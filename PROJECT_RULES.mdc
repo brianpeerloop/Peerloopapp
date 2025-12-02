@@ -1,0 +1,332 @@
+# Project Rules - Light Speed Learning Interface
+
+## 🔐 Authentication Logic
+
+### User Roles & Permissions
+```javascript
+// User role definitions
+const userRoles = {
+  STUDENT: 'student',           // Can enroll in courses, access learning materials
+  TEACHER: 'teacher',           // Can create courses, grade assignments
+  INSTRUCTOR: 'instructor',     // Can teach courses, manage content
+  CREATOR: 'creator',           // Can create and publish courses
+  ADMIN: 'admin'               // Full system access
+};
+
+// Permission matrix
+const permissions = {
+  student: ['view_courses', 'enroll_courses', 'access_materials', 'submit_assignments'],
+  teacher: ['view_courses', 'create_courses', 'grade_assignments', 'manage_students'],
+  instructor: ['view_courses', 'teach_courses', 'manage_content', 'view_analytics'],
+  creator: ['view_courses', 'create_courses', 'publish_courses', 'manage_content'],
+  admin: ['all_permissions']
+};
+```
+
+### Authentication Flow
+1. **Login**: User provides credentials
+2. **Role Assignment**: System assigns user role based on account type
+3. **Permission Check**: Verify user has required permissions for requested action
+4. **Session Management**: Maintain user session with role information
+5. **Logout**: Clear session and redirect to login
+
+### Security Rules
+- All API endpoints must verify user authentication
+- Role-based access control for all protected routes
+- Session tokens expire after 24 hours
+- Password requirements: 8+ characters, uppercase, lowercase, number, special character
+- Rate limiting: 100 requests per minute per user
+
+## 📁 File Structure Rules
+
+### Directory Organization
+```
+src/
+├── components/           # React components
+│   ├── common/          # Shared/reusable components
+│   ├── features/        # Feature-specific components
+│   └── layouts/         # Layout components
+├── pages/               # Page-level components
+├── hooks/               # Custom React hooks
+├── utils/               # Utility functions
+├── services/            # API services
+├── types/               # TypeScript type definitions
+├── constants/           # Application constants
+├── styles/              # Global styles and themes
+└── assets/              # Static assets (images, icons)
+```
+
+### Naming Conventions
+
+#### Files & Directories
+- **Components**: PascalCase (`UserProfile.js`, `CourseCard.js`)
+- **Hooks**: camelCase with 'use' prefix (`useAuth.js`, `useCourseData.js`)
+- **Utilities**: camelCase (`formatDate.js`, `validateEmail.js`)
+- **Constants**: UPPER_SNAKE_CASE (`API_ENDPOINTS.js`, `USER_ROLES.js`)
+- **CSS Files**: kebab-case (`user-profile.css`, `course-card.css`)
+
+#### Variables & Functions
+```javascript
+// ✅ Good naming
+const userProfile = { name: 'John', role: 'student' };
+const getUserById = (id) => { /* ... */ };
+const isAuthenticated = true;
+const API_BASE_URL = 'https://api.example.com';
+
+// ❌ Bad naming
+const user = { name: 'John', role: 'student' };
+const get = (id) => { /* ... */ };
+const auth = true;
+const url = 'https://api.example.com';
+```
+
+#### Component Structure
+```javascript
+// Component file structure
+import React from 'react';
+import PropTypes from 'prop-types';
+import './ComponentName.css';
+
+const ComponentName = ({ prop1, prop2 }) => {
+  // 1. Hooks
+  const [state, setState] = useState();
+  
+  // 2. Event handlers
+  const handleClick = () => { /* ... */ };
+  
+  // 3. Helper functions
+  const formatData = () => { /* ... */ };
+  
+  // 4. Render
+  return (
+    <div className="component-name">
+      {/* JSX content */}
+    </div>
+  );
+};
+
+ComponentName.propTypes = {
+  prop1: PropTypes.string.isRequired,
+  prop2: PropTypes.number
+};
+
+export default ComponentName;
+```
+
+## 🎯 Project-Specific Rules
+
+### Learning Platform Features
+1. **Course Management**
+   - Courses must have: title, description, instructor, duration, level, price
+   - Curriculum must include: lessons, duration, learning objectives
+   - Support for video, text, and interactive content
+
+2. **User Progress Tracking**
+   - Track course enrollment status
+   - Monitor lesson completion
+   - Store quiz scores and assignments
+   - Calculate overall progress percentage
+
+3. **Community Features**
+   - Course-specific discussion forums
+   - User profiles with learning history
+   - Follow/unfollow instructors and courses
+   - Post sharing and interaction
+
+4. **Search & Discovery**
+   - Full-text search across courses and instructors
+   - Filter by category, level, price, duration
+   - Sort by rating, popularity, newest
+   - Personalized recommendations
+
+### Data Management Rules
+```javascript
+// Course data structure
+const courseSchema = {
+  id: 'required|number',
+  title: 'required|string|max:100',
+  description: 'required|string|max:500',
+  instructorId: 'required|number',
+  duration: 'required|string',
+  level: 'required|enum:beginner,intermediate,advanced',
+  price: 'required|number|min:0',
+  rating: 'number|min:0|max:5',
+  students: 'number|min:0',
+  category: 'required|string',
+  tags: 'array|string',
+  curriculum: 'array|object',
+  learningObjectives: 'array|string'
+};
+
+// User data structure
+const userSchema = {
+  id: 'required|number',
+  name: 'required|string|max:50',
+  email: 'required|email',
+  role: 'required|enum:student,teacher,instructor,creator,admin',
+  enrolledCourses: 'array|number',
+  completedCourses: 'array|number',
+  progress: 'object'
+};
+```
+
+### API Endpoint Rules
+```javascript
+// RESTful API structure
+const apiEndpoints = {
+  // Authentication
+  'POST /auth/login': 'User login',
+  'POST /auth/logout': 'User logout',
+  'POST /auth/register': 'User registration',
+  
+  // Courses
+  'GET /courses': 'List all courses',
+  'GET /courses/:id': 'Get course details',
+  'POST /courses': 'Create new course (instructor+)',
+  'PUT /courses/:id': 'Update course (owner+)',
+  'DELETE /courses/:id': 'Delete course (owner+)',
+  
+  // Users
+  'GET /users/:id': 'Get user profile',
+  'PUT /users/:id': 'Update user profile',
+  'GET /users/:id/progress': 'Get user progress',
+  
+  // Enrollments
+  'POST /enrollments': 'Enroll in course',
+  'DELETE /enrollments/:id': 'Unenroll from course',
+  
+  // Community
+  'GET /communities': 'List communities',
+  'POST /communities/:id/posts': 'Create post',
+  'PUT /posts/:id/like': 'Like/unlike post'
+};
+```
+
+### Error Handling Rules
+```javascript
+// Error response format
+const errorResponse = {
+  error: {
+    code: 'ERROR_CODE',
+    message: 'Human readable message',
+    details: 'Additional error details',
+    timestamp: '2024-01-01T00:00:00Z'
+  }
+};
+
+// Common error codes
+const errorCodes = {
+  UNAUTHORIZED: 'User not authenticated',
+  FORBIDDEN: 'User lacks required permissions',
+  NOT_FOUND: 'Resource not found',
+  VALIDATION_ERROR: 'Invalid input data',
+  SERVER_ERROR: 'Internal server error'
+};
+```
+
+### Performance Rules
+1. **Loading States**: Show loading indicators for all async operations
+2. **Pagination**: Limit results to 20 items per page
+3. **Caching**: Cache course data for 5 minutes
+4. **Image Optimization**: Use WebP format, lazy loading
+5. **Bundle Size**: Keep main bundle under 500KB
+
+### Accessibility Rules
+1. **ARIA Labels**: All interactive elements must have aria-labels
+2. **Keyboard Navigation**: Full keyboard accessibility
+3. **Color Contrast**: Minimum 4.5:1 ratio
+4. **Screen Reader**: Semantic HTML structure
+5. **Focus Management**: Visible focus indicators
+
+### Testing Rules
+```javascript
+// Test file naming
+const testFileNaming = {
+  'ComponentName.test.js': 'Unit tests for components',
+  'ComponentName.spec.js': 'Integration tests',
+  '__tests__/': 'Test directory structure'
+};
+
+// Test coverage requirements
+const testCoverage = {
+  statements: 80,
+  branches: 70,
+  functions: 80,
+  lines: 80
+};
+```
+
+## 🔄 State Management Rules
+
+### Global State Structure
+```javascript
+const globalState = {
+  auth: {
+    user: null,
+    isAuthenticated: false,
+    token: null,
+    permissions: []
+  },
+  courses: {
+    list: [],
+    selected: null,
+    filters: {},
+    loading: false
+  },
+  user: {
+    profile: null,
+    progress: {},
+    enrolledCourses: [],
+    followedInstructors: []
+  },
+  ui: {
+    activeMenu: 'Browse',
+    searchQuery: '',
+    theme: 'light'
+  }
+};
+```
+
+### State Update Rules
+1. **Immutable Updates**: Never mutate state directly
+2. **Normalized Data**: Store related data in normalized form
+3. **Loading States**: Track loading state for all async operations
+4. **Error Handling**: Store error states for failed operations
+5. **Optimistic Updates**: Update UI immediately, rollback on error
+
+## 📝 Documentation Rules
+
+### Code Comments
+```javascript
+/**
+ * Component description
+ * 
+ * @param {Object} props - Component props
+ * @param {string} props.title - The title to display
+ * @param {Function} props.onClick - Click handler function
+ * @returns {JSX.Element} Rendered component
+ */
+```
+
+### README Requirements
+- Project description and purpose
+- Installation and setup instructions
+- API documentation
+- Contributing guidelines
+- License information
+
+### Commit Message Format
+```
+type(scope): description
+
+feat(auth): add user login functionality
+fix(courses): resolve course loading issue
+docs(readme): update installation instructions
+style(components): improve button styling
+refactor(database): optimize query performance
+test(auth): add login component tests
+```
+description:
+globs:
+alwaysApply: false
+---

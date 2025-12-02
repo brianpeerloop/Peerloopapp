@@ -1,0 +1,479 @@
+# Global Coding Standards - Light Speed Learning Interface
+
+## 🎨 Code Style Guidelines
+
+### JavaScript/React Standards
+
+#### Variable Declarations
+```javascript
+// ✅ Good - Use const by default, let when reassignment needed
+const userProfile = { name: 'John', role: 'student' };
+let isLoading = false;
+const API_BASE_URL = 'https://api.example.com';
+
+// ❌ Bad - Avoid var, use meaningful names
+var user = { name: 'John' };
+let flag = true;
+const url = 'https://api.example.com';
+```
+
+#### Function Declarations
+```javascript
+// ✅ Good - Use arrow functions for callbacks, regular functions for methods
+const handleSubmit = (event) => {
+  event.preventDefault();
+  // Handle form submission
+};
+
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount);
+};
+
+// ❌ Bad - Inconsistent function styles
+function handleSubmit(event) {
+  event.preventDefault();
+}
+
+const formatCurrency = function(amount) {
+  return '$' + amount;
+};
+```
+
+#### Component Structure
+```javascript
+// ✅ Good - Organized component structure
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import './CourseCard.css';
+
+const CourseCard = ({ course, onEnroll, isEnrolled }) => {
+  // 1. State declarations
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // 2. Effects
+  useEffect(() => {
+    // Side effects here
+  }, []);
+  
+  // 3. Event handlers
+  const handleEnrollClick = async () => {
+    setIsLoading(true);
+    try {
+      await onEnroll(course.id);
+    } catch (error) {
+      console.error('Enrollment failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // 4. Helper functions
+  const formatDuration = (duration) => {
+    return duration.replace('weeks', 'w');
+  };
+  
+  // 5. Render
+  return (
+    <div className="course-card">
+      <img src={course.thumbnail} alt={course.title} />
+      <h3>{course.title}</h3>
+      <p>{course.description}</p>
+      <button 
+        onClick={handleEnrollClick}
+        disabled={isLoading || isEnrolled}
+        className="enroll-button"
+      >
+        {isLoading ? 'Enrolling...' : isEnrolled ? 'Enrolled' : 'Enroll'}
+      </button>
+    </div>
+  );
+};
+
+CourseCard.propTypes = {
+  course: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    thumbnail: PropTypes.string.isRequired
+  }).isRequired,
+  onEnroll: PropTypes.func.isRequired,
+  isEnrolled: PropTypes.bool
+};
+
+CourseCard.defaultProps = {
+  isEnrolled: false
+};
+
+export default CourseCard;
+```
+
+### CSS/Styling Standards
+
+#### CSS Class Naming
+```css
+/* ✅ Good - BEM methodology */
+.course-card { }
+.course-card__title { }
+.course-card__description { }
+.course-card--featured { }
+.course-card--loading { }
+
+/* ❌ Bad - Inconsistent naming */
+.courseCard { }
+.course_title { }
+.courseDescription { }
+.featured-course { }
+```
+
+#### CSS Organization
+```css
+/* ✅ Good - Organized CSS structure */
+/* 1. Layout */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* 2. Components */
+.course-card {
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 3. States */
+.course-card--loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 4. Responsive */
+@media (max-width: 768px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+}
+```
+
+### TypeScript Standards (When Applicable)
+
+#### Type Definitions
+```typescript
+// ✅ Good - Clear type definitions
+interface Course {
+  id: number;
+  title: string;
+  description: string;
+  instructorId: number;
+  duration: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  price: number;
+  rating?: number;
+  students?: number;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+  enrolledCourses: number[];
+}
+
+type UserRole = 'student' | 'teacher' | 'instructor' | 'creator' | 'admin';
+
+// ❌ Bad - Any types, unclear interfaces
+interface Course {
+  id: any;
+  title: any;
+  [key: string]: any;
+}
+```
+
+## ✅ DO's
+
+### Code Organization
+- **DO** organize imports: React imports first, then third-party, then local
+- **DO** use meaningful variable and function names
+- **DO** keep functions small and focused (max 20 lines)
+- **DO** use early returns to reduce nesting
+- **DO** destructure props in function parameters
+- **DO** use default parameters instead of conditional logic
+
+### Error Handling
+- **DO** always handle async operations with try/catch
+- **DO** provide meaningful error messages
+- **DO** log errors for debugging
+- **DO** show user-friendly error states
+- **DO** validate input data before processing
+
+### Performance
+- **DO** use React.memo for expensive components
+- **DO** use useCallback for event handlers passed to children
+- **DO** use useMemo for expensive calculations
+- **DO** lazy load components and routes
+- **DO** optimize images and assets
+
+### Accessibility
+- **DO** use semantic HTML elements
+- **DO** provide alt text for images
+- **DO** ensure keyboard navigation works
+- **DO** maintain proper color contrast
+- **DO** use ARIA labels for complex interactions
+
+### Testing
+- **DO** write tests for business logic
+- **DO** test error scenarios
+- **DO** use descriptive test names
+- **DO** mock external dependencies
+- **DO** test user interactions, not implementation
+
+## ❌ DON'Ts
+
+### Code Quality
+- **DON'T** use var (use const/let)
+- **DON'T** mutate state directly
+- **DON'T** use inline styles (use CSS classes)
+- **DON'T** create deeply nested components
+- **DON'T** use magic numbers (use constants)
+- **DON'T** ignore TypeScript errors
+
+### Performance
+- **DON'T** create functions inside render
+- **DON'T** use index as key in lists
+- **DON'T** make unnecessary re-renders
+- **DON'T** bundle large dependencies
+- **DON'T** forget to clean up effects
+
+### Security
+- **DON'T** store sensitive data in localStorage
+- **DON'T** trust user input (always validate)
+- **DON'T** expose API keys in client code
+- **DON'T** use eval() or innerHTML
+- **DON'T** forget to sanitize data
+
+### User Experience
+- **DON'T** block the UI with long operations
+- **DON'T** forget loading states
+- **DON'T** ignore error states
+- **DON'T** make assumptions about user data
+- **DON'T** create confusing navigation
+
+## 🔧 Best Practices
+
+### State Management
+```javascript
+// ✅ Good - Immutable state updates
+const [courses, setCourses] = useState([]);
+
+const addCourse = (newCourse) => {
+  setCourses(prevCourses => [...prevCourses, newCourse]);
+};
+
+const updateCourse = (id, updates) => {
+  setCourses(prevCourses => 
+    prevCourses.map(course => 
+      course.id === id ? { ...course, ...updates } : course
+    )
+  );
+};
+
+// ❌ Bad - Mutating state directly
+const addCourse = (newCourse) => {
+  courses.push(newCourse); // This won't trigger re-render
+};
+```
+
+### Event Handling
+```javascript
+// ✅ Good - Proper event handling
+const handleSubmit = (event) => {
+  event.preventDefault();
+  // Handle form submission
+};
+
+const handleInputChange = (event) => {
+  const { name, value } = event.target;
+  setFormData(prev => ({ ...prev, [name]: value }));
+};
+
+// ❌ Bad - Inline event handlers
+<button onClick={() => console.log('clicked')}>Click me</button>
+```
+
+### API Calls
+```javascript
+// ✅ Good - Proper API error handling
+const fetchCourses = async () => {
+  setIsLoading(true);
+  setError(null);
+  
+  try {
+    const response = await api.get('/courses');
+    setCourses(response.data);
+  } catch (error) {
+    setError(error.message);
+    console.error('Failed to fetch courses:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+// ❌ Bad - No error handling
+const fetchCourses = async () => {
+  const response = await api.get('/courses');
+  setCourses(response.data);
+};
+```
+
+### Component Composition
+```javascript
+// ✅ Good - Composition over inheritance
+const CourseList = ({ courses, onCourseClick }) => (
+  <div className="course-list">
+    {courses.map(course => (
+      <CourseCard 
+        key={course.id}
+        course={course}
+        onClick={() => onCourseClick(course)}
+      />
+    ))}
+  </div>
+);
+
+// ❌ Bad - Monolithic components
+const CourseList = ({ courses }) => (
+  <div>
+    {courses.map(course => (
+      <div key={course.id}>
+        <h3>{course.title}</h3>
+        <p>{course.description}</p>
+        <button>Enroll</button>
+        {/* 100 more lines of JSX */}
+      </div>
+    ))}
+  </div>
+);
+```
+
+## 📊 Code Metrics
+
+### Complexity Limits
+- **Cyclomatic Complexity**: Max 10 per function
+- **Lines of Code**: Max 50 per function, 300 per component
+- **Parameters**: Max 5 per function
+- **Nesting**: Max 4 levels deep
+
+### Performance Targets
+- **First Contentful Paint**: < 1.5s
+- **Largest Contentful Paint**: < 2.5s
+- **Cumulative Layout Shift**: < 0.1
+- **First Input Delay**: < 100ms
+
+### Bundle Size Limits
+- **Main Bundle**: < 500KB
+- **Vendor Bundle**: < 1MB
+- **Total Bundle**: < 2MB
+
+## 🧪 Testing Standards
+
+### Unit Tests
+```javascript
+// ✅ Good - Comprehensive unit tests
+describe('CourseCard', () => {
+  const mockCourse = {
+    id: 1,
+    title: 'Test Course',
+    description: 'Test Description',
+    thumbnail: 'test.jpg'
+  };
+
+  it('renders course information correctly', () => {
+    render(<CourseCard course={mockCourse} onEnroll={jest.fn()} />);
+    
+    expect(screen.getByText('Test Course')).toBeInTheDocument();
+    expect(screen.getByText('Test Description')).toBeInTheDocument();
+    expect(screen.getByAltText('Test Course')).toBeInTheDocument();
+  });
+
+  it('calls onEnroll when enroll button is clicked', () => {
+    const mockOnEnroll = jest.fn();
+    render(<CourseCard course={mockCourse} onEnroll={mockOnEnroll} />);
+    
+    fireEvent.click(screen.getByText('Enroll'));
+    
+    expect(mockOnEnroll).toHaveBeenCalledWith(mockCourse.id);
+  });
+
+  it('shows loading state during enrollment', async () => {
+    const mockOnEnroll = jest.fn(() => new Promise(resolve => setTimeout(resolve, 100)));
+    render(<CourseCard course={mockCourse} onEnroll={mockOnEnroll} />);
+    
+    fireEvent.click(screen.getByText('Enroll'));
+    
+    expect(screen.getByText('Enrolling...')).toBeInTheDocument();
+  });
+});
+```
+
+### Integration Tests
+```javascript
+// ✅ Good - Integration tests for user flows
+describe('Course Enrollment Flow', () => {
+  it('allows user to enroll in a course', async () => {
+    render(<App />);
+    
+    // Navigate to courses
+    fireEvent.click(screen.getByText('Browse'));
+    
+    // Find and click on a course
+    const courseCard = screen.getByText('AI for Product Managers');
+    fireEvent.click(courseCard);
+    
+    // Enroll in the course
+    fireEvent.click(screen.getByText('Enroll'));
+    
+    // Verify enrollment
+    await waitFor(() => {
+      expect(screen.getByText('Enrolled')).toBeInTheDocument();
+    });
+  });
+});
+```
+
+## 🔍 Code Review Checklist
+
+### Before Submitting
+- [ ] Code follows naming conventions
+- [ ] No console.log statements in production code
+- [ ] All functions have JSDoc comments
+- [ ] Error handling is implemented
+- [ ] Loading states are included
+- [ ] Accessibility requirements met
+- [ ] Tests are written and passing
+- [ ] Bundle size is within limits
+- [ ] No security vulnerabilities
+- [ ] Performance is acceptable
+
+### Review Points
+- [ ] Code is readable and maintainable
+- [ ] Logic is correct and efficient
+- [ ] Error cases are handled
+- [ ] User experience is good
+- [ ] Security is maintained
+- [ ] Performance is optimized
+- [ ] Tests are comprehensive
+- [ ] Documentation is updated
+description:
+globs:
+alwaysApply: false
+---

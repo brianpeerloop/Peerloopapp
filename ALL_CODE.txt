@@ -1,0 +1,1778 @@
+================================================================================
+                           LIGHT SPEED LEARNING INTERFACE
+                           COMPLETE CODEBASE COLLECTION
+================================================================================
+
+This file contains all the code from the Light Speed Learning Interface project.
+Each file is separated by clear headers and includes the complete source code.
+
+================================================================================
+                                    PROJECT FILES
+================================================================================
+
+--------------------------------------------------------------------------------
+                                package.json
+--------------------------------------------------------------------------------
+
+{
+  "name": "x-com-mockup",
+  "version": "1.0.0",
+  "description": "A Light Speed Learning interface using React",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "react-icons": "^4.12.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+
+--------------------------------------------------------------------------------
+                                README.md
+--------------------------------------------------------------------------------
+
+# X.com Mockup Interface
+
+A React-based mockup of the X.com (formerly Twitter) user interface with the same layout and design patterns, but with menu items labeled as Menu1 through Menu6.
+
+## Features
+
+- **Left Sidebar**: Navigation menu with Menu1-Menu6 labels, X logo, post button, and user profile
+- **Main Content**: Feed header, post composer, and sample posts with interaction buttons
+- **Right Sidebar**: Search bar, trending topics, suggested users, and footer links
+- **Responsive Design**: Adapts to different screen sizes
+- **X.com Design**: Matches the original X.com dark theme and styling
+
+## Menu Structure
+
+- **Menu1**: Home (currently active)
+- **Menu2**: Search
+- **Menu3**: Notifications
+- **Menu4**: Messages
+- **Menu5**: Profile
+- **Menu6**: More options
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start the development server:
+```bash
+npm start
+```
+
+3. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── Sidebar.js          # Left navigation sidebar
+│   ├── Sidebar.css
+│   ├── MainContent.js      # Main feed content
+│   ├── MainContent.css
+│   ├── RightSidebar.js     # Right sidebar with trends
+│   └── RightSidebar.css
+├── App.js                  # Main app component
+├── App.css
+├── index.js               # React entry point
+└── index.css              # Global styles
+```
+
+## Features Implemented
+
+- **Interactive Post Composer**: Type in the textarea to enable the Post button
+- **Hover Effects**: All interactive elements have hover states
+- **Responsive Layout**: Sidebar collapses on smaller screens
+- **Sample Content**: Mock posts, trending topics, and suggested users
+- **X.com Styling**: Dark theme with proper colors, typography, and spacing
+
+## Customization
+
+You can easily customize the interface by:
+- Modifying the menu labels in `Sidebar.js`
+- Adding more sample posts in `MainContent.js`
+- Changing colors in the CSS files
+- Adding new features or components
+
+## Technologies Used
+
+- React 18
+- React Icons
+- CSS3 with Flexbox
+- Responsive design principles
+
+--------------------------------------------------------------------------------
+                            public/index.html
+--------------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Light Speed Learning Interface"
+    />
+    <title>Light Speed Learning</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+
+================================================================================
+                                    SOURCE FILES
+================================================================================
+
+--------------------------------------------------------------------------------
+                                src/index.js
+--------------------------------------------------------------------------------
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+--------------------------------------------------------------------------------
+                                src/index.css
+--------------------------------------------------------------------------------
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  height: 100vh;
+}
+
+--------------------------------------------------------------------------------
+                                src/App.js
+--------------------------------------------------------------------------------
+
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import './App.css';
+import Sidebar from './components/Sidebar';
+import MainContent from './components/MainContent';
+import ErrorBoundary from './components/ErrorBoundary';
+
+/**
+ * Main Application Component
+ * 
+ * This is the root component that manages the overall application state and layout.
+ * It handles user switching, menu state management, and renders the main layout
+ * consisting of a sidebar and main content area.
+ */
+function App() {
+  // Global state for tracking which menu item is currently active
+  // This determines what content is displayed in the main area
+  const [activeMenu, setActiveMenu] = useState('Browse');
+
+  // Define two different user profiles for demonstration purposes
+  // Each user has different roles and permissions
+  const userA = {
+    id: 1,
+    name: 'Alex Student/Teacher',
+    roles: ['student', 'teacher'], // Alex can both learn and teach
+  };
+  const userB = {
+    id: 2,
+    name: 'Jamie Creator/Instructor/Student/Teacher',
+    roles: ['creator', 'instructor', 'student', 'teacher'], // Jamie has all roles
+  };
+
+  // State for tracking which user is currently active
+  // This affects what content and features are available
+  const [currentUser, setCurrentUser] = useState(userA);
+
+  /**
+   * Handles menu changes from the sidebar
+   * @param {string} menuName - The name of the menu item that was clicked
+   */
+  const handleMenuChange = (menuName) => {
+    setActiveMenu(menuName);
+  };
+
+  /**
+   * Toggles between the two predefined users
+   * This is used for demonstration purposes to show different user experiences
+   */
+  const toggleUser = () => {
+    setCurrentUser(currentUser.id === userA.id ? userB : userA);
+  };
+
+  return (
+    <ErrorBoundary>
+      <div className="app">
+        {/* Left Sidebar - Navigation and user profile */}
+        <Sidebar onMenuChange={handleMenuChange} activeMenu={activeMenu} currentUser={currentUser} />
+        
+        {/* Main Content Area - Displays different content based on active menu */}
+        <MainContent 
+          activeMenu={activeMenu} 
+          currentUser={currentUser} 
+          onSwitchUser={toggleUser} 
+        />
+      </div>
+    </ErrorBoundary>
+  );
+}
+
+App.propTypes = {
+  // No props for App component
+};
+
+export default App;
+
+--------------------------------------------------------------------------------
+                                src/App.css
+--------------------------------------------------------------------------------
+
+.app {
+  display: flex;
+  height: 100vh;
+  background-color: #ffffff;
+  color: #000000;
+  min-width: 320px;
+  width: 100%;
+  overflow-x: auto;
+  position: relative;
+  align-items: flex-start;
+}
+
+/* Responsive design */
+@media (max-width: 1400px) {
+  .app {
+    /* Removed justify-content: center to prevent gap */
+    min-width: 808px; /* 88px sidebar + 720px main content (240px * 3) */
+    width: 808px; /* Force fixed width */
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: block; /* Remove flex to prevent resizing */
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    min-width: 320px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    min-width: 280px;
+  }
+}
+
+--------------------------------------------------------------------------------
+                            src/components/ErrorBoundary.js
+--------------------------------------------------------------------------------
+
+import React from 'react';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          padding: '20px',
+          margin: '20px',
+          border: '1px solid #e0245e',
+          borderRadius: '8px',
+          backgroundColor: '#fff5f5',
+          color: '#e0245e'
+        }}>
+          <h2>Something went wrong</h2>
+          <p>We're sorry, but something unexpected happened. Please try refreshing the page.</p>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{
+              background: '#e0245e',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Refresh Page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export default ErrorBoundary;
+
+--------------------------------------------------------------------------------
+                            src/components/PropTypes.js
+--------------------------------------------------------------------------------
+
+import PropTypes from 'prop-types';
+
+// User prop types
+export const UserPropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  roles: PropTypes.arrayOf(PropTypes.string).isRequired
+});
+
+// Course prop types
+export const CoursePropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  instructorId: PropTypes.number.isRequired,
+  duration: PropTypes.string.isRequired,
+  level: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  rating: PropTypes.number,
+  students: PropTypes.number,
+  category: PropTypes.string.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.string),
+  thumbnail: PropTypes.string.isRequired,
+  curriculum: PropTypes.array,
+  learningObjectives: PropTypes.arrayOf(PropTypes.string)
+});
+
+// Instructor prop types
+export const InstructorPropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  avatar: PropTypes.string.isRequired,
+  bio: PropTypes.string.isRequired,
+  qualifications: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    sentence: PropTypes.string.isRequired
+  })),
+  website: PropTypes.string,
+  expertise: PropTypes.arrayOf(PropTypes.string),
+  stats: PropTypes.shape({
+    studentsTaught: PropTypes.number,
+    coursesCreated: PropTypes.number,
+    averageRating: PropTypes.number,
+    totalReviews: PropTypes.number
+  }),
+  courses: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object
+  ]))
+});
+
+// Community prop types
+export const CommunityPropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  topic: PropTypes.string.isRequired,
+  members: PropTypes.number.isRequired,
+  posts: PropTypes.number.isRequired,
+  lastActivity: PropTypes.string.isRequired,
+  instructor: PropTypes.string.isRequired,
+  instructorAvatar: PropTypes.string.isRequired,
+  topicImage: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  courseId: PropTypes.number,
+  isCourseSpecific: PropTypes.bool
+});
+
+// Post prop types
+export const PostPropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  communityId: PropTypes.number,
+  courseId: PropTypes.number,
+  author: PropTypes.string.isRequired,
+  authorAvatar: PropTypes.string.isRequired,
+  authorHandle: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  timestamp: PropTypes.string.isRequired,
+  likes: PropTypes.number.isRequired,
+  replies: PropTypes.number.isRequired,
+  community: PropTypes.string.isRequired,
+  communityColor: PropTypes.string.isRequired
+});
+
+--------------------------------------------------------------------------------
+                            src/components/Sidebar.js
+--------------------------------------------------------------------------------
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import './Sidebar.css';
+import { 
+  FaHome, 
+  FaSearch, 
+  FaBell, 
+  FaEnvelope, 
+  FaUser, 
+  FaEllipsisH,
+  FaFeatherAlt,
+  FaCog,
+  FaSignOutAlt,
+  FaUserEdit,
+  FaShieldAlt,
+  FaBookmark,
+  FaHeart,
+  FaHistory,
+  FaQuestionCircle
+} from 'react-icons/fa';
+import { UserPropType } from './PropTypes';
+
+/**
+ * Sidebar Component
+ * 
+ * This component renders the left navigation sidebar with menu items and user profile.
+ * It handles navigation between different sections of the application and displays
+ * the current user's profile information.
+ * 
+ * @param {Function} onMenuChange - Callback function to handle menu item clicks
+ * @param {string} activeMenu - The currently active menu item
+ */
+const Sidebar = ({ onMenuChange, activeMenu, currentUser }) => {
+
+  /**
+   * Main navigation menu items
+   * Each item has an icon, label (for internal logic), and optional displayLabel (for UI)
+   */
+  const menuItems = [
+    { icon: <FaHome />, label: 'Browse' }, // Browse courses and instructors
+    { icon: <FaBell />, label: 'My Community', displayLabel: 'My Community' }, // Community features
+    { icon: <FaSearch />, label: 'Dashboard' }, // User's learning dashboard
+    { icon: <FaUser />, label: 'Messages' }, // Messaging system
+    { icon: <FaEllipsisH />, label: 'Menu6' }, // Additional menu item
+  ];
+
+  /**
+   * Profile dropdown menu items
+   * These appear when the user profile is clicked
+   */
+  const profileMenuItems = [
+    { icon: <FaUserEdit />, label: 'Edit Profile', action: 'edit-profile' },
+    { icon: <FaBookmark />, label: 'Bookmarks', action: 'bookmarks' },
+    { icon: <FaHistory />, label: 'History', action: 'history' },
+    { icon: <FaCog />, label: 'Settings', action: 'settings' },
+    { icon: <FaShieldAlt />, label: 'Privacy & Security', action: 'privacy' },
+    { icon: <FaQuestionCircle />, label: 'Help & Support', action: 'help' },
+    { icon: <FaSignOutAlt />, label: 'Sign Out', action: 'signout' },
+  ];
+
+  /**
+   * Handles clicks on the user profile section
+   * Navigates to the Profile page
+   */
+  const handleProfileClick = () => {
+    onMenuChange('Profile');
+  };
+
+  /**
+   * Handles actions from the profile dropdown menu
+   * @param {string} action - The action to perform
+   */
+  const handleProfileMenuAction = (action) => {
+    onMenuChange('Profile');
+    // Here you can add specific actions for each menu item
+  };
+
+  /**
+   * Handles clicks on main navigation menu items
+   * @param {string} label - The label of the clicked menu item
+   */
+  const handleMenuClick = (label) => {
+    if (label === 'Browse' && activeMenu === 'Browse') {
+      // If already on Browse page, pass a special signal to reset the view
+      onMenuChange('Browse_Reset');
+    } else {
+      onMenuChange(label);
+    }
+  };
+
+  return (
+    <div className="sidebar">
+      {/* Header section with logo */}
+      <div className="sidebar-header">
+        <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Custom SVG logo - represents the learning platform */}
+          <svg viewBox="0 0 64 64" width="38" height="38" style={{ display: 'inline-block' }}>
+            <path d="M32 10
+              C16 10, 10 32, 32 32
+              S54 10, 32 10
+              M32 32
+              C58 32, 58 54, 32 54
+              S6 32, 32 32
+              M32 32
+              C32 24, 40 24, 40 32
+              S32 40, 32 32
+              C32 40, 24 40, 24 32
+              S32 24, 32 32" 
+              fill="none" stroke="#222" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      
+      {/* Main navigation menu */}
+      <nav className="sidebar-nav">
+        {menuItems.map((item, index) => (
+          <div 
+            key={index} 
+            className={`nav-item ${activeMenu === item.label ? 'active' : ''}`}
+            onClick={() => handleMenuClick(item.label)}
+          >
+            <div className="nav-icon">{item.icon}</div>
+            {/* Use displayLabel if available, otherwise use label */}
+            <span className="nav-label">{item.displayLabel || item.label}</span>
+          </div>
+        ))}
+      </nav>
+
+      {/* User profile section at the bottom */}
+      <div className="sidebar-profile-container">
+        <div className="sidebar-profile" onClick={handleProfileClick}>
+          <div className="profile-info">
+            {/* User avatar */}
+            <div className="profile-avatar">
+              <img src="https://via.placeholder.com/40x40/FFD700/000000?text=AE" alt="Profile" />
+            </div>
+            {/* User details */}
+            <div className="profile-details">
+              <div className="profile-name">{currentUser?.name || 'User'}</div>
+              <div className="profile-handle">@{currentUser?.name?.toLowerCase().replace(/\s+/g, '') || 'user'}</div>
+            </div>
+          </div>
+          {/* Profile menu button */}
+          <div className="profile-menu">
+            <FaEllipsisH />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+Sidebar.propTypes = {
+  onMenuChange: PropTypes.func.isRequired,
+  activeMenu: PropTypes.string.isRequired,
+  currentUser: UserPropType
+};
+
+Sidebar.defaultProps = {
+  currentUser: null
+};
+
+export default Sidebar;
+
+--------------------------------------------------------------------------------
+                            src/components/Sidebar.css
+--------------------------------------------------------------------------------
+
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  border-right: 1px solid #e1e8ed;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+  flex-shrink: 0;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+.sidebar-header {
+  padding: 12px 0;
+  margin-bottom: 8px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.logo:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.lightspeed-logo {
+  width: 28px;
+  height: 28px;
+  fill: #000000;
+}
+
+.sidebar-nav {
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.nav-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.nav-item.active {
+  font-weight: 700;
+  color: #000000;
+}
+
+.nav-icon {
+  margin-right: 16px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-label {
+  font-size: 18px;
+}
+
+.sidebar-post-button {
+  margin: 14px 0;
+}
+
+.post-btn {
+  width: 100%;
+  background-color: #1d9bf0;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.post-btn:hover {
+  background-color: #1a8cd8;
+}
+
+.sidebar-profile-container {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-height: 56px;
+}
+
+.sidebar-profile:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.profile-handle {
+  color: #536471;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.profile-menu {
+  color: #536471;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+@media (max-width: 1400px) {
+  .sidebar {
+    width: 88px !important;
+    align-items: center;
+    flex-shrink: 0; /* Prevent shrinking */
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1001;
+    min-width: 88px;
+    max-width: 88px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  }
+  
+  .nav-label,
+  .post-btn span,
+  .profile-details,
+  .profile-menu {
+    display: none;
+  }
+  
+  .nav-icon {
+    margin-right: 0;
+  }
+  
+  .post-btn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  
+  .sidebar-profile {
+    justify-content: center;
+  }
+  
+  .profile-avatar {
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 88px !important;
+    align-items: center;
+    flex-shrink: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1001;
+    min-width: 88px;
+    max-width: 88px;
+    height: 100vh;
+    border-right: 1px solid #e1e8ed;
+    padding: 0 10px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  }
+  
+  .nav-label,
+  .post-btn span,
+  .profile-details,
+  .profile-menu {
+    display: none;
+  }
+  
+  .nav-icon {
+    margin-right: 0;
+  }
+  
+  .post-btn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  
+  .sidebar-profile {
+    justify-content: center;
+  }
+  
+  .profile-avatar {
+    margin: 0;
+  }
+} 
+
+--------------------------------------------------------------------------------
+                            src/data/database.js
+--------------------------------------------------------------------------------
+
+/**
+ * Mock Database for Learning Platform
+ * 
+ * This file contains all the mock data for the learning platform including:
+ * - Instructors with detailed profiles, qualifications, and expertise
+ * - Courses with comprehensive information, curriculum, and learning objectives
+ * - Helper functions for querying and searching the data
+ * 
+ * The data is structured to simulate a real learning management system
+ * with realistic content and relationships between instructors and courses.
+ */
+
+// Database for instructors and courses
+export const instructorsDatabase = [
+  {
+    id: 1,
+    name: "Albert Einstein",
+    title: "Theoretical Physicist & Nobel Laureate",
+    avatar: "https://via.placeholder.com/120x120/4ECDC4/ffffff?text=AE",
+    bio: "Revolutionary physicist who developed the theory of relativity, one of the two pillars of modern physics. Nobel Prize winner and one of the most influential scientists of all time.",
+    qualifications: [
+      {
+        id: 1,
+        sentence: "Ph.D. in Physics from University of Zurich (1905)"
+      },
+      {
+        id: 2,
+        sentence: "Nobel Prize in Physics from Royal Swedish Academy of Sciences (1921)"
+      },
+      {
+        id: 3,
+        sentence: "Professor of Physics at Princeton University for 22 years"
+      }
+    ],
+    website: "https://www.princeton.edu",
+    expertise: [
+      "Theory of Relativity",
+      "Quantum Mechanics", 
+      "Statistical Physics",
+      "Mathematical Physics",
+      "Cosmology & Astrophysics",
+      "Philosophy of Science"
+    ],
+    stats: {
+      studentsTaught: 50000,
+      coursesCreated: 15,
+      averageRating: 5.0,
+      totalReviews: 5000
+    },
+    courses: [1, 2, 3] // Course IDs that this instructor teaches
+  },
+  {
+    id: 2,
+    name: "Jane Doe",
+    title: "Leading AI Strategist at TechCorp",
+    avatar: "https://via.placeholder.com/120x120/FF6B6B/ffffff?text=JD",
+    bio: "Leading AI strategist with 10+ years experience in product management and AI implementation. Expert in helping companies leverage AI for competitive advantage.",
+    qualifications: [
+      {
+        id: 1,
+        sentence: "MBA from Stanford Graduate School of Business (2015)"
+      },
+      {
+        id: 2,
+        sentence: "Leading AI Strategist at TechCorp for 6 years"
+      },
+      {
+        id: 3,
+        sentence: "Former Product Manager at Google AI for 4 years"
+      }
+    ],
+    website: "https://techcorp.com",
+    expertise: [
+      "AI Product Strategy",
+      "Machine Learning Applications",
+      "Product Management",
+      "AI Ethics & Governance",
+      "Data-Driven Decision Making",
+      "AI Implementation"
+    ],
+    stats: {
+      studentsTaught: 25000,
+      coursesCreated: 12,
+      averageRating: 4.9,
+      totalReviews: 3200
+    },
+    courses: [1, 4, 5, 6] // Course IDs that this instructor teaches
+  },
+  {
+    id: 3,
+    name: "Prof. Maria Rodriguez",
+    title: "Data Science & Analytics Specialist",
+    avatar: "https://via.placeholder.com/120x120/FFD93D/000000?text=MR",
+    bio: "Expert in data science, statistical analysis, and business intelligence. Helps organizations make data-driven decisions through advanced analytics.",
+    qualifications: [
+      {
+        id: 1,
+        sentence: "Ph.D. in Statistics from University of California, Berkeley (2016)"
+      },
+      {
+        id: 2,
+        sentence: "Senior Data Scientist at Netflix for 6 years"
+      },
+      {
+        id: 3,
+        sentence: "Analytics Director at Spotify for 4 years"
+      }
+    ],
+    website: "https://netflix.com",
+    expertise: [
+      "Statistical Analysis & Modeling",
+      "Data Visualization & Storytelling",
+      "Business Intelligence & Analytics",
+      "Python & R Programming",
+      "SQL & Database Management",
+      "A/B Testing & Experimentation"
+    ],
+    stats: {
+      studentsTaught: 15000,
+      coursesCreated: 6,
+      averageRating: 4.7,
+      totalReviews: 1800
+    },
+    courses: [7, 8] // Course IDs that this instructor teaches
+  },
+  {
+    id: 4,
+    name: "James Wilson",
+    title: "Full-Stack Development & DevOps Engineer",
+    avatar: "https://via.placeholder.com/120x120/6C5CE7/ffffff?text=JW",
+    bio: "Full-stack developer with expertise in modern web technologies and DevOps practices. Builds scalable applications and efficient deployment pipelines.",
+    qualifications: [
+      {
+        id: 1,
+        sentence: "B.S. in Computer Science from University of Washington (2018)"
+      },
+      {
+        id: 2,
+        sentence: "Senior Full-Stack Developer at Shopify for 5 years"
+      },
+      {
+        id: 3,
+        sentence: "DevOps Engineer at GitHub for 3 years"
+      }
+    ],
+    website: "https://github.com",
+    expertise: [
+      "React, Vue.js & Angular",
+      "Node.js & Python Backend",
+      "Docker & Kubernetes",
+      "CI/CD Pipelines",
+      "Microservices Architecture",
+      "Cloud Infrastructure (AWS/Azure)"
+    ],
+    stats: {
+      studentsTaught: 12000,
+      coursesCreated: 9,
+      averageRating: 4.6,
+      totalReviews: 1500
+    },
+    courses: [9, 10, 11] // Course IDs that this instructor teaches
+  },
+  {
+    id: 5,
+    name: "Dr. Priya Nair",
+    title: "AI for Robotics Specialist",
+    avatar: "https://via.placeholder.com/120x120/00B894/ffffff?text=PN",
+    bio: "Expert in robotics and AI integration, focusing on real-world automation and intelligent systems.",
+    qualifications: [
+      { id: 1, sentence: "Ph.D. in Robotics and AI from MIT (2020)" },
+      { id: 2, sentence: "Lead Robotics Engineer at Boston Dynamics" }
+    ],
+    website: "https://bostondynamics.com",
+    expertise: [
+      "Robotics AI Integration",
+      "Autonomous Systems",
+      "Reinforcement Learning",
+      "Python & ROS"
+    ],
+    stats: {
+      studentsTaught: 3200,
+      coursesCreated: 1,
+      averageRating: 4.9,
+      totalReviews: 400
+    },
+    courses: [12] // Course IDs that this instructor teaches
+  },
+  {
+    id: 6,
+    name: "Prof. Elena Petrova",
+    title: "AI in Healthcare Innovator",
+    avatar: "https://via.placeholder.com/120x120/0984e3/ffffff?text=EP",
+    bio: "Pioneer in applying AI to medical diagnostics and healthcare data analysis.",
+    qualifications: [
+      { id: 1, sentence: "M.D., Ph.D. in Biomedical Informatics from Stanford (2017)" },
+      { id: 2, sentence: "Chief Data Scientist at MedAI" }
+    ],
+    website: "https://medai.com",
+    expertise: [
+      "Deep Learning for Healthcare",
+      "Data Science",
+      "Python, R"
+    ],
+    stats: {
+      studentsTaught: 2100,
+      coursesCreated: 1,
+      averageRating: 4.8,
+      totalReviews: 250
+    },
+    courses: [13] // Course IDs that this instructor teaches
+  },
+  {
+    id: 7,
+    name: "Mr. Samuel Lee",
+    title: "AI Coding Bootcamp Instructor",
+    avatar: "https://via.placeholder.com/120x120/636e72/ffffff?text=SL",
+    bio: "Specialist in teaching practical AI coding skills for beginners and professionals alike.",
+    qualifications: [
+      { id: 1, sentence: "M.S. in Computer Science from UC Berkeley (2015)" },
+      { id: 2, sentence: "Lead Instructor at CodeAI Bootcamp" }
+    ],
+    website: "https://codeaibootcamp.com",
+    expertise: [
+      "AI Coding Fundamentals",
+      "Python for AI",
+      "Machine Learning Projects",
+      "Education Technology"
+    ],
+    stats: {
+      studentsTaught: 5000,
+      coursesCreated: 1,
+      averageRating: 4.7,
+      totalReviews: 600
+    },
+    courses: [14] // Course IDs that this instructor teaches
+  }
+];
+
+/**
+ * Comprehensive course database with detailed information
+ * Each course includes curriculum, learning objectives, and instructor relationship
+ */
+export const coursesDatabase = [
+  {
+    id: 1,
+    title: "AI for Product Managers",
+    description: "Master the skills to lead AI-driven products. Learn to evaluate AI technologies, build AI roadmaps, and make data-driven decisions.",
+    duration: "6 weeks",
+    level: "Intermediate",
+    rating: 4.8,
+    students: 15678,
+    price: "$100",
+    thumbnail: "https://via.placeholder.com/300x200/4ECDC4/ffffff?text=AI+PM",
+    instructorId: 2, // Links to Jane Doe
+    category: "AI & Product Management",
+    tags: ["AI", "Product Management", "Machine Learning", "Strategy"],
+    learningObjectives: [
+      "Evaluate AI technologies for product development",
+      "Build comprehensive AI roadmaps",
+      "Make data-driven product decisions",
+      "Lead AI-driven product teams",
+      "Implement AI ethics and responsible practices"
+    ],
+    curriculum: [
+      {
+        title: "Introduction to AI for Product Managers",
+        duration: "45 min",
+        description: "Overview of AI in product management and course structure"
+      },
+      {
+        title: "Machine Learning Fundamentals",
+        duration: "1h 15min",
+        description: "Understanding core ML concepts and their business applications"
+      },
+      {
+        title: "Building an AI Roadmap",
+        duration: "1h",
+        description: "Creating strategic AI implementation plans"
+      },
+      {
+        title: "AI Ethics and Responsible Development",
+        duration: "1h 30min",
+        description: "Ensuring ethical AI practices in product development"
+      },
+      {
+        title: "AI Product Strategy",
+        duration: "2h",
+        description: "Developing comprehensive AI product strategies"
+      },
+      {
+        title: "Implementation and Deployment",
+        duration: "1h 45min",
+        description: "Bringing AI products to market successfully"
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "Node.js Backend Development",
+    description: "Learn to build robust backend services with Node.js, Express, and MongoDB. Master REST APIs and authentication systems.",
+    duration: "6 weeks",
+    level: "Intermediate",
+    rating: 4.7,
+    students: 980,
+    price: "$249",
+    thumbnail: "https://via.placeholder.com/300x200/00D2FF/ffffff?text=Node",
+    instructorId: 1, // Links to Albert Einstein
+    category: "Backend Development",
+    tags: ["Node.js", "Express", "MongoDB", "REST API"],
+    learningObjectives: [
+      "Build robust backend services with Node.js",
+      "Master REST API development and authentication",
+      "Implement database integration with MongoDB",
+      "Deploy scalable backend applications",
+      "Follow security best practices"
+    ],
+    curriculum: [
+      {
+        title: "Node.js Fundamentals",
+        duration: "1h 15min",
+        description: "Core concepts and environment setup"
+      },
+      {
+        title: "Express Framework",
+        duration: "2h 45min",
+        description: "Building REST APIs and middleware"
+      },
+      {
+        title: "Database Integration",
+        duration: "3h 30min",
+        description: "MongoDB connection and data modeling"
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "Cloud Architecture with AWS",
+    description: "Design and deploy scalable cloud solutions using AWS services. Learn serverless architecture and infrastructure as code.",
+    duration: "10 weeks",
+    level: "Advanced",
+    rating: 4.9,
+    students: 750,
+    price: "$399",
+    thumbnail: "https://via.placeholder.com/300x200/FF9900/ffffff?text=AWS",
+    instructorId: 1, // Links to Albert Einstein
+    category: "Cloud Computing",
+    tags: ["AWS", "Serverless", "Lambda", "CloudFormation"],
+    learningObjectives: [
+      "Design scalable cloud architectures",
+      "Implement serverless applications",
+      "Master infrastructure as code",
+      "Deploy and manage AWS services",
+      "Optimize cloud costs and performance"
+    ],
+    curriculum: [
+      {
+        title: "AWS Fundamentals",
+        duration: "2h 00min",
+        description: "Core AWS services and concepts"
+      },
+      {
+        title: "Serverless Architecture",
+        duration: "3h 30min",
+        description: "Lambda functions and API Gateway"
+      },
+      {
+        title: "Infrastructure as Code",
+        duration: "4h 15min",
+        description: "CloudFormation and CDK"
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "Deep Learning Fundamentals",
+    description: "Master the fundamentals of deep learning, neural networks, and modern AI architectures. Build and deploy real-world AI applications.",
+    duration: "10 weeks",
+    level: "Intermediate",
+    rating: 4.9,
+    students: 2100,
+    price: "$399",
+    thumbnail: "https://via.placeholder.com/300x200/FF6B6B/ffffff?text=AI",
+    instructorId: 2, // Links to Jane Doe
+    category: "Machine Learning",
+    tags: ["Deep Learning", "Neural Networks", "TensorFlow", "PyTorch"],
+    learningObjectives: [
+      "Understand neural network fundamentals",
+      "Build and train deep learning models",
+      "Master modern AI architectures",
+      "Deploy AI applications in production",
+      "Apply deep learning to real-world problems"
+    ],
+    curriculum: [
+      {
+        title: "Neural Network Basics",
+        duration: "2h 30min",
+        description: "Fundamentals of neural networks"
+      },
+      {
+        title: "Deep Learning Frameworks",
+        duration: "3h 45min",
+        description: "TensorFlow and PyTorch implementation"
+      },
+      {
+        title: "Advanced Architectures",
+        duration: "4h 00min",
+        description: "CNN, RNN, and Transformer models"
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "Computer Vision with Python",
+    description: "Learn computer vision techniques using OpenCV, TensorFlow, and PyTorch. Build image recognition and object detection systems.",
+    duration: "6 weeks",
+    level: "Advanced",
+    rating: 4.7,
+    students: 950,
+    price: "$249",
+    thumbnail: "https://via.placeholder.com/300x200/4ECDC4/ffffff?text=CV",
+    instructorId: 2, // Links to Jane Doe
+    category: "Computer Vision",
+    tags: ["OpenCV", "Image Processing", "Object Detection", "CNN"],
+    learningObjectives: [
+      "Master computer vision fundamentals",
+      "Build image recognition systems",
+      "Implement object detection algorithms",
+      "Process and analyze visual data",
+      "Deploy computer vision applications"
+    ],
+    curriculum: [
+      {
+        title: "Computer Vision Basics",
+        duration: "1h 45min",
+        description: "Image processing fundamentals"
+      },
+      {
+        title: "Object Detection",
+        duration: "3h 15min",
+        description: "YOLO and R-CNN implementations"
+      },
+      {
+        title: "Advanced Techniques",
+        duration: "2h 30min",
+        description: "Deep learning for computer vision"
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: "Natural Language Processing",
+    description: "Explore NLP techniques for text analysis, sentiment analysis, and language modeling. Build chatbots and language processing systems.",
+    duration: "8 weeks",
+    level: "Advanced",
+    rating: 4.8,
+    students: 1200,
+    price: "$349",
+    thumbnail: "https://via.placeholder.com/300x200/9B59B6/ffffff?text=NLP",
+    instructorId: 2, // Links to Jane Doe
+    category: "Natural Language Processing",
+    tags: ["NLP", "Transformers", "BERT", "Text Analysis"],
+    learningObjectives: [
+      "Master NLP fundamentals and techniques",
+      "Build text analysis and processing systems",
+      "Implement transformer-based models",
+      "Create chatbots and language applications",
+      "Deploy NLP solutions in production"
+    ],
+    curriculum: [
+      {
+        title: "NLP Fundamentals",
+        duration: "2h 00min",
+        description: "Text processing and analysis basics"
+      },
+      {
+        title: "Transformer Models",
+        duration: "3h 30min",
+        description: "BERT, GPT, and modern architectures"
+      },
+      {
+        title: "Practical Applications",
+        duration: "2h 45min",
+        description: "Chatbots and language systems"
+      }
+    ]
+  },
+  {
+    id: 7,
+    title: "Data Science Fundamentals",
+    description: "Learn the core concepts of data science, statistical analysis, and data visualization. Master Python for data analysis.",
+    duration: "8 weeks",
+    level: "Beginner",
+    rating: 4.6,
+    students: 1800,
+    price: "$199",
+    thumbnail: "https://via.placeholder.com/300x200/FFD93D/000000?text=Data",
+    instructorId: 3, // Links to Prof. Maria Rodriguez
+    category: "Data Science",
+    tags: ["Python", "Pandas", "Matplotlib", "Statistics"],
+    learningObjectives: [
+      "Master Python for data analysis",
+      "Understand statistical concepts",
+      "Create compelling data visualizations",
+      "Perform exploratory data analysis",
+      "Build data-driven insights"
+    ],
+    curriculum: [
+      {
+        title: "Python for Data Science",
+        duration: "2h 15min",
+        description: "Pandas, NumPy, and data manipulation"
+      },
+      {
+        title: "Statistical Analysis",
+        duration: "3h 00min",
+        description: "Hypothesis testing and modeling"
+      },
+      {
+        title: "Data Visualization",
+        duration: "2h 30min",
+        description: "Matplotlib, Seaborn, and Plotly"
+      }
+    ]
+  },
+  {
+    id: 8,
+    title: "Business Intelligence & Analytics",
+    description: "Transform raw data into actionable insights. Learn to create dashboards and reports for business decision-making.",
+    duration: "6 weeks",
+    level: "Intermediate",
+    rating: 4.5,
+    students: 650,
+    price: "$279",
+    thumbnail: "https://via.placeholder.com/300x200/00B894/ffffff?text=BI",
+    instructorId: 3, // Links to Prof. Maria Rodriguez
+    category: "Business Analytics",
+    tags: ["Tableau", "Power BI", "SQL", "Dashboard Design"],
+    learningObjectives: [
+      "Transform data into business insights",
+      "Create compelling dashboards and reports",
+      "Master BI tools and platforms",
+      "Design effective data visualizations",
+      "Drive data-driven decision making"
+    ],
+    curriculum: [
+      {
+        title: "BI Fundamentals",
+        duration: "1h 30min",
+        description: "Business intelligence concepts"
+      },
+      {
+        title: "Dashboard Design",
+        duration: "3h 45min",
+        description: "Tableau and Power BI mastery"
+      },
+      {
+        title: "Advanced Analytics",
+        duration: "2h 15min",
+        description: "Predictive analytics and reporting"
+      }
+    ]
+  },
+  {
+    id: 9,
+    title: "Full-Stack Web Development",
+    description: "Build complete web applications from frontend to backend. Learn modern development practices and deployment strategies.",
+    duration: "12 weeks",
+    level: "Intermediate",
+    rating: 4.7,
+    students: 1400,
+    price: "$449",
+    thumbnail: "https://via.placeholder.com/300x200/6C5CE7/ffffff?text=Full",
+    instructorId: 4, // Links to James Wilson
+    category: "Full-Stack Development",
+    tags: ["React", "Node.js", "MongoDB", "Deployment"],
+    learningObjectives: [
+      "Build complete web applications",
+      "Master frontend and backend development",
+      "Implement modern development practices",
+      "Deploy applications to production",
+      "Follow industry best practices"
+    ],
+    curriculum: [
+      {
+        title: "Full-Stack Fundamentals",
+        duration: "2h 30min",
+        description: "Architecture and project setup"
+      },
+      {
+        title: "Frontend Development",
+        duration: "4h 00min",
+        description: "React, state management, and UI/UX"
+      },
+      {
+        title: "Backend Development",
+        duration: "3h 45min",
+        description: "Node.js, APIs, and database integration"
+      }
+    ]
+  },
+  {
+    id: 10,
+    title: "DevOps & CI/CD Mastery",
+    description: "Master DevOps practices, containerization, and continuous integration/deployment. Build efficient development pipelines.",
+    duration: "8 weeks",
+    level: "Advanced",
+    rating: 4.8,
+    students: 850,
+    price: "$329",
+    thumbnail: "https://via.placeholder.com/300x200/FF7675/ffffff?text=DevOps",
+    instructorId: 4, // Links to James Wilson
+    category: "DevOps",
+    tags: ["Docker", "Kubernetes", "Jenkins", "GitHub Actions"],
+    learningObjectives: [
+      "Master DevOps principles and practices",
+      "Implement containerization with Docker",
+      "Build CI/CD pipelines",
+      "Manage infrastructure with Kubernetes",
+      "Automate deployment processes"
+    ],
+    curriculum: [
+      {
+        title: "DevOps Fundamentals",
+        duration: "2h 00min",
+        description: "DevOps culture and practices"
+      },
+      {
+        title: "Containerization",
+        duration: "3h 30min",
+        description: "Docker and container orchestration"
+      },
+      {
+        title: "CI/CD Pipelines",
+        duration: "3h 15min",
+        description: "Jenkins, GitHub Actions, and automation"
+      }
+    ]
+  },
+  {
+    id: 11,
+    title: "Microservices Architecture",
+    description: "Design and implement scalable microservices architectures. Learn service communication, API gateways, and distributed systems.",
+    duration: "10 weeks",
+    level: "Advanced",
+    rating: 4.6,
+    students: 720,
+    price: "$379",
+    thumbnail: "https://via.placeholder.com/300x200/74B9FF/ffffff?text=Micro",
+    instructorId: 4, // Links to James Wilson
+    category: "System Design",
+    tags: ["Microservices", "API Gateway", "Service Mesh", "Distributed Systems"],
+    learningObjectives: [
+      "Design scalable microservices architectures",
+      "Implement service communication patterns",
+      "Build API gateways and service mesh",
+      "Manage distributed systems",
+      "Deploy microservices to production"
+    ],
+    curriculum: [
+      {
+        title: "Microservices Fundamentals",
+        duration: "2h 15min",
+        description: "Architecture principles and patterns"
+      },
+      {
+        title: "Service Communication",
+        duration: "3h 45min",
+        description: "API gateways and service mesh"
+      },
+      {
+        title: "Deployment Strategies",
+        duration: "3h 00min",
+        description: "Container orchestration and scaling"
+      }
+    ]
+  },
+  {
+    id: 12,
+    title: "AI for Robotics Coding Lab",
+    description: "Hands-on coding with AI algorithms for robotics, including path planning and control.",
+    duration: "6 weeks",
+    level: "Intermediate",
+    rating: 4.9,
+    students: 800,
+    price: "$399",
+    thumbnail: "https://via.placeholder.com/300x200/00B894/ffffff?text=RoboticsAI",
+    instructorId: 5, // Links to Dr. Priya Nair
+    category: "AI & Robotics",
+    tags: ["Robotics", "AI", "Python", "Reinforcement Learning"],
+    learningObjectives: [
+      "Implement AI algorithms for robotics",
+      "Code path planning and control systems",
+      "Integrate Python with ROS for robotics"
+    ],
+    curriculum: [
+      { title: "Robotics AI Basics", duration: "2h", description: "Introduction to robotics and AI integration." },
+      { title: "Path Planning", duration: "2h 30min", description: "Coding path planning algorithms." },
+      { title: "Reinforcement Learning", duration: "3h", description: "Applying RL to robotics." }
+    ]
+  },
+  {
+    id: 13,
+    title: "AI for Medical Diagnostics Coding",
+    description: "Develop AI models for medical image analysis and diagnostics using Python.",
+    duration: "8 weeks",
+    level: "Advanced",
+    rating: 4.8,
+    students: 600,
+    price: "$499",
+    thumbnail: "https://via.placeholder.com/300x200/0984e3/ffffff?text=MedAI",
+    instructorId: 6, // Links to Prof. Elena Petrova
+    category: "AI in Healthcare",
+    tags: ["Medical AI", "Deep Learning", "Python", "Diagnostics"],
+    learningObjectives: [
+      "Build AI models for medical diagnostics",
+      "Analyze medical images with deep learning",
+      "Apply Python to healthcare data"
+    ],
+    curriculum: [
+      { title: "Medical AI Overview", duration: "1h 30min", description: "Introduction to AI in healthcare." },
+      { title: "Image Analysis", duration: "3h", description: "Coding deep learning for medical images." },
+      { title: "Diagnostics Projects", duration: "3h 30min", description: "Building diagnostic AI systems." }
+    ]
+  },
+  {
+    id: 14,
+    title: "AI Coding Bootcamp: Python Projects",
+    description: "Project-based course for learning AI coding with Python, including real-world ML projects.",
+    duration: "5 weeks",
+    level: "Beginner",
+    rating: 4.7,
+    students: 1200,
+    price: "$299",
+    thumbnail: "https://via.placeholder.com/300x200/636e72/ffffff?text=BootcampAI",
+    instructorId: 7, // Links to Mr. Samuel Lee
+    category: "AI Coding",
+    tags: ["Python", "AI", "Machine Learning", "Projects"],
+    learningObjectives: [
+      "Learn Python for AI coding",
+      "Complete real-world ML projects",
+      "Understand AI coding best practices"
+    ],
+    curriculum: [
+      { title: "Python for AI", duration: "1h", description: "Python basics for AI coding." },
+      { title: "ML Project 1", duration: "2h 30min", description: "Hands-on machine learning project." },
+      { title: "ML Project 2", duration: "2h 30min", description: "Advanced AI coding project." }
+    ]
+  }
+];
+
+/**
+ * Helper Functions for Database Queries
+ * These functions provide a clean API for accessing the mock data
+ */
+
+/**
+ * Find an instructor by their ID
+ * @param {number} id - The instructor ID to search for
+ * @returns {Object|null} The instructor object or null if not found
+ */
+export const getInstructorById = (id) => {
+  return instructorsDatabase.find(instructor => instructor.id === id);
+};
+
+/**
+ * Find a course by its ID
+ * @param {number} id - The course ID to search for
+ * @returns {Object|null} The course object or null if not found
+ */
+export const getCourseById = (id) => {
+  return coursesDatabase.find(course => course.id === id);
+};
+
+/**
+ * Get all courses taught by a specific instructor
+ * @param {number} instructorId - The instructor ID
+ * @returns {Array} Array of course objects
+ */
+export const getCoursesByInstructorId = (instructorId) => {
+  return coursesDatabase.filter(course => course.instructorId === instructorId);
+};
+
+/**
+ * Get all instructors from the database
+ * @returns {Array} Array of all instructor objects
+ */
+export const getAllInstructors = () => {
+  return instructorsDatabase;
+};
+
+/**
+ * Get all courses from the database
+ * @returns {Array} Array of all course objects
+ */
+export const getAllCourses = () => {
+  return coursesDatabase;
+};
+
+/**
+ * Get an instructor with their associated courses
+ * @param {number} instructorId - The instructor ID
+ * @returns {Object|null} Instructor object with courses array, or null if not found
+ */
+export const getInstructorWithCourses = (instructorId) => {
+  const instructor = getInstructorById(instructorId);
+  if (!instructor) return null;
+  
+  const courses = getCoursesByInstructorId(instructorId);
+  return {
+    ...instructor,
+    courses: courses
+  };
+}; 
+
+/**
+ * Get all courses with search indexing for efficient searching
+ * Each course gets a searchIndex property containing all searchable text
+ * @returns {Array} Array of course objects with search indexing
+ */
+export const getIndexedCourses = () => {
+  return coursesDatabase.map(course => ({
+    ...course,
+    searchIndex: [
+      course.title,
+      course.description,
+      course.category,
+      course.level,
+      course.price,
+      course.duration,
+      course.rating,
+      course.students,
+      ...(course.tags || []),
+      ...(course.learningObjectives || []),
+      ...(course.curriculum ? course.curriculum.map(c => c.title + ' ' + c.description) : []),
+      // Add instructor name to course search index
+      getInstructorById(course.instructorId)?.name || '',
+      getInstructorById(course.instructorId)?.title || '',
+      getInstructorById(course.instructorId)?.bio || ''
+    ].join(' ').toLowerCase()
+  }));
+};
+
+/**
+ * Get all instructors with search indexing for efficient searching
+ * Each instructor gets a searchIndex property containing all searchable text
+ * @returns {Array} Array of instructor objects with search indexing
+ */
+export const getIndexedInstructors = () => {
+  return instructorsDatabase.map(instructor => ({
+    ...instructor,
+    searchIndex: [
+      instructor.name,
+      instructor.title,
+      instructor.bio,
+      instructor.website,
+      ...(instructor.qualifications ? instructor.qualifications.map(q => q.sentence) : []),
+      ...(instructor.expertise || []),
+      ...(instructor.stats ? Object.values(instructor.stats).map(String) : [])
+    ].join(' ').toLowerCase()
+  }));
+}; 

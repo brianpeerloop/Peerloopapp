@@ -1,0 +1,27 @@
+<!-- AlphaPeer Logo -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 140">
+  <defs>
+    <style>
+      .main-text { 
+        font-family: "Times New Roman", serif; 
+        font-size: 120px; 
+        font-weight: bold;
+        fill: #2E3B94;
+      }
+      .sub-text { 
+        font-family: "Times New Roman", serif; 
+        font-size: 32px; 
+        font-weight: normal;
+        fill: #2E3B94;
+      }
+    </style>
+  </defs>
+  
+  <!-- Main "αp" text with proper kerning -->
+  <text x="10" y="100" class="main-text">α</text>
+  <text x="110" y="100" class="main-text">p</text>
+  
+  <!-- "Alpha" and "Peer" text with proper spacing -->
+  <text x="10" y="130" class="sub-text">Alpha</text>
+  <text x="210" y="130" class="sub-text">Peer</text>
+</svg>

@@ -1,0 +1,284 @@
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  border-right: 1px solid #e1e8ed;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+  flex-shrink: 0;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+.sidebar-header {
+  padding: 8px 0;
+  margin-bottom: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.lightspeed-logo {
+  width: 28px;
+  height: 28px;
+  fill: #000000;
+}
+
+.sidebar-nav {
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.nav-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.nav-item.active {
+  font-weight: 700;
+  color: #000000;
+}
+
+.nav-icon {
+  margin-right: 16px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-label {
+  font-size: 18px;
+}
+
+.sidebar-post-button {
+  margin: 14px 0;
+}
+
+.post-btn {
+  width: 100%;
+  background-color: #1d9bf0;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.post-btn:hover {
+  background-color: #1a8cd8;
+}
+
+.sidebar-profile-container {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-height: 56px;
+}
+
+.sidebar-profile:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.profile-handle {
+  color: #536471;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.profile-menu {
+  color: #536471;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+@media (max-width: 1400px) {
+  .sidebar {
+    width: 88px !important;
+    align-items: center;
+    flex-shrink: 0; /* Prevent shrinking */
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1001;
+    min-width: 88px;
+    max-width: 88px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  }
+  
+  .nav-label,
+  .post-btn span,
+  .profile-details,
+  .profile-menu {
+    display: none;
+  }
+  
+  .nav-icon {
+    margin-right: 0;
+  }
+  
+  .post-btn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  
+  .sidebar-profile {
+    justify-content: center;
+  }
+  
+  .profile-avatar {
+    margin: 0;
+  }
+
+  .logo {
+    padding: 8px !important;
+    justify-content: center !important;
+  }
+
+  .logo img {
+    width: 40px !important;
+    height: auto !important;
+    max-height: 32px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 88px !important;
+    align-items: center;
+    flex-shrink: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1001;
+    min-width: 88px;
+    max-width: 88px;
+    height: 100vh;
+    border-right: 1px solid #e1e8ed;
+    padding: 0 10px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  }
+  
+  .nav-label,
+  .post-btn span,
+  .profile-details,
+  .profile-menu {
+    display: none;
+  }
+  
+  .nav-icon {
+    margin-right: 0;
+  }
+  
+  .post-btn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  
+  .sidebar-profile {
+    justify-content: center;
+  }
+  
+  .profile-avatar {
+    margin: 0;
+  }
+
+  .logo {
+    padding: 8px !important;
+    justify-content: center !important;
+  }
+
+  .logo img {
+    width: 40px !important;
+    height: auto !important;
+    max-height: 32px !important;
+  }
+}
+
+ 

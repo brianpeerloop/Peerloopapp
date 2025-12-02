@@ -1,0 +1,40 @@
+.app {
+  display: flex;
+  height: 100vh;
+  background-color: #ffffff;
+  color: #000000;
+  min-width: 320px;
+  width: 100%;
+  overflow-x: auto;
+  position: relative;
+  align-items: flex-start;
+}
+
+/* Responsive design */
+@media (max-width: 1400px) {
+  .app {
+    /* Removed justify-content: center to prevent gap */
+    min-width: 808px; /* 88px sidebar + 720px main content (240px * 3) */
+    width: 808px; /* Force fixed width */
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: block; /* Remove flex to prevent resizing */
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    min-width: 320px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    min-width: 280px;
+  }
+} 

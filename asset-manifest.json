@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Peerloopapp/static/css/main.ab9db9ef.css",
+    "main.js": "/Peerloopapp/static/js/main.49f0d093.js",
+    "index.html": "/Peerloopapp/index.html",
+    "main.ab9db9ef.css.map": "/Peerloopapp/static/css/main.ab9db9ef.css.map",
+    "main.49f0d093.js.map": "/Peerloopapp/static/js/main.49f0d093.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ab9db9ef.css",
+    "static/js/main.49f0d093.js"
+  ]
+}

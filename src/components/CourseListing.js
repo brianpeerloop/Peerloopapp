@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './CourseListing.css';
-import { FaStar, FaUsers, FaGraduationCap, FaAward, FaPlay, FaCheck, FaArrowRight, FaHeart, FaShare, FaBook, FaClock, FaDollarSign, FaCertificate, FaChalkboardTeacher } from 'react-icons/fa';
+import { FaStar, FaUsers, FaGraduationCap, FaAward, FaPlay, FaCheck, FaArrowRight, FaHeart, FaShare, FaBook, FaClock, FaDollarSign, FaCertificate, FaChalkboardTeacher, FaCalendarAlt, FaVideo, FaUserGraduate } from 'react-icons/fa';
 import { getAllCourses, getInstructorById } from '../data/database';
 import { CoursePropType } from './PropTypes';
+
+// Mock Student-Teachers data (will be replaced with real data later)
+const mockStudentTeachers = [
+  { id: 1, name: 'Marcus Chen', rating: 4.9, sessionsTaught: 25, avatar: 'https://via.placeholder.com/40x40/4ECDC4/ffffff?text=MC', available: true },
+  { id: 2, name: 'Sarah Williams', rating: 4.8, sessionsTaught: 18, avatar: 'https://via.placeholder.com/40x40/FF6B6B/ffffff?text=SW', available: true },
+  { id: 3, name: 'James Park', rating: 4.7, sessionsTaught: 12, avatar: 'https://via.placeholder.com/40x40/6C5CE7/ffffff?text=JP', available: false },
+];
 
 const CourseListing = ({ onCourseSelect, selectedCourse, onBackToList }) => {
   const [courses, setCourses] = useState([]);
@@ -75,7 +82,7 @@ const CourseListing = ({ onCourseSelect, selectedCourse, onBackToList }) => {
   const categories = ['all', ...new Set(courses.map(course => course.category))];
 
   const renderCourseCard = (course) => {
-    const instructor = getInstructorById(course.instructorId);
+    const creator = getInstructorById(course.instructorId);
     
     return (
       <div key={course.id} className="course-card" onClick={() => onCourseSelect(course)}>
@@ -84,6 +91,11 @@ const CourseListing = ({ onCourseSelect, selectedCourse, onBackToList }) => {
           <div className="course-card-overlay">
             <FaPlay className="play-icon" />
           </div>
+          <div className="course-card-badge-overlay">
+            <span className="one-on-one-badge">
+              <FaVideo /> 1-on-1 Sessions
+            </span>
+          </div>
         </div>
         
         <div className="course-card-content">
@@ -91,9 +103,9 @@ const CourseListing = ({ onCourseSelect, selectedCourse, onBackToList }) => {
             <h3 className="course-title">{course.title}</h3>
             <div className="course-creator">
               <div className="creator-avatar">
-                <img src={instructor?.avatar} alt={instructor?.name} />
+                <img src={creator?.avatar} alt={creator?.name} />
               </div>
-              <span className="creator-name">By {instructor?.name}</span>
+              <span className="creator-name">Created by {creator?.name}</span>
             </div>
           </div>
 
@@ -106,14 +118,14 @@ const CourseListing = ({ onCourseSelect, selectedCourse, onBackToList }) => {
             </div>
             <div className="enrollment-count">
               <FaUsers className="users-icon" />
-              <span>{course.students.toLocaleString()} students enrolled</span>
+              <span>{course.students.toLocaleString()} students</span>
             </div>
           </div>
 
           <div className="course-badges">
             <div className="teach-earn-badge">
               <FaChalkboardTeacher className="badge-icon" />
-              <span>Teach & Earn</span>
+              <span>Earn 70% Teaching</span>
             </div>
             <div className="price-badge">
               <FaDollarSign className="price-icon" />
@@ -126,93 +138,117 @@ const CourseListing = ({ onCourseSelect, selectedCourse, onBackToList }) => {
   };
 
   const renderCourseDetail = (course) => {
-    const instructor = getInstructorById(course.instructorId);
+    const creator = getInstructorById(course.instructorId);
     
     return (
       <div className="course-detail-page">
-        {/* Hero Section */}
+        {/* Hero Section - Simplified */}
         <div className="course-hero">
           <div className="course-hero-content">
-            <h1 className="course-hero-title">{course.title}</h1>
-            <h2 className="course-hero-subtitle">Master the Skills to Lead AI-Driven Products</h2>
+            <div className="course-hero-header">
+              <h1 className="course-hero-title">{course.title}</h1>
+              <p className="course-hero-description">{course.description}</p>
+            </div>
             
+            {/* Creator Info */}
             <div className="course-creator-hero">
               <div className="creator-hero-avatar">
-                <img src={instructor?.avatar} alt={instructor?.name} />
+                <img src={creator?.avatar} alt={creator?.name} />
               </div>
               <div className="creator-hero-info">
-                <h3>Created by {instructor?.name}</h3>
-                <p>{instructor?.title}</p>
-                <p>{instructor?.bio}</p>
-                <button className="view-community-btn" aria-label="View community page">
-                  View Community Page <FaArrowRight />
+                <span className="creator-label">Created by</span>
+                <h3>{creator?.name}</h3>
+                <p>{creator?.title}</p>
+              </div>
+            </div>
+
+            {/* Course Stats */}
+            <div className="course-hero-stats">
+              <div className="stat-item">
+                <FaStar className="stat-icon" />
+                <span>{course.rating} rating</span>
+              </div>
+              <div className="stat-item">
+                <FaUsers className="stat-icon" />
+                <span>{course.students.toLocaleString()} students</span>
+              </div>
+              <div className="stat-item">
+                <FaClock className="stat-icon" />
+                <span>{course.duration}</span>
+              </div>
+              <div className="stat-item">
+                <FaVideo className="stat-icon" />
+                <span>1-on-1 Sessions</span>
+              </div>
+            </div>
+
+            {/* Price & Enroll */}
+            <div className="course-hero-cta">
+              <div className="price-display">
+                <span className="price-amount">{course.price}</span>
+                <span className="price-includes">Includes 1-on-1 tutoring sessions</span>
+              </div>
+              <button className="enroll-btn" aria-label={`Enroll in ${course.title} for ${course.price}`}>
+                <FaCalendarAlt /> Enroll & Schedule First Session
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Student-Teachers Section - Core to PeerLoop */}
+        <div className="student-teachers-section">
+          <h3>
+            <FaUserGraduate className="section-icon" />
+            Learn from the Creator or Certified Student-Teachers
+          </h3>
+          <p className="section-subtitle">Book 1-on-1 sessions with peer tutors who've mastered this course</p>
+          
+          <div className="student-teachers-grid">
+            {/* Creator as first option */}
+            <div className="student-teacher-card creator-card">
+              <div className="st-avatar">
+                <img src={creator?.avatar} alt={creator?.name} />
+                <span className="creator-badge">Creator</span>
+              </div>
+              <div className="st-info">
+                <h4>{creator?.name}</h4>
+                <div className="st-stats">
+                  <span><FaStar /> {creator?.stats?.averageRating || 5.0}</span>
+                  <span><FaUsers /> {creator?.stats?.studentsTaught?.toLocaleString() || '1000+'} taught</span>
+                </div>
+              </div>
+              <button className="schedule-btn">Schedule Session</button>
+            </div>
+
+            {/* Student-Teachers */}
+            {mockStudentTeachers.map(st => (
+              <div key={st.id} className={`student-teacher-card ${!st.available ? 'unavailable' : ''}`}>
+                <div className="st-avatar">
+                  <img src={st.avatar} alt={st.name} />
+                  {st.available && <span className="available-badge">Available</span>}
+                </div>
+                <div className="st-info">
+                  <h4>{st.name}</h4>
+                  <div className="st-stats">
+                    <span><FaStar /> {st.rating}</span>
+                    <span><FaChalkboardTeacher /> {st.sessionsTaught} sessions</span>
+                  </div>
+                </div>
+                <button className="schedule-btn" disabled={!st.available}>
+                  {st.available ? 'Schedule Session' : 'Unavailable'}
                 </button>
               </div>
-            </div>
-
-            <div className="course-cta-buttons">
-              <div className="cta-button learn-certify">
-                <h3>LEARN & CERTIFY</h3>
-                <button className="enroll-btn" aria-label={`Enroll in ${course.title} for ${course.price}`}>Enroll Now - {course.price}</button>
-                <p>Earn your verifiable certificate</p>
-              </div>
-              
-              <div className="cta-button teach-earn">
-                <h3>LEARN, TEACH & EARN</h3>
-                <button className="unlock-btn" aria-label="Unlock teaching and earning potential">Unlock 80% Earning Potential</button>
-                <p>Become a teacher after you pass</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Community & Teacher Marketplace Section */}
-        <div className="community-section">
-          <h3>Learn from the Creator or a Certified Peer</h3>
-          
-          <div className="live-community-feed">
-            <div className="community-post">
-              <div className="post-avatar">
-                <img src="https://via.placeholder.com/40x40/4ECDC4/ffffff?text=JS" alt="John S." />
-              </div>
-              <div className="post-content">
-                <div className="post-header">
-                  <strong>John S. (Taught 25x)</strong>
-                </div>
-                <p>"Just wrapped up a session on Module 3. The key takeaway for my student was understanding how to implement transformer models in real-world scenarios. The hands-on approach really helped solidify the concepts!"</p>
-              </div>
-            </div>
-
-            <div className="community-post">
-              <div className="post-avatar">
-                <img src="https://via.placeholder.com/40x40/FF6B6B/ffffff?text=MG" alt="Maria G." />
-              </div>
-              <div className="post-content">
-                <div className="post-header">
-                  <strong>Maria G. (Taught 12x)</strong>
-                </div>
-                <p>"Here's a great resource I shared today for understanding transformer models: [Link to comprehensive guide]. This really helped my student grasp the attention mechanism concepts!"</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Course Content & Certification */}
+        {/* Course Curriculum */}
         <div className="course-content-section">
-          <div className="learning-objectives">
-            <h4>What You'll Learn</h4>
-            <div className="objectives-grid">
-              {course.learningObjectives?.slice(0, 3).map((objective, index) => (
-                <div key={index} className="objective-item">
-                  <FaCheck className="check-icon" />
-                  <span>{objective}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="course-curriculum">
-            <h4>Course Curriculum</h4>
+            <h4>
+              <FaBook className="section-icon" />
+              Course Curriculum
+            </h4>
             <div className="curriculum-list">
               {course.curriculum?.map((module, index) => (
                 <div key={index} className="curriculum-item">
@@ -221,63 +257,67 @@ const CourseListing = ({ onCourseSelect, selectedCourse, onBackToList }) => {
                     <span className="module-title">{module.title}</span>
                     <span className="module-duration">{module.duration}</span>
                   </div>
-                  <FaArrowRight className="expand-icon" />
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="credentials-section">
-            <h4>Your Credentials</h4>
-            <div className="credentials-grid">
-              <div className="credential-card knowledge">
-                <FaCertificate className="credential-icon" />
-                <h5>{course.title}</h5>
-                <p>Knowledge Verified</p>
-              </div>
-              
-              <div className="credential-card teaching">
-                <FaChalkboardTeacher className="credential-icon" />
-                <h5>{course.title}</h5>
-                <p>Teaching Mastery</p>
-                <span className="teaching-stats">Taught: 50+ times</span>
-              </div>
+          {/* What You'll Learn */}
+          <div className="learning-objectives">
+            <h4>
+              <FaCheck className="section-icon" />
+              What You'll Learn
+            </h4>
+            <div className="objectives-grid">
+              {course.learningObjectives?.map((objective, index) => (
+                <div key={index} className="objective-item">
+                  <FaCheck className="check-icon" />
+                  <span>{objective}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Student Reviews */}
-        <div className="reviews-section">
-          <h3>Reviews ({Math.floor(course.students * 0.1)})</h3>
-          
-          <div className="reviews-list">
-            <div className="review-item">
-              <div className="review-stars">
-                {[...Array(5)].map((_, i) => (
-                  <FaStar key={i} className="star-filled" />
-                ))}
+        {/* Earn While You Learn - PeerLoop Value Prop */}
+        <div className="earn-section">
+          <div className="earn-content">
+            <h3>
+              <FaChalkboardTeacher className="section-icon" />
+              Earn While You Learn
+            </h3>
+            <p>Complete this course, get certified, and become a Student-Teacher.</p>
+            
+            <div className="revenue-split">
+              <div className="split-item student-teacher-split">
+                <span className="split-percent">70%</span>
+                <span className="split-label">You Earn</span>
+                <span className="split-desc">As a Student-Teacher</span>
               </div>
-              <p className="review-text">"This course changed my career. Became a teacher and made back the fee in a week!"</p>
-              <span className="reviewer-name">- John S.</span>
+              <div className="split-item creator-split">
+                <span className="split-percent">15%</span>
+                <span className="split-label">Creator</span>
+                <span className="split-desc">Course creator</span>
+              </div>
+              <div className="split-item platform-split">
+                <span className="split-percent">15%</span>
+                <span className="split-label">PeerLoop</span>
+                <span className="split-desc">Platform</span>
+              </div>
             </div>
 
-            <div className="review-item">
-              <div className="review-stars">
-                {[...Array(5)].map((_, i) => (
-                  <FaStar key={i} className="star-filled" />
-                ))}
-              </div>
-              <p className="review-text">"Just wanted the knowledge, and it was perfect. The certificate looks great on my resume."</p>
-              <span className="reviewer-name">- Priya K.</span>
-            </div>
+            <p className="earn-example">
+              At {course.price}, you'd earn <strong>${Math.round(parseFloat(course.price.replace('$', '')) * 0.7)}</strong> per student you teach.
+            </p>
           </div>
         </div>
 
         {/* Final CTA */}
         <div className="final-cta">
-          <button className="enroll-now-btn" onClick={() => {}} aria-label={`Enroll in ${course.title} for ${course.price}`}>
-            Enroll Now - {course.price}
+          <button className="enroll-now-btn" aria-label={`Enroll in ${course.title} for ${course.price}`}>
+            <FaCalendarAlt /> Enroll Now - {course.price}
           </button>
+          <p className="cta-subtext">Start learning with 1-on-1 tutoring sessions</p>
         </div>
       </div>
     );

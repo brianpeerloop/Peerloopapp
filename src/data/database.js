@@ -1,16 +1,16 @@
 /**
- * Mock Database for Learning Platform
+ * PeerLoop Database
  * 
- * This file contains all the mock data for the learning platform including:
- * - Instructors with detailed profiles, qualifications, and expertise
+ * This file contains all the mock data for the PeerLoop platform including:
+ * - Creators with detailed profiles, qualifications, and expertise
  * - Courses with comprehensive information, curriculum, and learning objectives
  * - Helper functions for querying and searching the data
  * 
- * The data is structured to simulate a real learning management system
- * with realistic content and relationships between instructors and courses.
+ * PeerLoop Model: Learn → Certify → Teach → Earn (70/15/15 split)
+ * Price Range: $300-600 (1-on-1 tutoring pricing)
  */
 
-// Database for instructors and courses
+// Database for creators (experts who create courses)
 export const instructorsDatabase = [
   {
     id: 1,
@@ -42,12 +42,12 @@ export const instructorsDatabase = [
       "Philosophy of Science"
     ],
     stats: {
-      studentsTaught: 50000,
-      coursesCreated: 15,
-      averageRating: 5.0,
-      totalReviews: 5000
+      studentsTaught: 1730,
+      coursesCreated: 2,
+      averageRating: 4.8,
+      totalReviews: 350
     },
-    courses: [1, 2, 3] // Course IDs that this instructor teaches
+    courses: [2, 3] // Course IDs: Node.js Backend, Cloud Architecture AWS
   },
   {
     id: 2,
@@ -79,12 +79,12 @@ export const instructorsDatabase = [
       "AI Implementation"
     ],
     stats: {
-      studentsTaught: 25000,
-      coursesCreated: 12,
-      averageRating: 4.9,
-      totalReviews: 3200
+      studentsTaught: 19928,
+      coursesCreated: 4,
+      averageRating: 4.8,
+      totalReviews: 2400
     },
-    courses: [1, 4, 5, 6] // Course IDs that this instructor teaches
+    courses: [1, 4, 5, 6] // Course IDs: AI for PM, Deep Learning, Computer Vision, NLP
   },
   {
     id: 3,
@@ -116,12 +116,12 @@ export const instructorsDatabase = [
       "A/B Testing & Experimentation"
     ],
     stats: {
-      studentsTaught: 15000,
-      coursesCreated: 6,
-      averageRating: 4.7,
-      totalReviews: 1800
+      studentsTaught: 2450,
+      coursesCreated: 2,
+      averageRating: 4.55,
+      totalReviews: 490
     },
-    courses: [7, 8] // Course IDs that this instructor teaches
+    courses: [7, 8] // Course IDs: Data Science Fundamentals, Business Intelligence
   },
   {
     id: 4,
@@ -153,12 +153,12 @@ export const instructorsDatabase = [
       "Cloud Infrastructure (AWS/Azure)"
     ],
     stats: {
-      studentsTaught: 12000,
-      coursesCreated: 9,
-      averageRating: 4.6,
-      totalReviews: 1500
+      studentsTaught: 2970,
+      coursesCreated: 3,
+      averageRating: 4.7,
+      totalReviews: 595
     },
-    courses: [9, 10, 11] // Course IDs that this instructor teaches
+    courses: [9, 10, 11] // Course IDs: Full-Stack Dev, DevOps, Microservices
   },
   {
     id: 5,
@@ -250,7 +250,7 @@ export const coursesDatabase = [
     level: "Intermediate",
     rating: 4.8,
     students: 15678,
-    price: "$100",
+    price: "$399",
     thumbnail: "https://via.placeholder.com/300x200/4ECDC4/ffffff?text=AI+PM",
     instructorId: 2, // Links to Jane Doe
     category: "AI & Product Management",
@@ -303,7 +303,7 @@ export const coursesDatabase = [
     level: "Intermediate",
     rating: 4.7,
     students: 980,
-    price: "$249",
+    price: "$349",
     thumbnail: "https://via.placeholder.com/300x200/00D2FF/ffffff?text=Node",
     instructorId: 1, // Links to Albert Einstein
     category: "Backend Development",
@@ -417,7 +417,7 @@ export const coursesDatabase = [
     level: "Advanced",
     rating: 4.7,
     students: 950,
-    price: "$249",
+    price: "$349",
     thumbnail: "https://via.placeholder.com/300x200/4ECDC4/ffffff?text=CV",
     instructorId: 2, // Links to Jane Doe
     category: "Computer Vision",
@@ -493,7 +493,7 @@ export const coursesDatabase = [
     level: "Beginner",
     rating: 4.6,
     students: 1800,
-    price: "$199",
+    price: "$299",
     thumbnail: "https://via.placeholder.com/300x200/FFD93D/000000?text=Data",
     instructorId: 3, // Links to Prof. Maria Rodriguez
     category: "Data Science",
@@ -531,7 +531,7 @@ export const coursesDatabase = [
     level: "Intermediate",
     rating: 4.5,
     students: 650,
-    price: "$279",
+    price: "$349",
     thumbnail: "https://via.placeholder.com/300x200/00B894/ffffff?text=BI",
     instructorId: 3, // Links to Prof. Maria Rodriguez
     category: "Business Analytics",

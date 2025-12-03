@@ -38,8 +38,8 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser }) => {
    * Each item has an icon, label (for internal logic), and optional displayLabel (for UI)
    */
   const menuItems = [
-    { icon: <FaHome />, label: 'Browse', displayLabel: 'Browse Courses' }, // Browse courses and instructors
     { icon: <FaBell />, label: 'My Community', displayLabel: 'My Community' }, // Community features
+    { icon: <FaHome />, label: 'Browse', displayLabel: 'Browse Courses' }, // Browse courses and instructors
     { icon: <FaBell />, label: 'Notifications', displayLabel: 'Notifications' }, // Notification center
     { icon: <FaSearch />, label: 'Dashboard' }, // User's learning dashboard
     { icon: <FaUser />, label: 'Messages' }, // Messaging system
@@ -110,6 +110,8 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser }) => {
             <div className="nav-icon">{item.icon}</div>
             {/* Use displayLabel if available, otherwise use label */}
             <span className="nav-label">{item.displayLabel || item.label}</span>
+            {/* Tooltip for collapsed sidebar */}
+            <span className="nav-tooltip">{item.displayLabel || item.label}</span>
           </div>
         ))}
       </nav>

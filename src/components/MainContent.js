@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './MainContent.css';
-import { FaImage, FaSmile, FaCalendar, FaMapMarkerAlt, FaGlobe, FaSearch, FaBook, FaUser, FaFilter, FaGraduationCap, FaStar, FaUsers, FaAward } from 'react-icons/fa';
+import { FaImage, FaSmile, FaCalendar, FaMapMarkerAlt, FaGlobe, FaSearch, FaBook, FaUser, FaFilter, FaGraduationCap, FaStar, FaUsers, FaAward, FaHeart, FaComment, FaAt, FaRetweet, FaBullhorn, FaDollarSign, FaCheckCircle, FaClock } from 'react-icons/fa';
 import { AiOutlineHeart, AiOutlineBarChart } from 'react-icons/ai';
 import { BiRepost } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
@@ -213,190 +213,263 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
   };
 
     const renderInstructorProfile = () => {
-    const instructorCourseIds = selectedInstructor.courses ? selectedInstructor.courses.map(c => (typeof c === 'object' ? c.id : c)) : [];
-    const isAnyCourseFollowed = instructorCourseIds.some(id => isCourseFollowed(id));
+    const creator = selectedInstructor;
+    const creatorCourses = creator.courses ? creator.courses.map(c => typeof c === 'object' ? c : indexedCourses.find(course => course.id === c)).filter(Boolean) : [];
 
     return (
-    <div className="instructor-profile">
-      <div className="instructor-profile-hero">
-        <div className="instructor-profile-bg" />
-        <div className="instructor-profile-avatar">
-          <img src={selectedInstructor.avatar} alt={selectedInstructor.name} />
-        </div>
-      </div>
-      <div className="instructor-profile-content">
-        <div className="instructor-profile-actions">
-          {!editingInstructor ? (
-            <div className="profile-action-buttons">
-              <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div style={{ background: '#f8fafc', minHeight: '100vh', padding: '0' }}>
+        {/* Back Button */}
+        <button 
+          onClick={() => setSelectedInstructor(null)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            background: '#fff',
+            border: '1px solid #e2e8f0',
+            borderRadius: 8,
+            padding: '10px 16px',
+            margin: '16px',
+            cursor: 'pointer',
+            fontWeight: 600,
+            color: '#64748b'
+          }}
+        >
+          ← Back to Creators
+        </button>
+
+        {/* Creator Profile Card */}
+        <div style={{ background: '#fff', borderRadius: 16, margin: '0 16px 24px 16px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+          {/* Header Banner */}
+          <div style={{ background: 'linear-gradient(135deg, #1d9bf0 0%, #0284c7 100%)', height: 120 }} />
+          
+          {/* Profile Content */}
+          <div style={{ padding: '0 24px 24px 24px', marginTop: -50 }}>
+            {/* Avatar & Basic Info */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20, marginBottom: 20 }}>
+              <img 
+                src={creator.avatar} 
+                alt={creator.name}
+                style={{ 
+                  width: 100, 
+                  height: 100, 
+                  borderRadius: '50%', 
+                  border: '4px solid #fff',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  objectFit: 'cover'
+                }}
+              />
+              <div style={{ flex: 1, paddingBottom: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
+                  <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: '#1e293b' }}>{creator.name}</h1>
+                  <span style={{ background: '#dbeafe', color: '#1e40af', fontSize: 12, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>CREATOR</span>
+                </div>
+                <p style={{ margin: 0, color: '#64748b', fontSize: 16 }}>{creator.title}</p>
+              </div>
+              <div style={{ display: 'flex', gap: 12 }}>
                 <button 
-                  className={`follow-btn ${isInstructorFollowed(selectedInstructor.id) ? 'following' : ''}`}
-                  onClick={() => setIsFollowDropdownOpen(open => !open)}
+                  style={{ 
+                    background: '#1d9bf0', 
+                    color: '#fff', 
+                    border: 'none', 
+                    padding: '12px 24px', 
+                    borderRadius: 8, 
+                    fontWeight: 600, 
+                    fontSize: 14, 
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8
+                  }}
                 >
-                  {isInstructorFollowed(selectedInstructor.id) ? 'Following' : 'Follow'}
+                  📅 Schedule Session
                 </button>
-                {isFollowDropdownOpen && (
-                  <div className="follow-dropdown">
-                    {selectedInstructor.courses && selectedInstructor.courses.map(c => {
-                      const courseObj = typeof c === 'object' ? c : indexedCourses.find(course => course.id === c);
-                      if (!courseObj) return null;
-                      return (
-                        <div key={courseObj.id} className="dropdown-course-item" onClick={e => { e.stopPropagation(); handleFollowCourse(courseObj.id); }}>
-                          <span>{courseObj.title}</span>
-                          {isCourseFollowed(courseObj.id) && <span className="checkmark">✔</span>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-              <button className="edit-instructor-btn" onClick={() => setEditingInstructor(true)}>
-                Edit Profile
-              </button>
-            </div>
-          ) : (
-            <div className="edit-actions">
-              <button className="save-btn" onClick={handleSaveInstructor}>
-                Save
-              </button>
-              <button className="cancel-btn" onClick={handleCancelEdit}>
-                Cancel
-              </button>
-            </div>
-          )}
-        </div>
-        
-        {editingInstructor ? (
-          <div className="instructor-edit-form">
-            <div className="form-group">
-              <label>Profile Picture</label>
-              <div className="image-upload-container">
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  id="image-upload"
-                  className="image-upload-input"
-                />
-                <label htmlFor="image-upload" className="image-upload-label">
-                  <div className="image-upload-preview">
-                    <img src={editedInstructorData.avatar} alt="Profile preview" />
-                  </div>
-                  <span>Click to upload new image</span>
-                </label>
+                <button 
+                  onClick={() => handleFollowInstructor(creator.id)}
+                  style={{ 
+                    background: isInstructorFollowed(creator.id) ? '#e2e8f0' : '#fff',
+                    color: isInstructorFollowed(creator.id) ? '#64748b' : '#1d9bf0',
+                    border: '2px solid #e2e8f0', 
+                    padding: '12px 24px', 
+                    borderRadius: 8, 
+                    fontWeight: 600, 
+                    fontSize: 14, 
+                    cursor: 'pointer' 
+                  }}
+                >
+                  {isInstructorFollowed(creator.id) ? '✓ Following' : 'Follow'}
+                </button>
               </div>
             </div>
-            <div className="form-group">
-              <label>Name</label>
-              <input 
-                type="text" 
-                value={editedInstructorData.name}
-                onChange={(e) => setEditedInstructorData({...editedInstructorData, name: e.target.value})}
-              />
+
+            {/* Stats Bar */}
+            <div style={{ 
+              display: 'flex', 
+              gap: 32, 
+              padding: '16px 0', 
+              borderTop: '1px solid #e2e8f0',
+              borderBottom: '1px solid #e2e8f0',
+              marginBottom: 20
+            }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>{creator.stats?.studentsTaught?.toLocaleString() || 0}</div>
+                <div style={{ fontSize: 13, color: '#64748b' }}>Students Taught</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>⭐ {creator.stats?.averageRating || 0}</div>
+                <div style={{ fontSize: 13, color: '#64748b' }}>Avg Rating</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>{creator.stats?.coursesCreated || creatorCourses.length}</div>
+                <div style={{ fontSize: 13, color: '#64748b' }}>Courses</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>{creator.stats?.totalReviews?.toLocaleString() || 0}</div>
+                <div style={{ fontSize: 13, color: '#64748b' }}>Reviews</div>
+              </div>
             </div>
-            <div className="form-group">
-              <label>Title</label>
-              <input 
-                type="text" 
-                value={editedInstructorData.title}
-                onChange={(e) => setEditedInstructorData({...editedInstructorData, title: e.target.value})}
-              />
+
+            {/* Bio */}
+            <div style={{ marginBottom: 24 }}>
+              <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: '#1e293b' }}>About</h3>
+              <p style={{ margin: 0, color: '#475569', fontSize: 15, lineHeight: 1.7 }}>{creator.bio}</p>
             </div>
-            <div className="form-group">
-              <label>Bio</label>
-              <textarea 
-                value={editedInstructorData.bio}
-                onChange={(e) => setEditedInstructorData({...editedInstructorData, bio: e.target.value})}
-                rows={4}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="instructor-profile-summary">
-            <h1>{selectedInstructor.name}</h1>
-            <p className="instructor-title">{selectedInstructor.title}</p>
-            <p className="instructor-bio">{selectedInstructor.bio}</p>
-            
-            {/* Qualifications Section */}
-            {selectedInstructor.qualifications && selectedInstructor.qualifications.length > 0 && (
-              <div className="instructor-qualifications-section">
-                <h2>Qualifications</h2>
-                <div className="qualifications-list">
-                  {selectedInstructor.qualifications.map((qual, index) => (
-                    <div key={index} className="qualification-item">
-                      <span className="qualification-sentence">{qual.sentence}</span>
+
+            {/* Credentials */}
+            {creator.qualifications && creator.qualifications.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Credentials</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {creator.qualifications.map((qual, index) => (
+                    <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#475569', fontSize: 14 }}>
+                      <span style={{ color: '#1d9bf0' }}>✓</span>
+                      <span>{qual.sentence}</span>
                     </div>
                   ))}
-                  {selectedInstructor.website && (
-                    <div className="qualification-item">
-                      <a 
-                        href={selectedInstructor.website} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="qualification-link"
-                      >
-                        Visit Website →
-                      </a>
-                    </div>
-                  )}
+                </div>
+                {creator.website && (
+                  <a 
+                    href={creator.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ display: 'inline-block', marginTop: 12, color: '#1d9bf0', fontWeight: 500, fontSize: 14 }}
+                  >
+                    🌐 Visit Website →
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* Expertise Tags */}
+            {creator.expertise && creator.expertise.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Expertise</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {creator.expertise.map((skill, index) => (
+                    <span key={index} style={{ 
+                      background: '#f1f5f9', 
+                      color: '#475569', 
+                      padding: '6px 14px', 
+                      borderRadius: 20, 
+                      fontSize: 13,
+                      fontWeight: 500
+                    }}>
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </div>
             )}
-            
+          </div>
+        </div>
 
-            
-
-            
-            {selectedInstructor.courses && selectedInstructor.courses.length > 0 && (
-              <div className="instructor-courses">
-                <h2>Courses</h2>
-                <div className="courses-list">
-                  {selectedInstructor.courses.map(c => {
-                    const courseObj = typeof c === 'object' ? c : indexedCourses.find(course => course.id === c);
-                    if (!courseObj) return null;
-                    return (
-                      <div key={courseObj.id} className="course-link" onClick={() => {
-                        setSelectedCourse(courseObj);
-                        setCurrentInstructorForCourse(selectedInstructor);
-                      }}>
-                        <div className="course-link-thumbnail">
-                          <img src={courseObj.thumbnail} alt={courseObj.title} />
-                        </div>
-                        <div className="course-link-info">
-                          <h3>{courseObj.title}</h3>
-                          <p className="course-link-description">{courseObj.description}</p>
-                          <div className="course-link-meta">
-                            <span className="course-duration">{courseObj.duration}</span>
-                            <span className="course-level">{courseObj.level}</span>
-                            <span className="course-rating">⭐ {courseObj.rating}</span>
-                            <span className="course-students">{courseObj.students} students</span>
-                          </div>
-                          <div className="course-link-price">
-                            <span className="price">{courseObj.price}</span>
-                          </div>
-                        </div>
-                        <div className="course-link-arrow">
-                          →
-                        </div>
-                        <button 
-                          className={`follow-btn ${isCourseFollowed(courseObj.id) ? 'following' : ''}`} 
-                          onClick={e => { e.stopPropagation(); handleFollowCourse(courseObj.id); }}
-                          disabled={isFollowingLoading}
-                        >
-                          {isCourseFollowed(courseObj.id) ? 'Following' : 'Follow'}
-                        </button>
+        {/* Courses Section */}
+        {creatorCourses.length > 0 && (
+          <div style={{ margin: '0 16px 24px 16px' }}>
+            <h2 style={{ margin: '0 0 16px 0', fontSize: 20, fontWeight: 700, color: '#1e293b' }}>
+              Courses by {creator.name}
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {creatorCourses.map(course => {
+                const isFollowed = isCourseFollowed(course.id);
+                const isViaCreator = isCourseFollowedViaCreator(course.id);
+                return (
+                  <div 
+                    key={course.id} 
+                    onClick={() => {
+                      setSelectedCourse(course);
+                      setCurrentInstructorForCourse(creator);
+                    }}
+                    style={{ 
+                      background: '#fff', 
+                      borderRadius: 12, 
+                      padding: 20, 
+                      cursor: 'pointer',
+                      border: '1px solid #e2e8f0',
+                      display: 'flex',
+                      gap: 20,
+                      alignItems: 'flex-start',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <img 
+                      src={course.thumbnail} 
+                      alt={course.title}
+                      style={{ width: 160, height: 100, borderRadius: 8, objectFit: 'cover' }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ margin: '0 0 8px 0', fontSize: 18, fontWeight: 600, color: '#1e293b' }}>{course.title}</h3>
+                      <p style={{ margin: '0 0 12px 0', color: '#64748b', fontSize: 14, lineHeight: 1.5 }}>{course.description}</p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: '#64748b' }}>
+                        <span>⭐ {course.rating}</span>
+                        <span>👥 {course.students?.toLocaleString()} students</span>
+                        <span>⏱️ {course.duration}</span>
+                        <span>📊 {course.level}</span>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+                    </div>
+                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <div style={{ fontSize: 24, fontWeight: 700, color: '#1d9bf0' }}>{course.price}</div>
+                      <button 
+                        onClick={e => { e.stopPropagation(); handleFollowCourse(course.id); }}
+                        disabled={isFollowingLoading}
+                        style={{ 
+                          background: isFollowed ? '#e2e8f0' : '#1d9bf0',
+                          color: isFollowed ? '#64748b' : '#fff',
+                          border: 'none', 
+                          padding: '10px 20px', 
+                          borderRadius: 8, 
+                          fontWeight: 600, 
+                          fontSize: 14, 
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {isFollowed ? '✓ Following' : 'Follow'}
+                      </button>
+                      <button 
+                        onClick={e => { e.stopPropagation(); }}
+                        style={{ 
+                          background: '#1d9bf0', 
+                          color: '#fff', 
+                          border: 'none', 
+                          padding: '10px 20px', 
+                          borderRadius: 8, 
+                          fontWeight: 600, 
+                          fontSize: 14, 
+                          cursor: 'pointer' 
+                        }}
+                      >
+                        View Course
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   // Helper function to get community data for a course
   const getCommunityForCourse = (courseId) => {
@@ -442,41 +515,92 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
     };
   };
 
-  // Helper function to get course-specific community data
+  // Helper function to get course-specific community data (for following individual courses)
   const getCourseSpecificCommunity = (courseId) => {
     const course = getCourseById(courseId);
     if (!course) return null;
     
-    const baseCommunity = getCommunityForCourse(courseId);
-    if (!baseCommunity) return null;
+    const instructor = getInstructorById(course.instructorId);
+    if (!instructor) return null;
     
-    // Create a course-specific community that only includes posts from this specific course
+    // Create a course-specific community
     return {
-      ...baseCommunity,
-      id: `course-${courseId}`, // Unique ID for this specific course
-      name: `${course.title} Community`,
-      description: `Community for ${course.title} - ${course.description}`,
+      id: `course-${courseId}`,
+      type: 'course', // Identifies this as a course follow
+      name: course.title, // Just the course name for the tab
       courseId: courseId,
-      isCourseSpecific: true
+      courseIds: [courseId], // Array for filtering posts
+      instructorId: course.instructorId,
+      instructorName: instructor.name,
+      description: course.description,
+      members: Math.floor(course.students * 0.8),
+      posts: Math.floor(course.students * 0.24)
     };
   };
 
-  // Helper function to check if a course is followed
-  const isCourseFollowed = (courseId) => {
-    const courseSpecificId = `course-${courseId}`;
-    return followedCommunities.some(c => c.id === courseSpecificId);
+  // Helper function to get creator community data (for following creators)
+  const getCreatorCommunity = (instructorId) => {
+    const instructor = getInstructorById(instructorId);
+    if (!instructor) return null;
+    
+    // Get all course IDs for this creator
+    const courseIds = instructor.courses || [];
+    
+    // Calculate aggregate stats
+    let totalStudents = 0;
+    courseIds.forEach(cid => {
+      const course = getCourseById(cid);
+      if (course) totalStudents += course.students;
+    });
+    
+    // Create a creator community that aggregates all their courses
+    return {
+      id: `creator-${instructorId}`,
+      type: 'creator', // Identifies this as a creator follow
+      name: instructor.name, // Creator name for the tab
+      instructorId: instructorId,
+      instructorName: instructor.name,
+      courseIds: courseIds, // All course IDs for filtering posts
+      description: instructor.bio,
+      members: Math.floor(totalStudents * 0.8),
+      posts: Math.floor(totalStudents * 0.24),
+      avatar: instructor.avatar
+    };
   };
 
-  // Helper function to check if an instructor is followed (based on their course communities)
-  const isInstructorFollowed = (instructorId) => {
-    const instructor = getInstructorById(instructorId);
-    if (!instructor) return false;
+  // Helper function to check if a course is followed (individually or via creator)
+  const isCourseFollowed = (courseId) => {
+    // Check if this specific course is followed
+    const courseSpecificId = `course-${courseId}`;
+    if (followedCommunities.some(c => c.id === courseSpecificId)) return true;
     
-    // Check if all of the instructor's course communities are followed
-    return instructor.courses.every(courseId => {
-      const courseSpecificId = `course-${courseId}`;
-      return followedCommunities.some(c => c.id === courseSpecificId);
-    });
+    // Also check if the creator of this course is followed
+    const course = getCourseById(courseId);
+    if (course) {
+      const creatorId = `creator-${course.instructorId}`;
+      if (followedCommunities.some(c => c.id === creatorId)) return true;
+    }
+    
+    return false;
+  };
+
+  // Helper to check if course is followed via creator (not individually)
+  const isCourseFollowedViaCreator = (courseId) => {
+    const course = getCourseById(courseId);
+    if (!course) return false;
+    
+    const courseSpecificId = `course-${courseId}`;
+    const isIndividuallyFollowed = followedCommunities.some(c => c.id === courseSpecificId);
+    if (isIndividuallyFollowed) return false;
+    
+    const creatorId = `creator-${course.instructorId}`;
+    return followedCommunities.some(c => c.id === creatorId);
+  };
+
+  // Helper function to check if a creator is followed
+  const isInstructorFollowed = (instructorId) => {
+    const creatorId = `creator-${instructorId}`;
+    return followedCommunities.some(c => c.id === creatorId);
   };
 
   const handleFollowInstructor = (instructorId) => {
@@ -491,37 +615,42 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
         return;
       }
 
-      // Get instructor data to find their courses
+      // Get instructor data
       const instructor = getInstructorById(instructorId);
       if (!instructor) {
         console.error('Instructor not found:', instructorId);
         return;
       }
 
-      const isAlreadyFollowed = isInstructorFollowed(instructorId);
+      const creatorCommunityId = `creator-${instructorId}`;
+      const isAlreadyFollowed = followedCommunities.some(c => c.id === creatorCommunityId);
       
       if (isAlreadyFollowed) {
-        // Unfollow - remove all course-specific communities for this instructor's courses
-        setFollowedCommunities(prev => {
-          return prev.filter(community => {
-            // Keep communities that are not course-specific for this instructor
-            if (!community.isCourseSpecific) return true;
-            // Remove course-specific communities for this instructor's courses
-            return !instructor.courses.includes(community.courseId);
-          });
-        });
+        // Unfollow - remove the creator community
+        setFollowedCommunities(prev => prev.filter(c => c.id !== creatorCommunityId));
       } else {
-        // Follow - add all course-specific communities for this instructor's courses
-        const newCommunities = instructor.courses.map(courseId => {
-          return getCourseSpecificCommunity(courseId);
-        }).filter(Boolean); // Filter out any undefined communities
-        
-        setFollowedCommunities(prev => {
-          // Add new communities, avoiding duplicates
-          const existingIds = new Set(prev.map(c => c.id));
-          const uniqueNewCommunities = newCommunities.filter(c => !existingIds.has(c.id));
-          return [...prev, ...uniqueNewCommunities];
-        });
+        // Follow - add creator community (single tab for all creator's courses)
+        const creatorCommunity = getCreatorCommunity(instructorId);
+        if (creatorCommunity) {
+          // Get the creator's course IDs to remove individual course follows
+          const creatorCourseIds = instructor.courses || [];
+          
+          setFollowedCommunities(prev => {
+            // Check if already exists
+            if (prev.some(c => c.id === creatorCommunity.id)) return prev;
+            
+            // Remove any individual course follows that belong to this creator
+            // since they're now included in the creator follow
+            const filteredPrev = prev.filter(c => {
+              // Keep if it's not a course follow
+              if (c.type !== 'course') return true;
+              // Keep if the course doesn't belong to this creator
+              return !creatorCourseIds.includes(c.courseId);
+            });
+            
+            return [...filteredPrev, creatorCommunity];
+          });
+        }
       }
     } catch (error) {
       console.error('Error in handleFollowInstructor:', error);
@@ -530,6 +659,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
     }
   };
 
+  // Follow/unfollow a SINGLE course (individual course follow)
   const handleFollowCourse = (courseId) => {
     if (isFollowingLoading) return; // Prevent rapid clicking
     
@@ -547,50 +677,54 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
         console.error('Course not found for courseId:', courseId);
         return;
       }
-      const instructor = getInstructorById(course.instructorId);
-      if (!instructor) {
-        console.error('Instructor not found for courseId:', courseId);
+
+      // Get the course-specific community for this single course
+      const courseCommunity = getCourseSpecificCommunity(courseId);
+      if (!courseCommunity) {
+        console.error('Could not create community for courseId:', courseId);
         return;
       }
 
-      // Get all course-specific communities for this instructor
-      const allInstructorCourseCommunities = instructor.courses.map(cid => getCourseSpecificCommunity(cid)).filter(Boolean);
+      // Check if this SPECIFIC course is followed (not via creator)
+      const courseSpecificId = `course-${courseId}`;
+      const isIndividuallyFollowed = followedCommunities.some(c => c.id === courseSpecificId);
+      
+      // Check if the creator of this course is followed
+      const creatorId = `creator-${course.instructorId}`;
+      const creatorCommunity = followedCommunities.find(c => c.id === creatorId);
+      const isCreatorFollowed = !!creatorCommunity;
       
       setFollowedCommunities(prev => {
-        // Check if any of the instructor's course communities are already followed
-        const isAlreadyFollowed = allInstructorCourseCommunities.every(c => prev.some(pc => pc.id === c.id));
-        
-        if (isAlreadyFollowed) {
-          // Unfollow: remove all of this instructor's course communities
-          const newCommunities = prev.filter(c => !instructor.courses.includes(c.courseId));
+        if (isIndividuallyFollowed) {
+          // Unfollow: remove just this course community
+          return prev.filter(c => c.id !== courseCommunity.id);
+        } else if (isCreatorFollowed) {
+          // Course is followed via creator - unfollow this specific course
+          // Remove the creator follow and add individual follows for OTHER courses
+          const instructor = getInstructorById(course.instructorId);
+          if (!instructor) return prev;
           
-          // Also remove instructor from followedInstructors if no courses are followed
-          const remainingInstructorCourses = newCommunities.filter(c => 
-            c.isCourseSpecific && instructor.courses.includes(c.courseId)
-          );
-          if (remainingInstructorCourses.length === 0) {
-            setFollowedInstructors(prev => {
-              const newSet = new Set(prev);
-              newSet.delete(instructor.id);
-              return newSet;
-            });
-          }
+          const otherCourseIds = (instructor.courses || []).filter(cid => cid !== courseId);
           
-          return newCommunities;
-        } else {
-          // Follow: add all of this instructor's course communities (avoid duplicates)
-          const existingIds = new Set(prev.map(c => c.id));
-          const uniqueNewCommunities = allInstructorCourseCommunities.filter(c => !existingIds.has(c.id));
-          const newCommunities = [...prev, ...uniqueNewCommunities];
+          // Remove creator follow
+          let newList = prev.filter(c => c.id !== creatorId);
           
-          // Also add instructor to followedInstructors
-          setFollowedInstructors(prev => {
-            const newSet = new Set(prev);
-            newSet.add(instructor.id);
-            return newSet;
+          // Add individual follows for the other courses
+          otherCourseIds.forEach(cid => {
+            const otherCourseCommunity = getCourseSpecificCommunity(cid);
+            if (otherCourseCommunity && !newList.some(c => c.id === otherCourseCommunity.id)) {
+              newList.push(otherCourseCommunity);
+            }
           });
           
-          return newCommunities;
+          return newList;
+        } else {
+          // Follow: add just this course community (avoid duplicates)
+          const existingIds = new Set(prev.map(c => c.id));
+          if (existingIds.has(courseCommunity.id)) {
+            return prev; // Already exists
+          }
+          return [...prev, courseCommunity];
         }
       });
     } catch (error) {
@@ -639,10 +773,10 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
             <div style={{ color: '#222', fontSize: 15, marginBottom: 14, textAlign: 'center' }}>{courseData.description}</div>
             {/* Flywheel Benefits */}
             <ul style={{ color: '#222', fontSize: 15, margin: '18px 0 0 0', paddingLeft: 0, textAlign: 'left', fontWeight: 400, lineHeight: 1.5, listStylePosition: 'inside' }}>
-              <li style={{ marginBottom: 2 }}>Earn: 80% commission on each student you teach (e.g., teach one to recover $80 of $100 investment)</li>
-              <li style={{ marginBottom: 2 }}>Certify: Dual credentials – Learning Certificate for knowledge, Teaching Certificate for impact</li>
-              <li style={{ marginBottom: 2 }}>Community: Join or create gated groups for certified peers; network, collaborate on real-world AI projects</li>
-              <li style={{ marginBottom: 2 }}>Outcomes: Address Bloom's 2 Sigma with scalable one-to-one peer tutoring for superior retention and mastery</li>
+              <li style={{ marginBottom: 2 }}>Earn: 70% commission when you become a Student-Teacher (e.g., earn $350 per $500 course you teach)</li>
+              <li style={{ marginBottom: 2 }}>1-on-1 Sessions: Learn directly from the Creator or certified Student-Teachers via live video</li>
+              <li style={{ marginBottom: 2 }}>Certify: Get certified, then teach others and earn while sharing your knowledge</li>
+              <li style={{ marginBottom: 2 }}>Outcomes: Proven 2x better results through peer tutoring (Bloom's 2 Sigma)</li>
             </ul>
             {/* Curriculum Outline */}
             <div style={{ margin: '32px 0 0 0', textAlign: 'left', width: '100%', paddingLeft: 0 }}>
@@ -662,15 +796,23 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
               <div style={{ color: '#444', fontSize: 13 }}>{instructorData.bio}</div>
             </div>
             {/* Student-Teacher Stats */}
-            <div style={{ color: '#1d9bf0', fontSize: 13, marginBottom: 10, textAlign: 'center' }}>
-              Active Student-Teachers: {studentTeachers} &nbsp;|&nbsp; Avg. Taught per Teacher: {avgTaught} &nbsp;|&nbsp; Top Teacher Badge: {topTeacherBadge}
+            <div style={{ background: '#eff6ff', border: '1px solid #1d9bf0', borderRadius: 8, padding: '12px 16px', marginBottom: 16, textAlign: 'center' }}>
+              <div style={{ color: '#0284c7', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
+                🎓 {studentTeachers} Student-Teachers available to help you learn
+              </div>
+              <div style={{ color: '#047857', fontSize: 13 }}>
+                Book 1-on-1 sessions with the Creator or certified peers
+              </div>
             </div>
             {/* Action Buttons */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 18, margin: '10px 0 18px 0' }}>
-              <span style={{ color: '#1d9bf0', fontWeight: 600, fontSize: 14, cursor: 'pointer', textDecoration: 'none', padding: 0, background: 'none', border: 'none', lineHeight: '20px' }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Enroll</span>
-              <span style={{ color: '#1d9bf0', fontWeight: 600, fontSize: 14, cursor: 'pointer', textDecoration: 'none', padding: 0, background: 'none', border: 'none', lineHeight: '20px' }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Explore Teaching</span>
-              <span style={{ color: '#1d9bf0', fontWeight: 500, fontSize: 14, cursor: 'pointer', textDecoration: 'none', padding: 0, background: 'none', border: 'none', lineHeight: '20px' }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Follow Course</span>
-              <span style={{ color: '#1d9bf0', fontWeight: 500, fontSize: 14, cursor: 'pointer', textDecoration: 'none', padding: 0, background: 'none', border: 'none', lineHeight: '20px' }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Join Community</span>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '16px 0 18px 0', flexWrap: 'wrap' }}>
+              <button style={{ background: '#1d9bf0', color: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: '10px 20px', borderRadius: 8, border: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                📅 Schedule Session
+              </button>
+              <button style={{ background: '#1d9bf0', color: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: '10px 20px', borderRadius: 8, border: 'none' }}>
+                Enroll Now - {courseData.price}
+              </button>
+              <span style={{ color: '#1d9bf0', fontWeight: 500, fontSize: 14, cursor: 'pointer', textDecoration: 'none', padding: '10px 0', background: 'none', border: 'none', lineHeight: '20px' }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Learn about teaching</span>
             </div>
             {/* Footer: Related Courses, Share Links */}
             <div style={{ color: '#888', fontSize: 13, textAlign: 'center', marginBottom: 10 }}>
@@ -692,45 +834,86 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
       instructor.searchIndex.includes(searchQuery.toLowerCase())
     );
     return (
-      <div className="courses-feed" style={{ padding: 0, margin: 0 }}>
-        {filteredInstructors.map(instructor => (
-          <div key={instructor.id} className="course-post" onClick={() => {
-            const fullInstructorData = getInstructorWithCourses(instructor.id);
-            setSelectedInstructor(fullInstructorData || instructor);
+      <div className="creators-feed" style={{ padding: 0, margin: 0 }}>
+        {filteredInstructors.map(creator => (
+          <div key={creator.id} className="creator-card" onClick={() => {
+            const fullCreatorData = getInstructorWithCourses(creator.id);
+            setSelectedInstructor(fullCreatorData || creator);
+          }} style={{
+            background: '#fff',
+            borderRadius: 12,
+            padding: '20px',
+            marginBottom: 16,
+            border: '1px solid #e2e8f0',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
           }}>
-            <div className="post-content" style={{ padding: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, color: '#222' }}>
-                <span style={{ fontWeight: 700, fontSize: 16, color: '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{instructor.name}</span>
-                <span style={{ color: '#888', fontSize: 13, fontWeight: 500 }}>@{instructor.title}</span>
-              </div>
-              <div className="post-text" style={{ color: '#222' }}>{instructor.bio}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, margin: '8px 0 2px 0' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FaBook style={{ fontSize: 18, color: '#4e8dd2' }} /> {instructor.stats?.coursesCreated || 0} Courses</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FaStar style={{ fontSize: 18, color: '#4e8dd2' }} /> {instructor.stats?.averageRating || 0}</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FaUsers style={{ fontSize: 18, color: '#4e8dd2' }} /> {instructor.stats?.followers?.toLocaleString() || 0} Followers</span>
-              </div>
-              {/* Horizontal stats row instead of vertical list */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 18, color: '#222', fontSize: 13, margin: '6px 0 0 0' }}>
-                <span>Total Students: {instructor.stats?.studentsTaught?.toLocaleString() || 'N/A'}</span>
-                <span style={{ color: '#888' }}>•</span>
-                <span>Avg. Course Rating: {instructor.stats?.averageRating || 'N/A'}</span>
-                <span style={{ color: '#888' }}>•</span>
-                <span>Communities: {instructor.stats?.communityType || 'N/A'}</span>
-              </div>
-              <div style={{ display: 'flex', gap: 12, marginTop: 8, color: '#1d9bf0', fontSize: 13 }} onClick={e => e.stopPropagation()}>
-                <button className={`follow-btn ${isInstructorFollowed(instructor.id) ? 'following' : ''}`}
-                  onClick={() => handleFollowInstructor(instructor.id)}
-                  disabled={isFollowingLoading}
-                  style={{ fontWeight: 500, fontSize: 13, background: 'none', border: 'none', color: '#1d9bf0', cursor: 'pointer', padding: 0 }}
-                >
-                  {isInstructorFollowed(instructor.id) ? 'Following' : 'Follow'}
-                </button>
-                <span style={{ cursor: 'pointer', color: '#1d9bf0', fontWeight: 500 }} onClick={() => setSelectedInstructor(getInstructorWithCourses(instructor.id))}>View Courses</span>
-                <span style={{ cursor: 'pointer', color: '#1d9bf0', fontWeight: 500 }}>Message</span>
-              </div>
-              <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
-                <span title="Like" style={{ color: '#888', fontSize: 15, cursor: 'pointer' }}>👍</span>
-                <span title="Dislike" style={{ color: '#888', fontSize: 15, cursor: 'pointer' }}>👎</span>
+            {/* Creator Header */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              <img 
+                src={creator.avatar} 
+                alt={creator.name}
+                style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '3px solid #1d9bf0' }}
+              />
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontWeight: 700, fontSize: 18, color: '#1e293b' }}>{creator.name}</span>
+                  <span style={{ background: '#dbeafe', color: '#1e40af', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 12 }}>CREATOR</span>
+                </div>
+                <div style={{ color: '#64748b', fontSize: 14, marginBottom: 8 }}>{creator.title}</div>
+                <div style={{ color: '#475569', fontSize: 14, lineHeight: 1.5, marginBottom: 12 }}>{creator.bio}</div>
+                
+                {/* Stats Row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, color: '#64748b', marginBottom: 12 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <FaUsers style={{ color: '#1d9bf0' }} />
+                    <strong style={{ color: '#1e293b' }}>{creator.stats?.studentsTaught?.toLocaleString() || 0}</strong> students
+                  </span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <FaStar style={{ color: '#f59e0b' }} />
+                    <strong style={{ color: '#1e293b' }}>{creator.stats?.averageRating || 0}</strong> rating
+                  </span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <FaBook style={{ color: '#3b82f6' }} />
+                    <strong style={{ color: '#1e293b' }}>{creator.stats?.coursesCreated || 0}</strong> courses
+                  </span>
+                </div>
+                
+                {/* Action Buttons */}
+                <div style={{ display: 'flex', gap: 12 }} onClick={e => e.stopPropagation()}>
+                  <button 
+                    onClick={() => setSelectedInstructor(getInstructorWithCourses(creator.id))}
+                    style={{ 
+                      background: '#1d9bf0', 
+                      color: '#fff', 
+                      border: 'none', 
+                      padding: '8px 16px', 
+                      borderRadius: 8, 
+                      fontWeight: 600, 
+                      fontSize: 13, 
+                      cursor: 'pointer' 
+                    }}
+                  >
+                    View Profile
+                  </button>
+                  <button 
+                    className={`follow-btn ${isInstructorFollowed(creator.id) ? 'following' : ''}`}
+                    onClick={() => handleFollowInstructor(creator.id)}
+                    disabled={isFollowingLoading}
+                    style={{ 
+                      background: isInstructorFollowed(creator.id) ? '#e2e8f0' : '#fff',
+                      color: isInstructorFollowed(creator.id) ? '#64748b' : '#1d9bf0',
+                      border: '1px solid #e2e8f0', 
+                      padding: '8px 16px', 
+                      borderRadius: 8, 
+                      fontWeight: 600, 
+                      fontSize: 13, 
+                      cursor: 'pointer' 
+                    }}
+                  >
+                    {isInstructorFollowed(creator.id) ? '✓ Following' : 'Follow'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -743,9 +926,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
   if (activeMenu === 'Browse' || activeMenu === 'Browse_Reset') {
     return (
       <div className="main-content">
-        <div style={{ display: 'flex', gap: '32px', marginTop: 32 }}>
-          {/* Left: Main Content */}
-          <div style={{ flex: 2, minWidth: 0 }}>
+        <div className="three-column-layout">
+          <div className="center-column">
             <div className="top-menu-section">
               <div className="tabs-section">
                 <button
@@ -760,13 +942,13 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
                   onClick={() => setActiveTopMenu('instructors')}
                 >
                   <FaUser />
-                  <span>Creator/Instructor</span>
+                  <span>Creators</span>
                 </button>
                 <div className="search-container">
                   <FaSearch className="search-icon" />
                   <input
                     type="text"
-                    placeholder="Search courses, instructors..."
+                    placeholder="Search courses, creators..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="search-input"
@@ -798,15 +980,37 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
                           course.searchIndex.includes(searchQuery.toLowerCase())
                         ).map(course => {
                           const instructorData = getInstructorById(course.instructorId);
+                          const isFollowed = isCourseFollowed(course.id);
+                          const isViaCreator = isCourseFollowedViaCreator(course.id);
                           return (
                             <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: 1.35, width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: '#222' }}>
                               <div className="post-content" style={{ padding: 0 }}>
-                                {/* Title and Duration Row */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, color: '#222' }}>
-                                  <span style={{ fontWeight: 700, fontSize: 16, color: '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.title}</span>
-                                  <span style={{ color: '#888', fontSize: 13, fontWeight: 500 }}>• {course.duration}</span>
+                                {/* Title, Duration, and Follow Button Row */}
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#222', flex: 1, minWidth: 0 }}>
+                                    <span style={{ fontWeight: 700, fontSize: 16, color: '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.title}</span>
+                                    <span style={{ color: '#888', fontSize: 13, fontWeight: 500, flexShrink: 0 }}>• {course.duration}</span>
+                                  </div>
+                                  <button 
+                                    onClick={e => { e.stopPropagation(); handleFollowCourse(course.id); }}
+                                    disabled={isFollowingLoading}
+                                    style={{ 
+                                      background: isFollowed ? '#e2e8f0' : '#1d9bf0',
+                                      color: isFollowed ? '#64748b' : '#fff',
+                                      border: 'none', 
+                                      padding: '6px 14px', 
+                                      borderRadius: 20, 
+                                      fontWeight: 600, 
+                                      fontSize: 13, 
+                                      cursor: 'pointer',
+                                      flexShrink: 0,
+                                      marginLeft: 12
+                                    }}
+                                  >
+                                    {isFollowed ? '✓ Following' : 'Follow'}
+                                  </button>
                                 </div>
-                                <div style={{ fontSize: 14, color: '#64748b', fontWeight: 500, margin: '2px 0 6px 0' }}>By {instructorData?.name}</div>
+                                <div style={{ fontSize: 14, color: '#64748b', fontWeight: 500, margin: '2px 0 6px 0' }}>Created by {instructorData?.name}</div>
                                 {/* Description Row - show all text */}
                                 <div className="post-text" style={{ color: '#222' }}>
                                   {course.description} Master AI skills, earn certificates, and unlock the option to teach and earn commissions.
@@ -847,20 +1051,9 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
                   )}
                 </div>
               ) : (
-                <div className="instructors-section">
-                  <div className="browse-header">
-                    <h1></h1>
-                  </div>
+                <div className="creators-section">
                   {selectedInstructor ? (
-                    <div className="instructor-detail-view">
-                      <button 
-                        className="back-btn"
-                        onClick={() => setSelectedInstructor(null)}
-                      >
-                        ← Back to Instructors
-                      </button>
-                      {renderInstructorProfile()}
-                    </div>
+                    renderInstructorProfile()
                   ) : (
                     renderInstructorSummary()
                   )}
@@ -868,8 +1061,46 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
               )}
             </div>
           </div>
-          {/* Right: Empty Pane */}
-          <div style={{ flex: 1, minWidth: 320 }}></div>
+          {/* Right Pane */}
+          <div className="right-pane">
+            <div className="right-pane-section">
+              <h3>Trending Topics</h3>
+              <div className="trending-item">
+                <span className="trending-category">AI & Machine Learning</span>
+                <span className="trending-title">#DeepLearning</span>
+                <span className="trending-posts">2.4K posts</span>
+              </div>
+              <div className="trending-item">
+                <span className="trending-category">Web Development</span>
+                <span className="trending-title">#ReactJS</span>
+                <span className="trending-posts">1.8K posts</span>
+              </div>
+              <div className="trending-item">
+                <span className="trending-category">Cloud Computing</span>
+                <span className="trending-title">#AWS</span>
+                <span className="trending-posts">1.2K posts</span>
+              </div>
+            </div>
+            <div className="right-pane-section">
+              <h3>Who to Follow</h3>
+              <div className="follow-suggestion">
+                <img src="https://via.placeholder.com/40x40/4ECDC4/ffffff?text=JD" alt="Jane Doe" />
+                <div className="follow-info">
+                  <span className="follow-name">Jane Doe</span>
+                  <span className="follow-title">AI Strategist</span>
+                </div>
+                <button className="follow-btn-small">Follow</button>
+              </div>
+              <div className="follow-suggestion">
+                <img src="https://via.placeholder.com/40x40/FF6B6B/ffffff?text=JW" alt="James Wilson" />
+                <div className="follow-info">
+                  <span className="follow-name">James Wilson</span>
+                  <span className="follow-title">Full-Stack Dev</span>
+                </div>
+                <button className="follow-btn-small">Follow</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -898,89 +1129,352 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
 
   // Show Notifications when Notifications is active
   if (activeMenu === 'Notifications') {
+    // X.com style notifications for PeerLoop interactions
+    const notifications = [
+      // Likes
+      {
+        id: 1,
+        type: 'like',
+        icon: <FaHeart style={{ color: '#e11d48' }} />,
+        users: [
+          { name: 'Sarah Chen', avatar: 'https://via.placeholder.com/32x32/FF6B6B/ffffff?text=SC' },
+          { name: 'Mike Rodriguez', avatar: 'https://via.placeholder.com/32x32/4ECDC4/ffffff?text=MR' },
+          { name: 'Emma Wilson', avatar: 'https://via.placeholder.com/32x32/9B59B6/ffffff?text=EW' }
+        ],
+        content: 'liked your post',
+        postPreview: '"Just completed my Student-Teacher certification in Node.js! Ready to help others learn 🚀"',
+        timestamp: '2m',
+        unread: true
+      },
+      // Comment/Reply
+      {
+        id: 2,
+        type: 'reply',
+        icon: <FaComment style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'Alex Thompson', avatar: 'https://via.placeholder.com/32x32/00D2FF/ffffff?text=AT' }
+        ],
+        content: 'replied to your post',
+        postPreview: '"Congrats! I just enrolled in your course. Looking forward to our first session!"',
+        timestamp: '15m',
+        unread: true
+      },
+      // Mention
+      {
+        id: 3,
+        type: 'mention',
+        icon: <FaAt style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'Jane Doe', avatar: 'https://via.placeholder.com/32x32/FF6B6B/ffffff?text=JD' }
+        ],
+        content: 'mentioned you in a post',
+        postPreview: '"Shoutout to @alexstudent for being an amazing Student-Teacher! Best 1-on-1 session I\'ve had 🙌"',
+        timestamp: '1h',
+        unread: true
+      },
+      // Repost
+      {
+        id: 4,
+        type: 'repost',
+        icon: <FaRetweet style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'David Park', avatar: 'https://via.placeholder.com/32x32/FFD93D/000000?text=DP' },
+          { name: 'Lisa Wang', avatar: 'https://via.placeholder.com/32x32/6C5CE7/ffffff?text=LW' }
+        ],
+        content: 'reposted your post',
+        postPreview: '"The PeerLoop model is genius - Learn, Teach, Earn. Already made $420 this week teaching!"',
+        timestamp: '2h',
+        unread: true
+      },
+      // New Follower
+      {
+        id: 5,
+        type: 'follow',
+        icon: <FaUser style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'Marcus Chen', avatar: 'https://via.placeholder.com/32x32/FF9900/ffffff?text=MC' }
+        ],
+        content: 'followed you',
+        postPreview: null,
+        timestamp: '3h',
+        unread: true
+      },
+      // Session Booked
+      {
+        id: 6,
+        type: 'session',
+        icon: <FaCalendar style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'Rachel Green', avatar: 'https://via.placeholder.com/32x32/00B894/ffffff?text=RG' }
+        ],
+        content: 'booked a session with you',
+        postPreview: 'Node.js Backend Development • Tomorrow at 2:00 PM',
+        timestamp: '4h',
+        unread: false
+      },
+      // Course Enrollment
+      {
+        id: 7,
+        type: 'enrollment',
+        icon: <FaGraduationCap style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'Tom Bradley', avatar: 'https://via.placeholder.com/32x32/74B9FF/ffffff?text=TB' },
+          { name: 'Amy Foster', avatar: 'https://via.placeholder.com/32x32/FF7675/ffffff?text=AF' },
+          { name: 'Chris Lee', avatar: 'https://via.placeholder.com/32x32/636e72/ffffff?text=CL' }
+        ],
+        content: 'enrolled in your course',
+        postPreview: 'AI for Product Managers',
+        timestamp: '6h',
+        unread: false
+      },
+      // Certification Achievement
+      {
+        id: 8,
+        type: 'achievement',
+        icon: <FaStar style={{ color: '#fbbf24' }} />,
+        users: [],
+        content: 'Congratulations! You\'ve been certified as a Student-Teacher',
+        postPreview: 'Cloud Architecture with AWS • You can now teach and earn 70% commission',
+        timestamp: '1d',
+        unread: false
+      },
+      // Earnings Notification
+      {
+        id: 9,
+        type: 'earnings',
+        icon: <FaDollarSign style={{ color: '#1d9bf0' }} />,
+        users: [],
+        content: 'You earned $245 this week',
+        postPreview: '7 sessions completed • 70% of $350 total tuition',
+        timestamp: '1d',
+        unread: false
+      },
+      // Creator Announcement
+      {
+        id: 10,
+        type: 'announcement',
+        icon: <FaBullhorn style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'Albert Einstein', avatar: 'https://via.placeholder.com/32x32/4ECDC4/ffffff?text=AE' }
+        ],
+        content: 'posted an announcement in Node.js Backend Development',
+        postPreview: '"New module added: Advanced Authentication with JWT! Check it out 🔐"',
+        timestamp: '2d',
+        unread: false
+      },
+      // Multiple Likes
+      {
+        id: 11,
+        type: 'like',
+        icon: <FaHeart style={{ color: '#e11d48' }} />,
+        users: [
+          { name: 'Jordan Smith', avatar: 'https://via.placeholder.com/32x32/e17055/ffffff?text=JS' },
+          { name: 'Taylor Brown', avatar: 'https://via.placeholder.com/32x32/fdcb6e/000000?text=TB' }
+        ],
+        content: 'and 12 others liked your post',
+        postPreview: '"Week 3 of teaching on PeerLoop: 15 students taught, $1,050 earned. This platform is changing education! 📚"',
+        timestamp: '2d',
+        unread: false
+      },
+      // Comment on your comment
+      {
+        id: 12,
+        type: 'reply',
+        icon: <FaComment style={{ color: '#1d9bf0' }} />,
+        users: [
+          { name: 'Nina Patel', avatar: 'https://via.placeholder.com/32x32/0984e3/ffffff?text=NP' }
+        ],
+        content: 'replied to your comment',
+        postPreview: '"Thanks for the tip! The 2 Sigma explanation really helped me understand the PeerLoop model."',
+        timestamp: '3d',
+        unread: false
+      },
+      // Session Reminder
+      {
+        id: 13,
+        type: 'reminder',
+        icon: <FaClock style={{ color: '#f59e0b' }} />,
+        users: [],
+        content: 'Reminder: You have a session starting in 30 minutes',
+        postPreview: 'Deep Learning Fundamentals with Jane Doe • 2:00 PM',
+        timestamp: '3d',
+        unread: false
+      },
+      // Payout Processed
+      {
+        id: 14,
+        type: 'payout',
+        icon: <FaCheckCircle style={{ color: '#1d9bf0' }} />,
+        users: [],
+        content: 'Your weekly payout has been processed',
+        postPreview: '$682.50 deposited to your bank account',
+        timestamp: '5d',
+        unread: false
+      }
+    ];
+
     return (
       <div className="main-content">
-        <div className="feed-header">
-          <h1>Notifications</h1>
+        <div style={{ 
+          position: 'sticky', 
+          top: 0, 
+          background: 'rgba(255,255,255,0.85)', 
+          backdropFilter: 'saturate(180%) blur(20px)',
+          borderBottom: '1px solid #e2e8f0',
+          padding: '16px 20px',
+          zIndex: 100
+        }}>
+          <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0f1419', margin: 0 }}>Notifications</h1>
         </div>
-        <div className="feed-posts">
-          {/* Fake notifications data */}
-          {[
-            {
-              id: 1,
-              type: 'course',
-              title: 'New Course Available',
-              message: 'Check out "Advanced React Patterns" - now available for enrollment!',
-              timestamp: '2 hours ago',
-              unread: true
-            },
-            {
-              id: 2,
-              type: 'community',
-              title: 'Community Update',
-              message: 'Sarah joined your "Machine Learning Basics" community',
-              timestamp: '5 hours ago',
-              unread: true
-            },
-            {
-              id: 3,
-              type: 'achievement',
-              title: 'Achievement Unlocked!',
-              message: 'Congratulations! You completed your first course as a teacher.',
-              timestamp: '1 day ago',
-              unread: false
-            },
-            {
-              id: 4,
-              type: 'message',
-              title: 'New Message',
-              message: 'John sent you a message about your "AI Ethics" course',
-              timestamp: '2 days ago',
-              unread: false
-            },
-            {
-              id: 5,
-              type: 'system',
-              title: 'System Update',
-              message: 'Platform maintenance completed. All services are back online.',
-              timestamp: '3 days ago',
-              unread: false
-            }
-          ].map(notification => (
-            <div key={notification.id} className={`notification-item ${notification.unread ? 'unread' : ''}`}>
-              <div className="notification-content">
-                <div className="notification-header">
-                  <span className="notification-type">{notification.type}</span>
-                  <span className="notification-timestamp">{notification.timestamp}</span>
-                </div>
-                <div className="notification-title">{notification.title}</div>
-                <div className="notification-message">{notification.message}</div>
-                <div className="notification-actions">
-                  <button className="notification-action-btn">
-                    <span className="notification-action-icon">💬</span>
-                    <span className="notification-action-count">12</span>
-                  </button>
-                  <button className="notification-action-btn">
-                    <span className="notification-action-icon">🔄</span>
-                    <span className="notification-action-count">24</span>
-                  </button>
-                  <button className="notification-action-btn">
-                    <span className="notification-action-icon">❤️</span>
-                    <span className="notification-action-count">156</span>
-                  </button>
-                  <button className="notification-action-btn">
-                    <span className="notification-action-icon">📈</span>
-                    <span className="notification-action-count">2.1K</span>
-                  </button>
-                  <button className="notification-action-btn">
-                    <span className="notification-action-icon">🔖</span>
-                  </button>
-                  <button className="notification-action-btn">
-                    <span className="notification-action-icon">📤</span>
-                  </button>
-                </div>
+        
+        {/* Notification Tabs */}
+        <div style={{ 
+          display: 'flex', 
+          borderBottom: '1px solid #e2e8f0',
+          background: '#fff'
+        }}>
+          <button style={{ 
+            flex: 1, 
+            padding: '16px', 
+            background: 'none', 
+            border: 'none', 
+            fontWeight: 600, 
+            color: '#0f1419',
+            borderBottom: '2px solid #1d9bf0',
+            cursor: 'pointer'
+          }}>All</button>
+          <button style={{ 
+            flex: 1, 
+            padding: '16px', 
+            background: 'none', 
+            border: 'none', 
+            fontWeight: 500, 
+            color: '#536471',
+            cursor: 'pointer'
+          }}>Mentions</button>
+          <button style={{ 
+            flex: 1, 
+            padding: '16px', 
+            background: 'none', 
+            border: 'none', 
+            fontWeight: 500, 
+            color: '#536471',
+            cursor: 'pointer'
+          }}>Sessions</button>
+          <button style={{ 
+            flex: 1, 
+            padding: '16px', 
+            background: 'none', 
+            border: 'none', 
+            fontWeight: 500, 
+            color: '#536471',
+            cursor: 'pointer'
+          }}>Earnings</button>
+        </div>
+
+        {/* Notifications List */}
+        <div style={{ background: '#fff' }}>
+          {notifications.map(notification => (
+            <div 
+              key={notification.id} 
+              style={{ 
+                display: 'flex',
+                padding: '16px 20px',
+                borderBottom: '1px solid #e2e8f0',
+                background: '#fff',
+                cursor: 'pointer',
+                transition: 'background 0.15s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+              onMouseLeave={(e) => e.currentTarget.style.background = '#fff'}
+            >
+              {/* Icon */}
+              <div style={{ 
+                width: 40, 
+                display: 'flex', 
+                justifyContent: 'center',
+                paddingTop: 4,
+                fontSize: 18
+              }}>
+                {notification.icon}
               </div>
-              {notification.unread && <div className="notification-dot"></div>}
+              
+              {/* Content */}
+              <div style={{ flex: 1, marginLeft: 12 }}>
+                {/* User Avatars - Using colored circles with initials instead of images */}
+                {notification.users.length > 0 && (
+                  <div style={{ display: 'flex', marginBottom: 8, height: 32 }}>
+                    {notification.users.slice(0, 3).map((user, idx) => {
+                      const colors = ['#FF6B6B', '#4ECDC4', '#9B59B6', '#00D2FF', '#FFD93D', '#6C5CE7', '#FF9900'];
+                      const colorIndex = user.name.charCodeAt(0) % colors.length;
+                      const initials = user.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+                      return (
+                        <div 
+                          key={idx}
+                          style={{ 
+                            width: 32, 
+                            height: 32, 
+                            borderRadius: '50%',
+                            marginLeft: idx > 0 ? -8 : 0,
+                            border: '2px solid #fff',
+                            background: colors[colorIndex],
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#fff',
+                            fontSize: 11,
+                            fontWeight: 700,
+                            flexShrink: 0
+                          }}
+                          title={user.name}
+                        >
+                          {initials}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                
+                {/* Notification Text */}
+                <div style={{ fontSize: 15, color: '#0f1419', lineHeight: 1.4 }}>
+                  {notification.users.length > 0 && (
+                    <span style={{ fontWeight: 700 }}>
+                      {notification.users.length === 1 
+                        ? notification.users[0].name 
+                        : notification.users.length === 2
+                          ? `${notification.users[0].name} and ${notification.users[1].name}`
+                          : `${notification.users[0].name}, ${notification.users[1].name}`}
+                    </span>
+                  )}
+                  {' '}{notification.content}
+                </div>
+                
+                {/* Post Preview */}
+                {notification.postPreview && (
+                  <div style={{ 
+                    marginTop: 8, 
+                    color: '#536471', 
+                    fontSize: 14,
+                    lineHeight: 1.4
+                  }}>
+                    {notification.postPreview}
+                  </div>
+                )}
+              </div>
+              
+              {/* Timestamp & Unread Dot */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                <span style={{ fontSize: 13, color: '#536471' }}>{notification.timestamp}</span>
+                {notification.unread && (
+                  <div style={{ 
+                    width: 8, 
+                    height: 8, 
+                    borderRadius: '50%', 
+                    background: '#1d9bf0',
+                    marginTop: 6
+                  }} />
+                )}
+              </div>
             </div>
           ))}
         </div>

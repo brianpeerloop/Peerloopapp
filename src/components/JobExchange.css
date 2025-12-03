@@ -81,15 +81,18 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  color: #536471;
 }
 
 .tab-btn.active {
-  background: #ff6b35;
-  color: white;
+  background: none;
+  color: #1d9bf0;
+  font-weight: 700;
 }
 
 .tab-btn:hover:not(.active) {
-  background: #e9ecef;
+  background: rgba(0, 0, 0, 0.05);
+  color: #1d9bf0;
 }
 
 .salary-filters {

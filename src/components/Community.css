@@ -802,6 +802,7 @@
   position: relative;
   display: flex;
   flex-shrink: 0;
+  overflow: visible;
 }
 
 /* Creator course dropdown */

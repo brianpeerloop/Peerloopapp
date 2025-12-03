@@ -11,12 +11,64 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [openCreatorDropdown, setOpenCreatorDropdown] = useState(null); // Track which creator dropdown is open
-  const [selectedCourseFilter, setSelectedCourseFilter] = useState(null); // Filter to specific course within creator
+  const [selectedCourseFilters, setSelectedCourseFilters] = useState([]); // Filter to specific courses within creator (multi-select)
   
   // Use props directly - the parent (MainContent) manages the state and localStorage
   // This ensures consistency between Browse follows and Community display
   const actualFollowedCommunities = followedCommunities;
   const actualSetFollowedCommunities = setFollowedCommunities || (() => {});
+
+  // Group followed communities by creator - always show creator tabs, not individual courses
+  const groupedByCreator = React.useMemo(() => {
+    const creatorMap = new Map();
+    
+    actualFollowedCommunities.forEach(community => {
+      let creatorId, creatorName, courseIds;
+      
+      if (community.type === 'creator') {
+        // Already a creator follow
+        creatorId = community.id;
+        creatorName = community.name;
+        courseIds = community.courseIds || [];
+      } else {
+        // Individual course follow - get the creator
+        const courseId = community.courseId || parseInt(community.id.replace('course-', ''));
+        const course = getCourseById(courseId);
+        if (!course) return;
+        
+        const instructor = getInstructorById(course.instructorId);
+        if (!instructor) return;
+        
+        creatorId = `creator-${course.instructorId}`;
+        creatorName = instructor.name;
+        courseIds = [courseId];
+      }
+      
+      // Merge into existing creator entry or create new one
+      if (creatorMap.has(creatorId)) {
+        const existing = creatorMap.get(creatorId);
+        // Merge course IDs, avoiding duplicates
+        const mergedCourseIds = [...new Set([...existing.followedCourseIds, ...courseIds])];
+        existing.followedCourseIds = mergedCourseIds;
+      } else {
+        // Get all courses for this creator
+        const instructorId = parseInt(creatorId.replace('creator-', ''));
+        const instructor = getInstructorById(instructorId);
+        const allCreatorCourses = getAllCourses().filter(c => c.instructorId === instructorId);
+        
+        creatorMap.set(creatorId, {
+          id: creatorId,
+          name: creatorName,
+          instructorId: instructorId,
+          allCourses: allCreatorCourses,
+          followedCourseIds: courseIds,
+          isFullCreatorFollow: community.type === 'creator'
+        });
+      }
+    });
+    
+    return Array.from(creatorMap.values());
+  }, [actualFollowedCommunities]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -492,9 +544,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
 
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
-    // Reset course filter when switching tabs
+    // Reset course filters when switching tabs
     if (tabId !== activeTab) {
-      setSelectedCourseFilter(null);
+      setSelectedCourseFilters([]);
       setOpenCreatorDropdown(null);
     }
   };
@@ -541,33 +593,23 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
   const displayedPosts = React.useMemo(() => {
     let filteredPosts;
     
+    // Get all followed course IDs from grouped creators
+    const allFollowedCourseIds = groupedByCreator.flatMap(c => c.followedCourseIds);
+    
     if (activeTab === 'Home') {
-      // Home tab: Show all posts from followed communities (algorithmic feed)
-      filteredPosts = fakePosts.filter(post => {
-        return actualFollowedCommunities.some(community => {
-          // Use courseIds array (works for both course and creator follows)
-          if (community.courseIds && community.courseIds.length > 0) {
-            return community.courseIds.includes(post.courseId);
-          }
-          // Fallback for old format
-          if (community.courseId) {
-            return post.courseId === community.courseId;
-          }
-          return false;
-        });
-      });
+      // Home tab: Show all posts from followed courses
+      filteredPosts = fakePosts.filter(post => allFollowedCourseIds.includes(post.courseId));
     } else {
-      // Specific community/creator tab: Filter based on the tab's courseIds
-      const activeCommunity = actualFollowedCommunities.find(c => c.id === activeTab);
-      if (activeCommunity && activeCommunity.courseIds) {
-        // If there's a specific course filter selected (for creator tabs)
-        if (selectedCourseFilter && activeCommunity.type === 'creator') {
-          // Filter to just the selected course
-          filteredPosts = fakePosts.filter(post => post.courseId === selectedCourseFilter);
+      // Specific creator tab: Filter based on that creator's followed courses
+      const activeCreator = groupedByCreator.find(c => c.id === activeTab);
+      if (activeCreator) {
+        if (selectedCourseFilters.length > 0) {
+          // Filter to selected courses only
+          filteredPosts = fakePosts.filter(post => selectedCourseFilters.includes(post.courseId));
         } else {
-          // Filter posts that match any of the courseIds in this community
+          // No filter selected - show all posts from this creator's followed courses
           filteredPosts = fakePosts.filter(post => 
-            activeCommunity.courseIds.includes(post.courseId)
+            activeCreator.followedCourseIds.includes(post.courseId)
           );
         }
       } else {
@@ -588,7 +630,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
       // Combine engagement and recency (recent + high engagement first)
       return (engagementB / (timeB + 1)) - (engagementA / (timeA + 1));
     });
-  }, [activeTab, actualFollowedCommunities, selectedCourseFilter]);
+  }, [activeTab, groupedByCreator, selectedCourseFilters]);
 
   if (selectedCommunity) {
     // Get posts for this community
@@ -784,159 +826,96 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
                   <span>Home</span>
                 </button>
                 
-                {/* Followed community tabs - shows course names or creator names */}
-                {actualFollowedCommunities.map(community => (
-                  <div key={community.id} className="community-tab-wrapper">
+                {/* Creator tabs - grouped by creator, each with dropdown for their courses */}
+                {groupedByCreator.map(creator => (
+                  <div key={creator.id} className="community-tab-wrapper">
                     <button
-                      className={`community-tab-btn ${activeTab === community.id ? 'active' : ''}`}
+                      className={`community-tab-btn ${activeTab === creator.id ? 'active' : ''}`}
                       onClick={() => {
-                        if (community.type === 'creator') {
-                          // For creator tabs: make active AND toggle dropdown
-                          if (activeTab !== community.id) {
-                            handleTabClick(community.id);
-                            setSelectedCourseFilter(null);
-                          }
-                          // Toggle dropdown (open on first click, toggle on subsequent)
-                          setOpenCreatorDropdown(openCreatorDropdown === community.id ? null : community.id);
-                        } else {
-                          handleTabClick(community.id);
-                          setOpenCreatorDropdown(null);
+                        if (activeTab !== creator.id) {
+                          handleTabClick(creator.id);
+                          setSelectedCourseFilters([]);
                         }
+                        setOpenCreatorDropdown(openCreatorDropdown === creator.id ? null : creator.id);
                       }}
-                      title={community.type === 'creator' ? `${community.name} (Creator) - Click for courses` : community.name}
+                      title={`${creator.name} - ${creator.followedCourseIds.length} course(s) followed`}
                     >
-                      {community.type === 'creator' && <FaUsers style={{ marginRight: 4, fontSize: 12 }} />}
-                      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <span>{getShortName(community)}</span>
-                        {/* Show selected course filter as subtitle */}
-                        {community.type === 'creator' && activeTab === community.id && selectedCourseFilter && (
-                          <span style={{ 
-                            fontSize: 10, 
-                            color: '#3b82f6', 
-                            marginTop: 2,
-                            fontWeight: 500,
-                            maxWidth: 120,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}>
-                            {(() => {
-                              const course = getCourseById(selectedCourseFilter);
-                              return course ? course.title.substring(0, 18) + (course.title.length > 18 ? '...' : '') : '';
-                            })()}
-                          </span>
-                        )}
-                      </span>
-                      {community.type === 'creator' && activeTab === community.id && (
-                        <FaChevronDown style={{ marginLeft: 4, fontSize: 10, transition: 'transform 0.2s', transform: openCreatorDropdown === community.id ? 'rotate(180deg)' : 'rotate(0)' }} />
-                      )}
+                      <span>{creator.name.length > 15 ? creator.name.substring(0, 13) + '...' : creator.name}</span>
+                      <span style={{ fontSize: 10, marginLeft: 4 }}>▼</span>
                     </button>
                     
-                    {/* Creator course dropdown */}
-                    {community.type === 'creator' && openCreatorDropdown === community.id && (
-                      <div 
-                        className="creator-course-dropdown" 
-                        style={{ 
-                          display: 'block',
-                          position: 'fixed',
-                          top: '60px',
-                          left: '300px',
-                          zIndex: 99999,
-                          background: '#ffffff',
-                          border: '1px solid #e2e8f0',
-                          borderRadius: '12px',
-                          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
-                          padding: '8px 0',
-                          minWidth: '300px'
-                        }}
-                      >
-                        {/* Creator header with avatar */}
-                        <div style={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          padding: '12px 16px',
-                          borderBottom: '1px solid #e2e8f0',
-                          marginBottom: '8px'
-                        }}>
-                          <div style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: '50%',
-                            border: '2px solid #1d9bf0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginRight: 12,
-                            background: '#eff6ff'
-                          }}>
-                            <FaUsers style={{ color: '#1d9bf0', fontSize: 16 }} />
-                          </div>
-                          <div>
-                            <div style={{ fontWeight: 600, color: '#1e293b', fontSize: 14 }}>{community.name}</div>
-                            <div style={{ fontSize: 12, color: '#64748b' }}>{community.courseIds?.length || 0} courses</div>
-                          </div>
-                        </div>
-                        
-                        {/* All courses option */}
+                    {/* Minimalist dropdown - same style as Browse Creators */}
+                    {openCreatorDropdown === creator.id && (
+                      <div style={{
+                        position: 'fixed',
+                        top: '53px',
+                        left: 'auto',
+                        marginTop: 4,
+                        background: '#fff',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: 8,
+                        boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                        zIndex: 99999,
+                        minWidth: 200,
+                        maxWidth: 280,
+                        padding: '4px 0'
+                      }}>
+                        {/* All option */}
                         <div 
                           style={{ 
-                            display: 'flex',
-                            alignItems: 'center',
-                            padding: '10px 16px',
+                            padding: '8px 12px',
                             cursor: 'pointer',
-                            color: !selectedCourseFilter ? '#1d9bf0' : '#475569',
-                            fontWeight: !selectedCourseFilter ? 600 : 400,
-                            background: !selectedCourseFilter ? '#eff6ff' : 'transparent',
-                            borderLeft: !selectedCourseFilter ? '3px solid #1d9bf0' : '3px solid transparent',
-                            transition: 'all 0.15s'
+                            fontSize: 13,
+                            color: selectedCourseFilters.length === 0 || selectedCourseFilters.length === creator.followedCourseIds.length ? '#1d9bf0' : '#475569',
+                            fontWeight: 500,
+                            borderBottom: '1px solid #f1f5f9'
                           }}
-                          onClick={() => {
-                            setSelectedCourseFilter(null);
-                            setOpenCreatorDropdown(null);
-                          }}
-                          onMouseEnter={(e) => { if (selectedCourseFilter) e.currentTarget.style.background = '#f8fafc'; }}
-                          onMouseLeave={(e) => { if (selectedCourseFilter) e.currentTarget.style.background = 'transparent'; }}
+                          onClick={() => setSelectedCourseFilters([])}
+                          onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
-                          <FaUsers style={{ marginRight: 10, color: '#1d9bf0' }} />
-                          All Courses
+                          All
                         </div>
                         
-                        {/* Individual course options */}
-                        {community.courseIds && community.courseIds.length > 0 ? (
-                          community.courseIds.map(courseId => {
-                            const course = getCourseById(courseId);
-                            if (!course) return null;
-                            const isSelected = selectedCourseFilter === courseId;
-                            return (
-                              <div 
-                                key={courseId}
-                                style={{ 
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  padding: '10px 16px',
-                                  cursor: 'pointer',
-                                  color: isSelected ? '#1d9bf0' : '#475569',
-                                  fontWeight: isSelected ? 600 : 400,
-                                  background: isSelected ? '#eff6ff' : 'transparent',
-                                  borderLeft: isSelected ? '3px solid #1d9bf0' : '3px solid transparent',
-                                  transition: 'all 0.15s'
-                                }}
-                                onClick={() => {
-                                  setSelectedCourseFilter(courseId);
-                                  setOpenCreatorDropdown(null);
-                                }}
-                                onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = '#f8fafc'; }}
-                                onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
-                              >
-                                <FaBook style={{ marginRight: 10, color: isSelected ? '#1d9bf0' : '#94a3b8' }} />
+                        {/* Individual courses */}
+                        {creator.followedCourseIds.map(courseId => {
+                          const course = getCourseById(courseId);
+                          if (!course) return null;
+                          const isSelected = selectedCourseFilters.includes(courseId);
+                          return (
+                            <div 
+                              key={courseId}
+                              style={{ 
+                                padding: '8px 12px',
+                                cursor: 'pointer',
+                                fontSize: 13,
+                                color: isSelected ? '#1d9bf0' : '#475569',
+                                fontWeight: isSelected ? 500 : 400,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                              }}
+                              onClick={() => {
+                                if (isSelected) {
+                                  setSelectedCourseFilters(prev => prev.filter(id => id !== courseId));
+                                } else {
+                                  setSelectedCourseFilters(prev => [...prev, courseId]);
+                                }
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
+                              <span style={{ 
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                              }}>
                                 {course.title}
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <div style={{ padding: '10px 16px', color: '#94a3b8', fontStyle: 'italic' }}>
-                            No courses found
-                          </div>
-                        )}
+                              </span>
+                              {isSelected && <span>✓</span>}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -958,7 +937,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
 
           {/* Feed Content */}
           <div className="community-feed-content">
-            {actualFollowedCommunities.length > 0 ? (
+            {groupedByCreator.length > 0 ? (
               <div className="posts-feed">
                 {displayedPosts.length > 0 ? (
                   displayedPosts.map(post => {
@@ -1034,20 +1013,16 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
         <div className="community-right-pane">
           <div className="community-right-section">
             <h3>Your Communities</h3>
-            {actualFollowedCommunities.length > 0 ? (
-              actualFollowedCommunities.slice(0, 5).map(community => (
+            {groupedByCreator.length > 0 ? (
+              groupedByCreator.slice(0, 5).map(creator => (
                 <div 
-                  key={community.id} 
-                  className={`community-mini-card ${activeTab === community.id ? 'active' : ''}`}
-                  onClick={() => handleTabClick(community.id)}
+                  key={creator.id} 
+                  className={`community-mini-card ${activeTab === creator.id ? 'active' : ''}`}
+                  onClick={() => handleTabClick(creator.id)}
                 >
-                  <span className="mini-card-name">
-                    {community.type === 'creator' ? `👤 ${community.name}` : community.name}
-                  </span>
+                  <span className="mini-card-name">{creator.name}</span>
                   <span className="mini-card-members">
-                    {community.type === 'creator' 
-                      ? `${community.courseIds?.length || 0} courses` 
-                      : `${community.members?.toLocaleString() || 0} members`}
+                    {creator.followedCourseIds.length} course{creator.followedCourseIds.length !== 1 ? 's' : ''} followed
                   </span>
                 </div>
               ))

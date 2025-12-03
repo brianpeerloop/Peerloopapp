@@ -755,7 +755,30 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%', maxWidth: '100%', margin: '0', background: '#fff', borderRadius: 0, border: '1px solid #e6e8ec', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 0, marginTop: '0' }}>
           {/* Removed banner image so the title is at the very top */}
           {/* Title & Creator */}
-          <div style={{ padding: '24px 32px 0 32px', textAlign: 'center' }}>
+          <div style={{ padding: '24px 32px 0 32px', textAlign: 'center', position: 'relative' }}>
+            {/* Follow button positioned top right */}
+            <button 
+              onClick={() => handleFollowCourse(courseData.id)}
+              disabled={isFollowingLoading}
+              style={{ 
+                position: 'absolute',
+                top: 24,
+                right: 32,
+                background: isCourseFollowed(courseData.id) ? '#e2e8f0' : '#1d9bf0', 
+                color: isCourseFollowed(courseData.id) ? '#64748b' : '#fff', 
+                fontWeight: 600, 
+                fontSize: 14, 
+                cursor: 'pointer', 
+                padding: '10px 20px', 
+                borderRadius: 8, 
+                border: 'none', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 6 
+              }}
+            >
+              {isCourseFollowed(courseData.id) ? '✓ Following' : 'Follow'}
+            </button>
             <div className="main-course-title" style={{ fontWeight: 700, fontSize: 32, marginBottom: 8 }}>
               {courseData.title}
             </div>

@@ -28,6 +28,7 @@
   min-width: 0;
   border-right: 1px solid #e2e8f0;
   overflow-y: auto;
+  height: 100vh;
 }
 
 .right-pane {

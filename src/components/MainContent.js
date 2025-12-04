@@ -1012,120 +1012,53 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
           </div>
         </div>
 
-        {/* ===== CTA - Single Minimalist Button ===== */}
+        {/* ===== CTA - Minimalist Text Link ===== */}
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
-          justifyContent: 'space-between',
-          padding: '16px 20px',
-          background: bgSecondary,
-          borderRadius: 12,
-          border: `1px solid ${borderColor}`,
-          marginBottom: 24
+          gap: 16,
+          marginBottom: 20
         }}>
-          <div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: textPrimary }}>
-              {courseData.price}
-            </div>
-            <div style={{ color: textMuted, fontSize: 13 }}>
-              Includes 1-on-1 sessions
-            </div>
-          </div>
-          <button style={{ 
-            background: accentBlue, 
-            color: '#fff', 
-            fontWeight: 600, 
-            fontSize: 16, 
-            cursor: 'pointer', 
-            padding: '14px 32px', 
-            borderRadius: 8, 
-            border: 'none'
-          }}>
+          <span style={{ fontSize: 24, fontWeight: 700, color: textPrimary }}>
+            {courseData.price}
+          </span>
+          <span style={{ color: textMuted, fontSize: 14 }}>•</span>
+          <span 
+            style={{ 
+              color: accentBlue, 
+              fontWeight: 600, 
+              fontSize: 15, 
+              cursor: 'pointer',
+              transition: 'opacity 0.15s'
+            }}
+            onMouseEnter={e => e.target.style.opacity = '0.7'}
+            onMouseLeave={e => e.target.style.opacity = '1'}
+          >
             Enroll Now
-          </button>
+          </span>
+          <span style={{ color: textMuted, fontSize: 13 }}>
+            (includes 1-on-1 sessions)
+          </span>
         </div>
 
-        {/* ===== LEARN & EARN SECTION ===== */}
+        {/* ===== LEARN & EARN - Compact ===== */}
         <div style={{ 
-          background: isDarkMode ? '#0c1825' : '#eff6ff', 
-          borderRadius: 12, 
-          padding: 24,
-          marginBottom: 24,
-          border: `1px solid ${isDarkMode ? '#1e3a5f' : '#bfdbfe'}`
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 8,
+          padding: '12px 16px',
+          background: isDarkMode ? '#0c1825' : '#f0f9ff', 
+          borderRadius: 8,
+          marginBottom: 20,
+          fontSize: 13,
+          color: textSecondary
         }}>
-          <div style={{ 
-            fontSize: 16, 
-            fontWeight: 700, 
-            color: textPrimary, 
-            marginBottom: 16,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8
-          }}>
-            🎓 Learn & Earn Path
-          </div>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr auto 1fr auto 1fr', 
-            alignItems: 'center',
-            gap: 12
-          }}>
-            {/* Step 1 */}
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                width: 48, 
-                height: 48, 
-                borderRadius: '50%', 
-                background: accentBlue, 
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 8px',
-                fontSize: 20
-              }}>📚</div>
-              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 14 }}>Complete</div>
-              <div style={{ color: textMuted, fontSize: 12 }}>Finish the course</div>
-            </div>
-            {/* Arrow */}
-            <div style={{ color: textMuted, fontSize: 20 }}>→</div>
-            {/* Step 2 */}
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                width: 48, 
-                height: 48, 
-                borderRadius: '50%', 
-                background: accentGreen, 
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 8px',
-                fontSize: 20
-              }}>✓</div>
-              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 14 }}>Get Certified</div>
-              <div style={{ color: textMuted, fontSize: 12 }}>Pass assessment</div>
-            </div>
-            {/* Arrow */}
-            <div style={{ color: textMuted, fontSize: 20 }}>→</div>
-            {/* Step 3 */}
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                width: 48, 
-                height: 48, 
-                borderRadius: '50%', 
-                background: '#f59e0b', 
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 8px',
-                fontSize: 20
-              }}>💰</div>
-              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 14 }}>Earn 70%</div>
-              <div style={{ color: textMuted, fontSize: 12 }}>Teach & earn</div>
-            </div>
-          </div>
+          <span style={{ fontWeight: 600, color: textPrimary }}>🎓 Learn & Earn:</span>
+          <span>Complete</span>
+          <span style={{ color: textMuted }}>→</span>
+          <span>Get Certified</span>
+          <span style={{ color: textMuted }}>→</span>
+          <span style={{ color: accentGreen, fontWeight: 600 }}>Earn 70% teaching</span>
         </div>
 
         {/* ===== CURRICULUM ===== */}

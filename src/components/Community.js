@@ -881,21 +881,52 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                         maxWidth: 280,
                         padding: '4px 0'
                       }}>
-                        {/* All option */}
+                        {/* All option - filter view */}
                         <div 
                           style={{ 
                             padding: '8px 12px',
                             cursor: 'pointer',
                             fontSize: 13,
                             color: selectedCourseFilters.length === 0 || selectedCourseFilters.length === creator.followedCourseIds.length ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
-                            fontWeight: 500,
-                            borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9'
+                            fontWeight: 500
                           }}
                           onClick={() => setSelectedCourseFilters([])}
                           onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
                           All
+                        </div>
+                        
+                        {/* Unfollow All option */}
+                        <div 
+                          style={{ 
+                            padding: '8px 12px',
+                            cursor: 'pointer',
+                            fontSize: 13,
+                            color: '#dc2626',
+                            fontWeight: 500,
+                            borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9'
+                          }}
+                          onClick={() => {
+                            // Remove all courses from this creator from followedCommunities
+                            actualSetFollowedCommunities(prev => 
+                              prev.filter(c => {
+                                // Remove creator follow
+                                if (c.id === creator.id) return false;
+                                // Remove individual course follows from this creator
+                                if (c.type === 'course') {
+                                  const courseId = c.courseId || parseInt(c.id.replace('course-', ''));
+                                  return !creator.followedCourseIds.includes(courseId);
+                                }
+                                return true;
+                              })
+                            );
+                            setOpenCreatorDropdown(null);
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
+                          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        >
+                          Unfollow All
                         </div>
                         
                         {/* Individual courses - show ALL courses from creator */}

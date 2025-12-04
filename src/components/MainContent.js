@@ -73,6 +73,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   const [isFollowingLoading, setIsFollowingLoading] = useState(false);
   const [openCreatorFollowDropdown, setOpenCreatorFollowDropdown] = useState(null); // Track which creator's follow dropdown is open
   const [selectedCourseForListing, setSelectedCourseForListing] = useState(null);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); // Track course description expansion
 
     // Reset to top level when Browse menu is clicked
     React.useEffect(() => {
@@ -1008,7 +1009,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             </span>
           </div>
 
-          {/* Description Box */}
+          {/* Description Box - Expandable */}
           <div style={{ 
             background: bgSecondary, 
             borderRadius: 12, 
@@ -1020,10 +1021,29 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
               margin: 0, 
               color: textPrimary, 
               fontSize: 15, 
-              lineHeight: 1.6 
+              lineHeight: 1.6,
+              display: isDescriptionExpanded ? 'block' : '-webkit-box',
+              WebkitLineClamp: isDescriptionExpanded ? 'unset' : 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: isDescriptionExpanded ? 'visible' : 'hidden'
             }}>
-              {courseData.description}
+              {courseData.description} This comprehensive course covers everything you need to know to master the subject. You'll learn through hands-on projects, real-world examples, and expert guidance. By the end, you'll have the skills and confidence to apply what you've learned in your career.
             </p>
+            <span 
+              onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+              style={{ 
+                color: accentBlue, 
+                fontSize: 14, 
+                cursor: 'pointer',
+                fontWeight: 500,
+                marginTop: 8,
+                display: 'inline-block'
+              }}
+              onMouseEnter={e => e.target.style.opacity = '0.7'}
+              onMouseLeave={e => e.target.style.opacity = '1'}
+            >
+              {isDescriptionExpanded ? 'Show less' : 'Show more'}
+            </span>
           </div>
         </div>
 

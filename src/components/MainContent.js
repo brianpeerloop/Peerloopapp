@@ -984,7 +984,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             const fullCreatorData = getInstructorWithCourses(creator.id);
             setSelectedInstructor(fullCreatorData || creator);
           }} style={{
-            background: isDarkMode ? '#1e293b' : '#fff',
+            background: isDarkMode ? '#16181c' : '#fff',
             borderRadius: 12,
             padding: '20px',
             marginBottom: 16,
@@ -1052,7 +1052,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                       }}
                       disabled={isFollowingLoading}
                       style={{ 
-                        background: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#334155' : '#e2e8f0') : (isDarkMode ? '#1e293b' : '#fff'),
+                        background: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : (isDarkMode ? '#16181c' : '#fff'),
                         color: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#94a3b8' : '#64748b') : '#1d9bf0',
                         border: isDarkMode ? '1px solid #475569' : '1px solid #e2e8f0', 
                         padding: '8px 16px', 
@@ -1557,10 +1557,10 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
       }
     ];
 
-    // Dark mode colors for notifications
-    const notifBg = isDarkMode ? '#0f172a' : '#fff';
-    const notifBgHover = isDarkMode ? '#1e293b' : '#f8fafc';
-    const notifHeaderBg = isDarkMode ? 'rgba(15,23,42,0.85)' : 'rgba(255,255,255,0.85)';
+    // Dark mode colors for notifications - X.com pure black
+    const notifBg = isDarkMode ? '#000000' : '#fff';
+    const notifBgHover = isDarkMode ? '#16181c' : '#f8fafc';
+    const notifHeaderBg = isDarkMode ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.85)';
     const notifBorder = isDarkMode ? '#334155' : '#e2e8f0';
     const notifTextPrimary = isDarkMode ? '#f1f5f9' : '#0f1419';
     const notifTextSecondary = isDarkMode ? '#94a3b8' : '#536471';

@@ -115,23 +115,23 @@ body.dark-mode .course-post .post-timestamp {
 
 .dark-mode .three-column-layout,
 body.dark-mode .three-column-layout {
-  background-color: #0f172a !important;
+  background-color: #000000 !important;
 }
 
 .dark-mode .center-column,
 body.dark-mode .center-column {
-  border-right-color: #334155 !important;
+  border-right-color: #2f3336 !important;
 }
 
 .dark-mode .right-pane,
 body.dark-mode .right-pane {
-  background-color: #1e293b !important;
+  background-color: #16181c !important;
 }
 
 .dark-mode .right-pane-section,
 body.dark-mode .right-pane-section {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
+  background-color: #16181c !important;
+  border-color: #2f3336 !important;
 }
 
 .dark-mode .right-pane-section h3,
@@ -139,11 +139,11 @@ body.dark-mode .right-pane-section h3 {
   color: #f1f5f9 !important;
 }
 
-/* Top Menu / Tabs */
+/* Top Menu / Tabs - X.com pure black */
 .dark-mode .top-menu-section,
 body.dark-mode .top-menu-section {
-  background: rgba(15, 23, 42, 0.95) !important;
-  border-bottom-color: #334155 !important;
+  background: rgba(0, 0, 0, 0.95) !important;
+  border-bottom-color: #2f3336 !important;
 }
 
 .dark-mode .tab-btn,
@@ -165,8 +165,8 @@ body.dark-mode .tab-btn.active {
 /* Search */
 .dark-mode .search-container,
 body.dark-mode .search-container {
-  background-color: #334155 !important;
-  border-color: #334155 !important;
+  background-color: #2f3336 !important;
+  border-color: #2f3336 !important;
 }
 
 .dark-mode .search-input,
@@ -190,13 +190,13 @@ body.dark-mode .browse-header p {
   color: #cbd5e1 !important;
 }
 
-/* Posts and notifications */
+/* Posts and notifications - X.com pure black */
 .dark-mode .post,
 body.dark-mode .post,
 .dark-mode .notification-item,
 body.dark-mode .notification-item {
-  background-color: #0f172a !important;
-  border-color: #334155 !important;
+  background-color: #000000 !important;
+  border-color: #2f3336 !important;
 }
 
 /* Cards - X.com style */
@@ -291,13 +291,13 @@ body.dark-mode .follow-name {
 body.dark-mode .trending-item,
 .dark-mode .follow-suggestion,
 body.dark-mode .follow-suggestion {
-  border-bottom-color: #334155 !important;
+  border-bottom-color: #2f3336 !important;
 }
 
 .dark-mode .feed-header,
 body.dark-mode .feed-header {
-  background-color: #0f172a !important;
-  border-bottom-color: #334155 !important;
+  background-color: #000000 !important;
+  border-bottom-color: #2f3336 !important;
 }
 
 .dark-mode .feed-header h1,
@@ -308,8 +308,8 @@ body.dark-mode .feed-header h1 {
 /* Post Composer */
 .dark-mode .post-composer,
 body.dark-mode .post-composer {
-  background-color: #1e293b !important;
-  border-bottom-color: #334155 !important;
+  background-color: #16181c !important;
+  border-bottom-color: #2f3336 !important;
 }
 
 .dark-mode .composer-content textarea,
@@ -324,13 +324,13 @@ body.dark-mode .composer-content textarea::placeholder {
 
 .dark-mode .composer-actions,
 body.dark-mode .composer-actions {
-  border-top-color: #334155 !important;
+  border-top-color: #2f3336 !important;
 }
 
 /* Feed Posts */
 .dark-mode .feed-posts,
 body.dark-mode .feed-posts {
-  background-color: #0f172a !important;
+  background-color: #000000 !important;
 }
 
 /* Action Buttons */
@@ -366,7 +366,7 @@ body.dark-mode .empty-state h2 {
 /* Dashboard */
 .dark-mode .dashboard-page,
 body.dark-mode .dashboard-page {
-  background-color: #0f172a !important;
+  background-color: #000000 !important;
 }
 
 .dark-mode .summary-card,
@@ -379,8 +379,8 @@ body.dark-mode .calendar-section,
 body.dark-mode .quick-actions,
 .dark-mode .week-summary,
 body.dark-mode .week-summary {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
+  background-color: #16181c !important;
+  border-color: #2f3336 !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
 }
 
@@ -412,14 +412,14 @@ body.dark-mode .summary-label {
 
 .dark-mode .dashboard-tab,
 body.dark-mode .dashboard-tab {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
+  background-color: #16181c !important;
+  border-color: #2f3336 !important;
   color: #cbd5e1 !important;
 }
 
 .dark-mode .dashboard-tab:hover,
 body.dark-mode .dashboard-tab:hover {
-  background-color: #334155 !important;
+  background-color: #2f3336 !important;
 }
 
 .dark-mode .dashboard-tab.active,
@@ -433,8 +433,8 @@ body.dark-mode .dashboard-tab.active {
 body.dark-mode .dashboard-tab.filter,
 .dark-mode .dashboard-tab.add-session,
 body.dark-mode .dashboard-tab.add-session {
-  background-color: #0f172a !important;
-  border-color: #334155 !important;
+  background-color: #000000 !important;
+  border-color: #2f3336 !important;
   color: #38bdf8 !important;
 }
 
@@ -442,13 +442,13 @@ body.dark-mode .dashboard-tab.add-session {
 body.dark-mode .dashboard-tab.filter:hover,
 .dark-mode .dashboard-tab.add-session:hover,
 body.dark-mode .dashboard-tab.add-session:hover {
-  background-color: #1e293b !important;
+  background-color: #16181c !important;
 }
 
 .dark-mode .calendar,
 body.dark-mode .calendar {
-  background-color: #0f172a !important;
-  border-color: #334155 !important;
+  background-color: #000000 !important;
+  border-color: #2f3336 !important;
 }
 
 .dark-mode .calendar-day,
@@ -479,7 +479,7 @@ body.dark-mode .quick-action-btn {
 .dark-mode .quick-action-btn:hover,
 body.dark-mode .quick-action-btn:hover {
   background-color: #38bdf8 !important;
-  color: #0f172a !important;
+  color: #000000 !important;
 }
 
 .dark-mode .lesson-date,
@@ -495,7 +495,7 @@ body.dark-mode .lesson-status {
 
 .dark-mode .dashboard-main-row::after,
 body.dark-mode .dashboard-main-row::after {
-  background: #334155 !important;
+  background: #2f3336 !important;
 }
 
 .dark-mode .calendar-weekdays div {
@@ -584,7 +584,7 @@ body.dark-mode .student-teacher-card {
 
 .dark-mode .student-teacher-card.creator-card,
 body.dark-mode .student-teacher-card.creator-card {
-  background: linear-gradient(135deg, #1e293b 0%, #2d3a4f 100%) !important;
+  background: linear-gradient(135deg, #16181c 0%, #2d3a4f 100%) !important;
   border-color: #667eea !important;
 }
 

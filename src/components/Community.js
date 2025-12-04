@@ -942,10 +942,32 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
                 {displayedPosts.length > 0 ? (
                   displayedPosts.map(post => {
                     const course = getCourseById(post.courseId);
+                    // Generate avatar color and initials
+                    const avatarColors = ['#FF6B6B', '#4ECDC4', '#9B59B6', '#00D2FF', '#FFD93D', '#6C5CE7', '#FF9900', '#17bf63', '#E74C3C', '#3498DB'];
+                    const colorIndex = post.author.charCodeAt(0) % avatarColors.length;
+                    const avatarColor = avatarColors[colorIndex];
+                    const initials = post.author.replace(/[^A-Z0-9]/gi, '').substring(0, 2).toUpperCase();
                     return (
                       <div key={post.id} className="post-card">
                         <div className="post-card-header">
-                          <img className="post-card-avatar" src={post.authorAvatar} alt="" />
+                          <div 
+                            className="post-card-avatar"
+                            style={{
+                              width: 40,
+                              height: 40,
+                              borderRadius: '50%',
+                              background: avatarColor,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: '#fff',
+                              fontWeight: 700,
+                              fontSize: 14,
+                              flexShrink: 0
+                            }}
+                          >
+                            {initials}
+                          </div>
                           <div className="post-card-header-info">
                             <div className="post-card-name-row">
                               <span className="post-card-author">{post.author}</span>

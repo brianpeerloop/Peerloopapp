@@ -554,6 +554,13 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
       setSelectedCourseFilters([]);
       setOpenCreatorDropdown(null);
     }
+    // Auto-set post audience to the selected creator (or 'everyone' for Home)
+    if (tabId === 'Home') {
+      setPostAudience('everyone');
+    } else {
+      // tabId is the creator id when clicking a creator tab
+      setPostAudience(tabId);
+    }
   };
 
   const handleFollowCommunity = (communityId) => {
@@ -865,71 +872,6 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                         maxWidth: 280,
                         padding: '4px 0'
                       }}>
-                        {/* Welcome message with info tooltip */}
-                        <div style={{
-                          padding: '10px 12px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
-                          marginBottom: 4
-                        }}>
-                          <span style={{
-                            fontSize: 13,
-                            fontWeight: 600,
-                            color: isDarkMode ? '#e7e9ea' : '#0f1419'
-                          }}>
-                            Welcome to your communities
-                          </span>
-                          <div 
-                            style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
-                            onMouseEnter={() => setShowInfoTooltip(creator.id)}
-                            onMouseLeave={() => setShowInfoTooltip(null)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowInfoTooltip(showInfoTooltip === creator.id ? null : creator.id);
-                            }}
-                          >
-                            <FaInfoCircle 
-                              style={{ 
-                                color: '#1d9bf0', 
-                                fontSize: 14, 
-                                cursor: 'pointer',
-                                opacity: 0.8
-                              }} 
-                            />
-                            {/* Info tooltip */}
-                            {showInfoTooltip === creator.id && (
-                              <div style={{
-                                position: 'absolute',
-                                top: '100%',
-                                right: 0,
-                                marginTop: 8,
-                                background: isDarkMode ? '#000' : '#0f1419',
-                                color: '#fff',
-                                padding: '8px 12px',
-                                borderRadius: 8,
-                                fontSize: 12,
-                                lineHeight: 1.4,
-                                width: 200,
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                                zIndex: 100000
-                              }}>
-                                Go to Browse and follow courses or Creators. Feeds will show in your community here
-                                <div style={{
-                                  position: 'absolute',
-                                  top: -6,
-                                  right: 8,
-                                  width: 0,
-                                  height: 0,
-                                  borderLeft: '6px solid transparent',
-                                  borderRight: '6px solid transparent',
-                                  borderBottom: isDarkMode ? '6px solid #000' : '6px solid #0f1419'
-                                }} />
-                              </div>
-                            )}
-                          </div>
-                        </div>
                         {/* All option */}
                         <div 
                           style={{ 

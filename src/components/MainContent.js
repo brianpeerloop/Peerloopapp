@@ -1076,10 +1076,10 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                         top: '100%',
                         left: 0,
                         marginTop: 4,
-                        background: '#fff',
-                        border: '1px solid #e2e8f0',
+                        background: isDarkMode ? '#16181c' : '#fff',
+                        border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
                         borderRadius: 8,
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                        boxShadow: isDarkMode ? '0 2px 12px rgba(0,0,0,0.4)' : '0 2px 12px rgba(0,0,0,0.1)',
                         zIndex: 1000,
                         minWidth: 200,
                         maxWidth: 280,
@@ -1094,7 +1094,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                             fontSize: 13,
                             color: isInstructorFollowed(creator.id) ? '#dc2626' : '#1d9bf0',
                             fontWeight: 500,
-                            borderBottom: '1px solid #f1f5f9',
+                            borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9',
                             background: 'transparent',
                             border: 'none',
                             width: '100%',
@@ -1107,7 +1107,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           handleFollowInstructor(creator.id);
                           setOpenCreatorFollowDropdown(null);
                         }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                          onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
                           {isInstructorFollowed(creator.id) ? 'Unfollow All' : 'Follow All'}
@@ -1131,14 +1131,14 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                     justifyContent: 'space-between',
                                     gap: 8,
                                     fontSize: 13,
-                                    color: isFollowed ? '#1d9bf0' : '#475569',
+                                    color: isFollowed ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
                                     fontWeight: isFollowed ? 500 : 400
                                   }}
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleFollowCourse(course.id);
                                   }}
-                                  onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                                  onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                                   onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                                 >
                                   <span style={{ 
@@ -1366,6 +1366,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
         <Community
           followedCommunities={followedCommunities}
           setFollowedCommunities={setFollowedCommunities}
+          isDarkMode={isDarkMode}
         />
       </div>
     );

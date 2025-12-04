@@ -3,7 +3,7 @@ import './Community.css';
 import { FaUsers, FaStar, FaClock, FaPlay, FaBook, FaGraduationCap, FaHome, FaChevronLeft, FaChevronRight, FaHeart, FaComment, FaRetweet, FaBookmark, FaShare, FaChevronDown } from 'react-icons/fa';
 import { getAllCourses, getInstructorById, getCourseById } from '../data/database';
 
-const Community = ({ followedCommunities = [], setFollowedCommunities = null }) => {
+const Community = ({ followedCommunities = [], setFollowedCommunities = null, isDarkMode = false }) => {
   const [selectedCommunity, setSelectedCommunity] = useState(null);
   const [activeTab, setActiveTab] = useState('Home'); // 'Home' or community id
   const [isFollowingLoading, setIsFollowingLoading] = useState(false);
@@ -851,10 +851,10 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
                         top: '53px',
                         left: 'auto',
                         marginTop: 4,
-                        background: '#fff',
-                        border: '1px solid #e2e8f0',
+                        background: isDarkMode ? '#16181c' : '#fff',
+                        border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
                         borderRadius: 8,
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                        boxShadow: isDarkMode ? '0 2px 12px rgba(0,0,0,0.4)' : '0 2px 12px rgba(0,0,0,0.1)',
                         zIndex: 99999,
                         minWidth: 200,
                         maxWidth: 280,
@@ -866,12 +866,12 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
                             padding: '8px 12px',
                             cursor: 'pointer',
                             fontSize: 13,
-                            color: selectedCourseFilters.length === 0 || selectedCourseFilters.length === creator.followedCourseIds.length ? '#1d9bf0' : '#475569',
+                            color: selectedCourseFilters.length === 0 || selectedCourseFilters.length === creator.followedCourseIds.length ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
                             fontWeight: 500,
-                            borderBottom: '1px solid #f1f5f9'
+                            borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9'
                           }}
                           onClick={() => setSelectedCourseFilters([])}
-                          onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                          onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
                           All
@@ -889,7 +889,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
                                 padding: '8px 12px',
                                 cursor: 'pointer',
                                 fontSize: 13,
-                                color: isSelected ? '#1d9bf0' : '#475569',
+                                color: isSelected ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
                                 fontWeight: isSelected ? 500 : 400,
                                 display: 'flex',
                                 alignItems: 'center',
@@ -902,7 +902,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
                                   setSelectedCourseFilters(prev => [...prev, courseId]);
                                 }
                               }}
-                              onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                              onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                               onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                               <span style={{ 

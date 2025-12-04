@@ -915,7 +915,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                 boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                                 zIndex: 100000
                               }}>
-                                This is where you find the communities you followed
+                                Go to Browse and follow courses or Creators. Feeds will show in your community here
                                 <div style={{
                                   position: 'absolute',
                                   top: -6,
@@ -1197,7 +1197,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                           boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                           zIndex: 100000
                         }}>
-                          This is where you find the communities you followed
+                          Go to Browse and follow courses or Creators. Feeds will show in your community here
                           <div style={{
                             position: 'absolute',
                             top: -6,

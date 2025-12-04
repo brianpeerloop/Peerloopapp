@@ -1275,97 +1275,35 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             marginBottom: 16,
             border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
             cursor: 'pointer',
-            transition: 'all 0.2s ease'
+            transition: 'all 0.2s ease',
+            position: 'relative'
           }}>
-            {/* Creator Header */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-              <div 
+            {/* Follow Button - Top Right */}
+            <div className="creator-follow-dropdown-wrapper" style={{ position: 'absolute', top: 16, right: 16 }} onClick={e => e.stopPropagation()}>
+              <button 
+                className={`follow-btn ${hasAnyCreatorCourseFollowed(creator.id) ? 'following' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenCreatorFollowDropdown(openCreatorFollowDropdown === creator.id ? null : creator.id);
+                }}
+                disabled={isFollowingLoading}
                 style={{ 
-                  width: 40, 
-                  height: 40, 
-                  borderRadius: '50%', 
-                  border: '2px solid #1d9bf0',
-                  background: avatarColor,
+                  background: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : '#1d9bf0',
+                  color: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#94a3b8' : '#64748b') : '#fff',
+                  border: 'none', 
+                  padding: '8px 16px', 
+                  borderRadius: 20, 
+                  fontWeight: 600, 
+                  fontSize: 14, 
+                  cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: 14,
-                  flexShrink: 0
+                  gap: 6
                 }}
               >
-                {initials}
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontWeight: 700, fontSize: 18, color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.name}</span>
-                  <span style={{ background: isDarkMode ? '#1e3a5f' : '#dbeafe', color: isDarkMode ? '#93c5fd' : '#1e40af', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 12 }}>CREATOR</span>
-                </div>
-                <div style={{ color: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 14, marginBottom: 8 }}>{creator.title}</div>
-                <div style={{ color: isDarkMode ? '#cbd5e1' : '#475569', fontSize: 14, lineHeight: 1.5, marginBottom: 12 }}>{creator.bio}</div>
-                
-                {/* Stats Row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, color: isDarkMode ? '#94a3b8' : '#64748b', marginBottom: 12 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <FaUsers style={{ color: '#1d9bf0' }} />
-                    <strong style={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.stats?.studentsTaught?.toLocaleString() || 0}</strong> students
-                  </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <FaStar style={{ color: '#f59e0b' }} />
-                    <strong style={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.stats?.averageRating || 0}</strong> rating
-                  </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <FaBook style={{ color: '#3b82f6' }} />
-                    <strong style={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.stats?.coursesCreated || 0}</strong> courses
-                  </span>
-                </div>
-                
-                {/* Action Buttons */}
-                <div style={{ display: 'flex', gap: 12 }} onClick={e => e.stopPropagation()}>
-                  <button 
-                    onClick={() => setSelectedInstructor(getInstructorWithCourses(creator.id))}
-                    style={{ 
-                      background: '#1d9bf0', 
-                      color: '#fff', 
-                      border: 'none', 
-                      padding: '8px 16px', 
-                      borderRadius: 8, 
-                      fontWeight: 600, 
-                      fontSize: 13, 
-                      cursor: 'pointer' 
-                    }}
-                  >
-                    View Profile
-                  </button>
-                  
-                  {/* Follow Button with Dropdown */}
-                  <div className="creator-follow-dropdown-wrapper" style={{ position: 'relative' }}>
-                    <button 
-                      className={`follow-btn ${hasAnyCreatorCourseFollowed(creator.id) ? 'following' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Always toggle dropdown - let user choose what to follow/unfollow
-                        setOpenCreatorFollowDropdown(openCreatorFollowDropdown === creator.id ? null : creator.id);
-                      }}
-                      disabled={isFollowingLoading}
-                      style={{ 
-                        background: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : (isDarkMode ? '#16181c' : '#fff'),
-                        color: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#94a3b8' : '#64748b') : '#1d9bf0',
-                        border: isDarkMode ? '1px solid #475569' : '1px solid #e2e8f0', 
-                        padding: '8px 16px', 
-                        borderRadius: 8, 
-                        fontWeight: 600, 
-                        fontSize: 13, 
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6
-                      }}
-                    >
-                      {hasAnyCreatorCourseFollowed(creator.id) ? '✓ Following' : 'Follow'}
-                      <span style={{ fontSize: 10, marginLeft: 2 }}>▼</span>
-                    </button>
+                {hasAnyCreatorCourseFollowed(creator.id) ? '✓ Following' : 'Follow'}
+                <span style={{ fontSize: 10, marginLeft: 2 }}>▼</span>
+              </button>
                     
                     {/* Follow Dropdown - Minimalist */}
                     {openCreatorFollowDropdown === creator.id && (
@@ -1454,7 +1392,39 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                         </div>
                       </div>
                     )}
-                  </div>
+            </div>
+
+            {/* Creator Content */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, paddingRight: 100 }}>
+              <div style={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                background: avatarColor,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: 16,
+                flexShrink: 0
+              }}>
+                {initials}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: 16, color: isDarkMode ? '#e7e9ea' : '#0f1419', marginBottom: 2 }}>
+                  {creator.name}
+                </div>
+                <div style={{ color: isDarkMode ? '#71767b' : '#536471', fontSize: 14, marginBottom: 6 }}>
+                  {creator.title}
+                </div>
+                <div style={{ color: isDarkMode ? '#e7e9ea' : '#0f1419', fontSize: 14, lineHeight: 1.5, marginBottom: 10 }}>
+                  {creator.bio}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: isDarkMode ? '#71767b' : '#536471' }}>
+                  <span>{creator.stats?.studentsTaught?.toLocaleString() || 0} students</span>
+                  <span>⭐ {creator.stats?.averageRating || 0}</span>
+                  <span>{creator.stats?.coursesCreated || 0} courses</span>
                 </div>
               </div>
             </div>

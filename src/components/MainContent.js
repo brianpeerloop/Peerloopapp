@@ -871,9 +871,19 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
       { id: 2, title: 'AI for Everyone' },
       { id: 4, title: 'Machine Learning Basics' }
     ];
+
+    // Dark mode colors
+    const bgPrimary = isDarkMode ? '#000' : '#fff';
+    const bgSecondary = isDarkMode ? '#16181c' : '#f7f9fa';
+    const bgTertiary = isDarkMode ? '#1e2428' : '#eff6ff';
+    const textPrimary = isDarkMode ? '#e7e9ea' : '#222';
+    const textSecondary = isDarkMode ? '#71767b' : '#444';
+    const textMuted = isDarkMode ? '#536471' : '#888';
+    const borderColor = isDarkMode ? '#2f3336' : '#e6e8ec';
+
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', padding: '0', marginTop: '0' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%', maxWidth: '100%', margin: '0', background: '#fff', borderRadius: 0, border: '1px solid #e6e8ec', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 0, marginTop: '0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%', maxWidth: '100%', margin: '0', background: bgPrimary, borderRadius: 0, border: `1px solid ${borderColor}`, boxShadow: isDarkMode ? 'none' : '0 2px 8px rgba(0,0,0,0.04)', padding: 0, marginTop: '0' }}>
           {/* Removed banner image so the title is at the very top */}
           {/* Title & Creator */}
           <div style={{ padding: '24px 32px 0 32px', textAlign: 'center', position: 'relative' }}>
@@ -885,8 +895,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                 position: 'absolute',
                 top: 24,
                 right: 32,
-                background: isCourseFollowed(courseData.id) ? '#e2e8f0' : '#1d9bf0', 
-                color: isCourseFollowed(courseData.id) ? '#64748b' : '#fff', 
+                background: isCourseFollowed(courseData.id) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : '#1d9bf0', 
+                color: isCourseFollowed(courseData.id) ? (isDarkMode ? '#71767b' : '#64748b') : '#fff', 
                 fontWeight: 600, 
                 fontSize: 14, 
                 cursor: 'pointer', 
@@ -900,23 +910,23 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             >
               {isCourseFollowed(courseData.id) ? '✓ Following' : 'Follow'}
             </button>
-            <div className="main-course-title" style={{ fontWeight: 700, fontSize: 32, marginBottom: 8 }}>
+            <div className="main-course-title" style={{ fontWeight: 700, fontSize: 32, marginBottom: 8, color: textPrimary }}>
               {courseData.title}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 8 }}>
-              <span style={{ fontSize: 16, color: '#444' }}>Created by {instructorData && instructorData.name}</span>
+              <span style={{ fontSize: 16, color: textSecondary }}>Created by {instructorData && instructorData.name}</span>
             </div>
             {/* Stats Row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, fontSize: 15, marginBottom: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, fontSize: 15, marginBottom: 10, color: textPrimary }}>
               <span title="Rating" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span style={{ color: '#f5b50a', fontSize: 16 }}>★</span> {courseData.rating}</span>
               <span title="Active Learners" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span role="img" aria-label="users">👥</span> {courseData.students.toLocaleString()} Active Learners</span>
               <span title="Level" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span role="img" aria-label="level">📊</span> {courseData.level}</span>
               <span title="Price" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span role="img" aria-label="money">💰</span> {courseData.price}</span>
             </div>
             {/* Description */}
-            <div style={{ color: '#222', fontSize: 15, marginBottom: 14, textAlign: 'center' }}>{courseData.description}</div>
+            <div style={{ color: textPrimary, fontSize: 15, marginBottom: 14, textAlign: 'center' }}>{courseData.description}</div>
             {/* Flywheel Benefits */}
-            <ul style={{ color: '#222', fontSize: 15, margin: '18px 0 0 0', paddingLeft: 0, textAlign: 'left', fontWeight: 400, lineHeight: 1.5, listStylePosition: 'inside' }}>
+            <ul style={{ color: textPrimary, fontSize: 15, margin: '18px 0 0 0', paddingLeft: 0, textAlign: 'left', fontWeight: 400, lineHeight: 1.5, listStylePosition: 'inside' }}>
               <li style={{ marginBottom: 2 }}>Earn: 70% commission when you become a Student-Teacher (e.g., earn $350 per $500 course you teach)</li>
               <li style={{ marginBottom: 2 }}>1-on-1 Sessions: Learn directly from the Creator or certified Student-Teachers via live video</li>
               <li style={{ marginBottom: 2 }}>Certify: Get certified, then teach others and earn while sharing your knowledge</li>
@@ -924,27 +934,27 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             </ul>
             {/* Curriculum Outline */}
             <div style={{ margin: '32px 0 0 0', textAlign: 'left', width: '100%', paddingLeft: 0 }}>
-              <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 12 }}>Curriculum Outline</div>
+              <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 12, color: textPrimary }}>Curriculum Outline</div>
               {courseData.curriculum.map((module, idx) => (
                 <div key={idx} style={{ marginBottom: 10 }}>
-                  <div style={{ fontWeight: 600, fontSize: 15, display: 'inline-block' }}>{module.title} <span style={{ fontWeight: 400, fontSize: 15, color: '#888' }}>({module.duration})</span></div>
-                  <div style={{ fontSize: 15, color: '#222', marginLeft: 2 }}>{module.description}</div>
+                  <div style={{ fontWeight: 600, fontSize: 15, display: 'inline-block', color: textPrimary }}>{module.title} <span style={{ fontWeight: 400, fontSize: 15, color: textMuted }}>({module.duration})</span></div>
+                  <div style={{ fontSize: 15, color: textPrimary, marginLeft: 2 }}>{module.description}</div>
                 </div>
               ))}
             </div>
             {/* Creator Profile Teaser */}
-            <div style={{ margin: '18px 0', textAlign: 'center', background: '#f7f9fa', borderRadius: 10, padding: 16 }}>
+            <div style={{ margin: '18px 0', textAlign: 'center', background: bgSecondary, borderRadius: 10, padding: 16, border: isDarkMode ? `1px solid ${borderColor}` : 'none' }}>
               <img src={instructorData.avatar} alt={instructorData.name} style={{ width: 48, height: 48, borderRadius: '50%', marginBottom: 4 }} />
-              <div style={{ fontWeight: 600, fontSize: 15 }}>{instructorData.name}</div>
-              <div style={{ color: '#888', fontSize: 13, marginBottom: 4 }}>{instructorData.title}</div>
-              <div style={{ color: '#444', fontSize: 13 }}>{instructorData.bio}</div>
+              <div style={{ fontWeight: 600, fontSize: 15, color: textPrimary }}>{instructorData.name}</div>
+              <div style={{ color: textMuted, fontSize: 13, marginBottom: 4 }}>{instructorData.title}</div>
+              <div style={{ color: textSecondary, fontSize: 13 }}>{instructorData.bio}</div>
             </div>
             {/* Student-Teacher Stats */}
-            <div style={{ background: '#eff6ff', border: '1px solid #1d9bf0', borderRadius: 8, padding: '12px 16px', marginBottom: 16, textAlign: 'center' }}>
-              <div style={{ color: '#0284c7', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
+            <div style={{ background: bgTertiary, border: '1px solid #1d9bf0', borderRadius: 8, padding: '12px 16px', marginBottom: 16, textAlign: 'center' }}>
+              <div style={{ color: '#1d9bf0', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
                 🎓 {studentTeachers} Student-Teachers available to help you learn
               </div>
-              <div style={{ color: '#047857', fontSize: 13 }}>
+              <div style={{ color: isDarkMode ? '#00ba7c' : '#047857', fontSize: 13 }}>
                 Book 1-on-1 sessions with the Creator or certified peers
               </div>
             </div>
@@ -959,7 +969,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
               <span style={{ color: '#1d9bf0', fontWeight: 500, fontSize: 14, cursor: 'pointer', textDecoration: 'none', padding: '10px 0', background: 'none', border: 'none', lineHeight: '20px' }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Learn about teaching</span>
             </div>
             {/* Footer: Related Courses, Share Links */}
-            <div style={{ color: '#888', fontSize: 13, textAlign: 'center', marginBottom: 10 }}>
+            <div style={{ color: textMuted, fontSize: 13, textAlign: 'center', marginBottom: 10 }}>
               Related Courses: {relatedCourses.map(rc => rc.title).join(' | ')}
             </div>
             <div style={{ color: '#1d9bf0', fontSize: 13, textAlign: 'center', marginBottom: 18 }}>

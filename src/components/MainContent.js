@@ -1163,8 +1163,40 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             border: `1px solid ${borderColor}`,
             display: 'flex',
             alignItems: 'flex-start',
-            gap: 16
+            gap: 16,
+            position: 'relative'
           }}>
+            {/* Follow button - top right */}
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                // Toggle follow for this creator
+                const creatorId = `creator-${courseData.instructorId}`;
+                const isFollowed = followedInstructors.has(courseData.instructorId);
+                if (isFollowed) {
+                  const newSet = new Set(followedInstructors);
+                  newSet.delete(courseData.instructorId);
+                  setFollowedInstructors(newSet);
+                } else {
+                  setFollowedInstructors(new Set([...followedInstructors, courseData.instructorId]));
+                }
+              }}
+              style={{ 
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                background: followedInstructors.has(courseData.instructorId) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : accentBlue, 
+                color: followedInstructors.has(courseData.instructorId) ? textSecondary : '#fff', 
+                fontWeight: 600, 
+                fontSize: 14, 
+                cursor: 'pointer', 
+                padding: '8px 16px', 
+                borderRadius: 20, 
+                border: 'none'
+              }}
+            >
+              {followedInstructors.has(courseData.instructorId) ? '✓ Following' : 'Follow'}
+            </button>
             <div style={{ 
               width: 56, 
               height: 56, 
@@ -1180,7 +1212,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             }}>
               {creatorInitials}
             </div>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, paddingRight: 100 }}>
               <div 
                 onClick={() => {
                   const fullCreatorData = getInstructorWithCourses(courseData.instructorId);

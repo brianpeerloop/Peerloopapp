@@ -844,16 +844,25 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     <button
                       className={`community-tab-btn ${activeTab === creator.id ? 'active' : ''}`}
                       onClick={() => {
+                        // Just select the tab, don't open dropdown
                         if (activeTab !== creator.id) {
                           handleTabClick(creator.id);
                           setSelectedCourseFilters([]);
                         }
-                        setOpenCreatorDropdown(openCreatorDropdown === creator.id ? null : creator.id);
+                        // Close any open dropdown when clicking tab text
+                        setOpenCreatorDropdown(null);
                       }}
                       title={`${creator.name} - ${creator.followedCourseIds.length} course(s) followed`}
                     >
                       <span>{creator.name.length > 15 ? creator.name.substring(0, 13) + '...' : creator.name}</span>
-                      <span style={{ fontSize: 10, marginLeft: 4 }}>▼</span>
+                      <span 
+                        style={{ fontSize: 10, marginLeft: 4, padding: '4px' }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Toggle dropdown only when clicking the arrow
+                          setOpenCreatorDropdown(openCreatorDropdown === creator.id ? null : creator.id);
+                        }}
+                      >▼</span>
                     </button>
                     
                     {/* Minimalist dropdown - same style as Browse Creators */}
@@ -889,14 +898,14 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                           All
                         </div>
                         
-                        {/* Individual courses */}
-                        {creator.followedCourseIds.map(courseId => {
-                          const course = getCourseById(courseId);
+                        {/* Individual courses - show ALL courses from creator */}
+                        {(creator.allCourses || []).map(course => {
                           if (!course) return null;
-                          const isSelected = selectedCourseFilters.includes(courseId);
+                          const isFollowed = creator.followedCourseIds.includes(course.id);
+                          const isSelected = selectedCourseFilters.includes(course.id);
                           return (
                             <div 
-                              key={courseId}
+                              key={course.id}
                               style={{ 
                                 padding: '8px 12px',
                                 cursor: 'pointer',
@@ -905,13 +914,17 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                 fontWeight: isSelected ? 500 : 400,
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'space-between'
+                                justifyContent: 'space-between',
+                                opacity: isFollowed ? 1 : 0.5
                               }}
                               onClick={() => {
-                                if (isSelected) {
-                                  setSelectedCourseFilters(prev => prev.filter(id => id !== courseId));
-                                } else {
-                                  setSelectedCourseFilters(prev => [...prev, courseId]);
+                                if (isFollowed) {
+                                  // Only allow selecting/deselecting followed courses
+                                  if (isSelected) {
+                                    setSelectedCourseFilters(prev => prev.filter(id => id !== course.id));
+                                  } else {
+                                    setSelectedCourseFilters(prev => [...prev, course.id]);
+                                  }
                                 }
                               }}
                               onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
@@ -923,8 +936,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                 textOverflow: 'ellipsis'
                               }}>
                                 {course.title}
+                                {!isFollowed && <span style={{ marginLeft: 6, fontSize: 11, color: isDarkMode ? '#536471' : '#94a3b8' }}>(not followed)</span>}
                               </span>
-                              {isSelected && <span>✓</span>}
+                              {isFollowed && <span style={{ color: '#1d9bf0' }}>✓</span>}
                             </div>
                           );
                         })}

@@ -1,49 +1,64 @@
-/* CSS Variables for theming */
+/* CSS Variables for theming - X.com inspired typography */
 :root {
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --border-color: #e2e8f0;
+  --bg-secondary: #f7f9f9;
+  --bg-tertiary: #eff3f4;
+  --text-primary: #0f1419;
+  --text-secondary: #536471;
+  --text-muted: #71767b;
+  --border-color: #eff3f4;
   --accent-color: #1d9bf0;
-  --accent-hover: #0284c7;
+  --accent-hover: #1a8cd8;
   --card-bg: #ffffff;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* X.com Typography */
+  --font-size-xs: 13px;
+  --font-size-sm: 14px;
+  --font-size-base: 15px;
+  --font-size-lg: 17px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 23px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.5;
 }
 
-/* Dark mode theme - on body for proper inheritance */
+/* Dark mode theme - X.com style bright white text */
 body.dark-mode {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
-  --border-color: #334155;
-  --accent-color: #38bdf8;
-  --accent-hover: #0ea5e9;
-  --card-bg: #1e293b;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --bg-primary: #000000;
+  --bg-secondary: #16181c;
+  --bg-tertiary: #1d1f23;
+  --text-primary: #e7e9ea;
+  --text-secondary: #71767b;
+  --text-muted: #71767b;
+  --border-color: #2f3336;
+  --accent-color: #1d9bf0;
+  --accent-hover: #1a8cd8;
+  --card-bg: #16181c;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
 }
 
 /* Also define on .dark-mode class for elements that use it */
 .dark-mode {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
-  --border-color: #334155;
-  --accent-color: #38bdf8;
-  --accent-hover: #0ea5e9;
-  --card-bg: #1e293b;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --bg-primary: #000000;
+  --bg-secondary: #16181c;
+  --bg-tertiary: #1d1f23;
+  --text-primary: #e7e9ea;
+  --text-secondary: #71767b;
+  --text-muted: #71767b;
+  --border-color: #2f3336;
+  --accent-color: #1d9bf0;
+  --accent-hover: #1a8cd8;
+  --card-bg: #16181c;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
 }
 
 body {
@@ -62,31 +77,33 @@ body.dark-mode {
    These use !important to ensure they override component styles
    ======================================== */
 
-/* Main Content Area */
+/* Main Content Area - X.com pure black */
 .dark-mode .main-content,
 body.dark-mode .main-content {
-  background-color: #0f172a !important;
+  background-color: #000000 !important;
 }
 
 .dark-mode .courses-feed,
 body.dark-mode .courses-feed {
-  background-color: #0f172a !important;
+  background-color: #000000 !important;
 }
 
 .dark-mode .course-post,
 body.dark-mode .course-post {
-  background-color: #0f172a !important;
-  border-bottom-color: #334155 !important;
+  background-color: #000000 !important;
+  border-bottom-color: #2f3336 !important;
 }
 
 .dark-mode .course-post .post-author,
 body.dark-mode .course-post .post-author {
-  color: #f1f5f9 !important;
+  color: #e7e9ea !important;
+  font-weight: 700 !important;
 }
 
 .dark-mode .course-post .post-text,
 body.dark-mode .course-post .post-text {
-  color: #cbd5e1 !important;
+  color: #e7e9ea !important;
+  font-size: 15px !important;
 }
 
 .dark-mode .course-post .post-handle,
@@ -182,7 +199,7 @@ body.dark-mode .notification-item {
   border-color: #334155 !important;
 }
 
-/* Cards */
+/* Cards - X.com style */
 .dark-mode .instructor-card,
 body.dark-mode .instructor-card,
 .dark-mode .course-card,
@@ -191,8 +208,8 @@ body.dark-mode .course-card,
 body.dark-mode .course-link,
 .dark-mode .instructor-single-col-card,
 body.dark-mode .instructor-single-col-card {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
+  background-color: #16181c !important;
+  border-color: #2f3336 !important;
 }
 
 .dark-mode .instructor-card:hover,
@@ -203,23 +220,37 @@ body.dark-mode .course-card:hover,
 body.dark-mode .course-link:hover,
 .dark-mode .instructor-single-col-card:hover,
 body.dark-mode .instructor-single-col-card:hover {
-  border-color: #38bdf8 !important;
-  background-color: #334155 !important;
+  border-color: #1d9bf0 !important;
+  background-color: #1d1f23 !important;
 }
 
-/* Text Colors */
+/* Text Colors - X.com style bright white */
 .dark-mode .post-author,
 body.dark-mode .post-author,
 .dark-mode .course-title,
 body.dark-mode .course-title,
 .dark-mode .instructor-name,
 body.dark-mode .instructor-name {
-  color: #f1f5f9 !important;
+  color: #e7e9ea !important;
+  font-weight: 700 !important;
 }
 
 .dark-mode h1, .dark-mode h2, .dark-mode h3, .dark-mode h4,
 body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4 {
-  color: #f1f5f9 !important;
+  color: #e7e9ea !important;
+  font-weight: 700 !important;
+}
+
+/* X.com style body text */
+.dark-mode p,
+body.dark-mode p,
+.dark-mode .post-text,
+body.dark-mode .post-text,
+.dark-mode .course-description,
+body.dark-mode .course-description {
+  color: #e7e9ea !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
 }
 
 .dark-mode .post-text,

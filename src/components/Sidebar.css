@@ -367,10 +367,10 @@
   font-weight: 500;
 }
 
-/* Dark mode styles for Sidebar */
+/* Dark mode styles for Sidebar - X.com style */
 .dark-mode .sidebar {
-  background-color: var(--bg-primary);
-  border-right-color: var(--border-color);
+  background-color: #000000;
+  border-right-color: #2f3336;
 }
 
 .dark-mode .sidebar-header {
@@ -385,28 +385,37 @@
 }
 
 .dark-mode .nav-item {
-  color: var(--text-secondary);
+  color: #e7e9ea;
+  font-size: 20px;
+  font-weight: 400;
 }
 
 .dark-mode .nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--accent-color);
+  background-color: rgba(231, 233, 234, 0.1);
+  color: #e7e9ea;
 }
 
 .dark-mode .nav-item.active {
-  color: var(--accent-color);
+  color: #e7e9ea;
+  font-weight: 700;
+}
+
+.dark-mode .nav-label {
+  color: #e7e9ea;
+  font-size: 20px;
 }
 
 .dark-mode .profile-name {
-  color: var(--text-primary);
+  color: #e7e9ea;
+  font-weight: 700;
 }
 
 .dark-mode .profile-handle {
-  color: var(--text-secondary);
+  color: #71767b;
 }
 
 .dark-mode .sidebar-profile:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(231, 233, 234, 0.1);
 }
 
 /* Responsive - hide toggle label when collapsed */

@@ -80,6 +80,34 @@
 
 ---
 
+### Session 3
+**Date:** December 4, 2025
+**Duration:** ~30 min
+**Phase:** Building & Polish
+
+**What we did:**
+- **Community Creator Dropdown Improvements:**
+  - Added "Follow All" option (blue) to follow all courses from a creator
+  - Added "Unfollow All" option (red) to unfollow all courses from a creator
+  - Fixed individual course follow/unfollow - clicking a course now toggles its follow state
+  - Followed courses show blue checkmark ✓
+  - Unfollowed courses can be clicked to follow
+
+- **Browse Section Follow Dropdown Fix:**
+  - Changed logic so "Unfollow All" shows when ANY course is followed (not just when entire creator is followed)
+  - Consistent behavior between Browse > Creators and Instructor Profile dropdowns
+
+**Technical changes:**
+- `Community.js`: Added Follow All/Unfollow All, fixed individual course click handlers
+- `MainContent.js`: Changed `isInstructorFollowed()` to `hasAnyCreatorCourseFollowed()` for dropdown logic
+
+**Deployments:** 4 deployments to GitHub Pages
+
+**Next session:** Continue feature development
+
+
+---
+
 <!-- Add more sessions as needed -->
 
 ---

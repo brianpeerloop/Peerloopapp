@@ -16,7 +16,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 function App() {
   // Global state for tracking which menu item is currently active
   // This determines what content is displayed in the main area
-  const [activeMenu, setActiveMenu] = useState('Browse');
+  const [activeMenu, setActiveMenu] = useState('My Community');
   
   // State for tracking if we're in creator mode
   const [isCreatorMode, setIsCreatorMode] = useState(false);

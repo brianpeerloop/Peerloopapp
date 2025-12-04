@@ -17,22 +17,25 @@
 
 /* Three Column Layout */
 .three-column-layout {
-  display: grid;
-  grid-template-columns: 1fr 320px;
+  display: flex;
   width: 100%;
   min-height: 100vh;
   gap: 0;
 }
 
 .center-column {
+  flex: 0 1 600px;
   min-width: 0;
+  max-width: 600px;
   border-right: 1px solid var(--border-color, #e2e8f0);
+  border-left: 1px solid var(--border-color, #e2e8f0);
   overflow-y: auto;
   height: 100vh;
 }
 
 .right-pane {
-  width: 320px;
+  flex: 0 0 350px;
+  width: 350px;
   padding: 16px;
   background: var(--bg-secondary, #f8fafc);
   overflow-y: auto;
@@ -147,26 +150,20 @@
     width: calc(100vw - 88px);
   }
   
-  .three-column-layout {
-    grid-template-columns: 1fr 280px;
-  }
-  
   .right-pane {
     width: 280px;
   }
 }
 
 @media (max-width: 1000px) {
-  .three-column-layout {
-    grid-template-columns: 1fr;
-  }
-  
   .right-pane {
     display: none;
   }
   
   .center-column {
     border-right: none;
+    border-left: none;
+    max-width: 100%;
   }
 }
 
@@ -174,6 +171,10 @@
   .main-content {
     margin-left: 88px;
     width: calc(100vw - 88px);
+  }
+  
+  .center-column {
+    max-width: 100%;
   }
 }
 
@@ -200,6 +201,7 @@
   gap: 0;
   height: 53px;
   background: none;
+  width: 100%;
 }
 
 .tab-btn {
@@ -216,7 +218,7 @@
   color: var(--text-secondary, #536471);
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
-  flex: 1;
+  flex: 0 0 auto;
   justify-content: center;
 }
 
@@ -255,22 +257,33 @@
 .search-container {
   display: flex;
   align-items: center;
-  background-color: var(--bg-tertiary, rgba(247, 249, 250, 0.9));
+  background-color: #eff3f4;
   border-radius: 20px;
-  padding: 6px 14px;
+  padding: 0 12px;
   margin-left: auto;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-  flex: 0 1 auto;
-  max-width: 220px;
-  min-width: 150px;
-  height: 36px;
+  border: 1px solid transparent;
+  flex: 0 0 auto;
+  width: 200px;
+  height: 40px;
   box-sizing: border-box;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.dark-mode .search-container {
+.search-container:focus-within {
+  border-color: #1d9bf0;
+  background-color: transparent;
+}
+
+.dark-mode .search-container,
+body.dark-mode .search-container {
   background-color: #000 !important;
-  border-color: #2f3336 !important;
+  border: 1px solid #2f3336 !important;
+}
+
+.dark-mode .search-container:focus-within,
+body.dark-mode .search-container:focus-within {
+  background-color: #000 !important;
+  border-color: #1d9bf0 !important;
 }
 
 .search-icon {

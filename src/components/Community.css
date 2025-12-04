@@ -45,22 +45,25 @@
 
 /* Community Three Column Layout */
 .community-three-column {
-  display: grid;
-  grid-template-columns: 1fr 320px;
+  display: flex;
   width: 100%;
   min-height: 100vh;
   gap: 0;
 }
 
 .community-center-column {
+  flex: 0 1 600px;
   min-width: 0;
+  max-width: 600px;
   border-right: 1px solid var(--border-color);
+  border-left: 1px solid var(--border-color);
   overflow-y: auto;
   height: 100vh;
 }
 
 .community-right-pane {
-  width: 320px;
+  flex: 0 0 350px;
+  width: 350px;
   padding: 16px;
   background: var(--bg-secondary);
   overflow-y: auto;
@@ -160,26 +163,20 @@
 
 /* Responsive */
 @media (max-width: 1400px) {
-  .community-three-column {
-    grid-template-columns: 1fr 280px;
-  }
-  
   .community-right-pane {
     width: 280px;
   }
 }
 
 @media (max-width: 1000px) {
-  .community-three-column {
-    grid-template-columns: 1fr;
-  }
-  
   .community-right-pane {
     display: none;
   }
   
   .community-center-column {
     border-right: none;
+    border-left: none;
+    max-width: 100%;
   }
 }
 

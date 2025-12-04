@@ -1,49 +1,133 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
-import { FaCalendar, FaUser, FaBook, FaClock, FaVideo, FaFilter, FaPlus } from 'react-icons/fa';
-import { coursesDatabase } from '../data/database';
-import { getInstructorById } from '../data/database';
+import { FaChevronLeft, FaChevronRight, FaVideo } from 'react-icons/fa';
+import { coursesDatabase, getInstructorById } from '../data/database';
 
-const getRandomFutureDate = (offset) => {
-  const now = new Date();
-  now.setDate(now.getDate() + offset);
-  now.setHours(14 + (offset % 4), 0, 0, 0); // 2pm, 3pm, etc.
-  return now;
-};
+const Dashboard = ({ isDarkMode }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const today = new Date();
 
-const formatDate = (date) => {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-};
+  // Generate demo sessions with specific dates
+  const generateSessions = () => {
+    const sessions = [];
+    const baseDate = new Date();
+    
+    // Today's sessions
+    sessions.push({
+      id: 1,
+      title: 'Node.js Backend Development',
+      instructor: 'Albert Einstein',
+      instructorHandle: '@AlbertEinstein',
+      module: 'Module 5: REST APIs',
+      date: new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), 14, 0),
+      type: 'learning',
+      sessionType: '1-on-1 Session'
+    });
+    sessions.push({
+      id: 2,
+      title: 'AI for Product Managers',
+      instructor: 'Sarah Chen',
+      instructorHandle: '@SarahChen',
+      module: '1-on-1 Session',
+      date: new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), 16, 30),
+      type: 'teaching',
+      sessionType: '1-on-1 Session'
+    });
 
-const formatTime = (date) => {
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-};
+    // Tomorrow
+    const tomorrow = new Date(baseDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    sessions.push({
+      id: 3,
+      title: 'Cloud Architecture with AWS',
+      instructor: 'Jane Doe',
+      instructorHandle: '@JaneDoe',
+      module: 'Module 3: AWS Lambda',
+      date: new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 15, 0),
+      type: 'learning',
+      sessionType: 'Group Session'
+    });
 
-const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('Upcoming');
-  const currentDate = new Date();
+    // Day after tomorrow
+    const dayAfter = new Date(baseDate);
+    dayAfter.setDate(dayAfter.getDate() + 2);
+    sessions.push({
+      id: 4,
+      title: 'AI for Product Managers',
+      instructor: 'Tom Bradley',
+      instructorHandle: '@TomBradley',
+      module: 'Group Session (4 students)',
+      date: new Date(dayAfter.getFullYear(), dayAfter.getMonth(), dayAfter.getDate(), 11, 0),
+      type: 'teaching',
+      sessionType: 'Group Session'
+    });
+    sessions.push({
+      id: 5,
+      title: 'Node.js Backend Development',
+      instructor: 'Albert Einstein',
+      instructorHandle: '@AlbertEinstein',
+      module: 'Module 6: Authentication',
+      date: new Date(dayAfter.getFullYear(), dayAfter.getMonth(), dayAfter.getDate(), 15, 0),
+      type: 'learning',
+      sessionType: '1-on-1 Session'
+    });
 
-  // Generate demo lessons from courses
-  const lessons = coursesDatabase.slice(0, 5).map((course, idx) => {
-    const instructor = getInstructorById(course.instructorId);
-    const date = getRandomFutureDate(idx);
-    return {
-      id: course.id,
-      title: course.title,
-      instructor: instructor ? instructor.name : 'Unknown',
-      date,
-      time: formatTime(date),
-      category: course.category,
-      thumbnail: course.thumbnail,
-      price: course.price,
-      level: course.level,
-      type: idx % 2 === 0 ? 'teaching' : 'learning',
-      status: idx === 0 ? 'confirmed' : idx === 1 ? 'confirmed' : idx === 2 ? 'pending' : 'confirmed',
-      earnings: idx % 2 === 0 ? 80 : 100,
-    };
-  });
+    // 3 days from now
+    const threeDays = new Date(baseDate);
+    threeDays.setDate(threeDays.getDate() + 3);
+    sessions.push({
+      id: 6,
+      title: 'Deep Learning Fundamentals',
+      instructor: 'Albert Einstein',
+      instructorHandle: '@AlbertEinstein',
+      module: 'Module 2: Neural Networks',
+      date: new Date(threeDays.getFullYear(), threeDays.getMonth(), threeDays.getDate(), 13, 0),
+      type: 'learning',
+      sessionType: '1-on-1 Session'
+    });
+    sessions.push({
+      id: 7,
+      title: 'AI for Product Managers',
+      instructor: 'Amy Foster',
+      instructorHandle: '@AmyFoster',
+      module: '1-on-1 Session',
+      date: new Date(threeDays.getFullYear(), threeDays.getMonth(), threeDays.getDate(), 17, 0),
+      type: 'teaching',
+      sessionType: '1-on-1 Session'
+    });
 
-  // Calendar helper functions
+    // Add more scattered sessions for calendar display
+    for (let i = 4; i <= 20; i++) {
+      const futureDate = new Date(baseDate);
+      futureDate.setDate(futureDate.getDate() + i);
+      if (Math.random() > 0.5) {
+        sessions.push({
+          id: 100 + i,
+          title: i % 2 === 0 ? 'Node.js Backend Development' : 'AI for Product Managers',
+          instructor: i % 2 === 0 ? 'Albert Einstein' : 'Jane Doe',
+          instructorHandle: i % 2 === 0 ? '@AlbertEinstein' : '@JaneDoe',
+          module: `Module ${i % 5 + 1}`,
+          date: new Date(futureDate.getFullYear(), futureDate.getMonth(), futureDate.getDate(), 10 + (i % 8), 0),
+          type: i % 3 === 0 ? 'teaching' : 'learning',
+          sessionType: i % 2 === 0 ? '1-on-1 Session' : 'Group Session'
+        });
+      }
+    }
+
+    return sessions.sort((a, b) => a.date - b.date);
+  };
+
+  const sessions = generateSessions();
+
+  // Stats
+  const stats = {
+    inProgress: 3,
+    completed: 12,
+    sessionsThisMonth: sessions.length,
+    earningsThisMonth: 1247
+  };
+
+  // Calendar helpers
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -52,135 +136,237 @@ const Dashboard = () => {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   };
 
-  const isToday = (day) => {
-    const today = new Date();
-    return day === today.getDate() && 
-           currentDate.getMonth() === today.getMonth() && 
-           currentDate.getFullYear() === today.getFullYear();
+  const getPrevMonthDays = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 0).getDate();
   };
+
+  const isToday = (day, month, year) => {
+    return day === today.getDate() && 
+           month === today.getMonth() && 
+           year === today.getFullYear();
+  };
+
+  const getSessionsForDay = (day, month, year) => {
+    return sessions.filter(s => 
+      s.date.getDate() === day && 
+      s.date.getMonth() === month && 
+      s.date.getFullYear() === year
+    );
+  };
+
+  const prevMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  };
+
+  const formatDayLabel = (date) => {
+    const diffDays = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0 || (date.getDate() === today.getDate() && date.getMonth() === today.getMonth())) {
+      return 'TODAY';
+    } else if (diffDays === 1 || (date.getDate() === today.getDate() + 1 && date.getMonth() === today.getMonth())) {
+      return `TOMORROW · ${date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`;
+    } else {
+      return date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }).toUpperCase();
+    }
+  };
+
+  // Group sessions by day
+  const groupSessionsByDay = () => {
+    const grouped = {};
+    const upcomingSessions = sessions.filter(s => s.date >= new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+    
+    upcomingSessions.forEach(session => {
+      const dateKey = session.date.toDateString();
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = {
+          date: session.date,
+          sessions: []
+        };
+      }
+      grouped[dateKey].sessions.push(session);
+    });
+
+    return Object.values(grouped).slice(0, 5); // Show next 5 days with sessions
+  };
+
+  const groupedSessions = groupSessionsByDay();
 
   const renderCalendar = () => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
+    const prevMonthDaysCount = getPrevMonthDays(currentDate);
     const days = [];
-    for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
-    }
-    for (let day = 1; day <= daysInMonth; day++) {
+
+    // Previous month days
+    for (let i = firstDay - 1; i >= 0; i--) {
       days.push(
-        <div 
-          key={day} 
-          className={`calendar-day ${isToday(day) ? 'today' : ''}`}
-        >
-          {day}
+        <div key={`prev-${i}`} className="calendar-cell other-month">
+          <span className="day-number">{prevMonthDaysCount - i}</span>
         </div>
       );
     }
+
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+      const daySessions = getSessionsForDay(day, currentDate.getMonth(), currentDate.getFullYear());
+      const isCurrentDay = isToday(day, currentDate.getMonth(), currentDate.getFullYear());
+      const learningSessions = daySessions.filter(s => s.type === 'learning');
+      const teachingSessions = daySessions.filter(s => s.type === 'teaching');
+
+      days.push(
+        <div 
+          key={day} 
+          className={`calendar-cell ${isCurrentDay ? 'today' : ''}`}
+        >
+          <span className={`day-number ${isCurrentDay ? 'today-number' : ''}`}>{day}</span>
+          <div className="session-dots">
+            {learningSessions.slice(0, 2).map((_, idx) => (
+              <span key={`l-${idx}`} className="session-dot learning" title="Learning session"></span>
+            ))}
+            {teachingSessions.slice(0, 2).map((_, idx) => (
+              <span key={`t-${idx}`} className="session-dot teaching" title="Teaching session"></span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // Next month days
+    const remainingCells = 42 - days.length;
+    for (let i = 1; i <= remainingCells; i++) {
+      days.push(
+        <div key={`next-${i}`} className="calendar-cell other-month">
+          <span className="day-number">{i}</span>
+        </div>
+      );
+    }
+
     return days;
   };
 
-  // Summary stats (demo values)
-  const summary = {
-    sessions: 6,
-    teachingHours: 8,
-    learningHours: 5,
-    availableSlots: 4,
-    teachingSessions: 4,
-    learningSessions: 2,
-    potentialEarnings: 320,
-    learningInvestment: 200,
-  };
-
   return (
-    <div className="dashboard-page" style={{ background: '#fff', minHeight: '100vh', padding: '32px' }}>
-      {/* Summary Cards */}
-      <div className="dashboard-summary-cards">
-        <div className="summary-card"><div className="summary-title">This Week</div><div className="summary-value">{summary.sessions}</div><div className="summary-label">sessions scheduled</div></div>
-        <div className="summary-card"><div className="summary-title">Teaching Hours</div><div className="summary-value">{summary.teachingHours}</div><div className="summary-label">hours this week</div></div>
-        <div className="summary-card"><div className="summary-title">Learning Hours</div><div className="summary-value">{summary.learningHours}</div><div className="summary-label">hours this week</div></div>
-        <div className="summary-card"><div className="summary-title">Available Slots</div><div className="summary-value">{summary.availableSlots}</div><div className="summary-label">open for booking</div></div>
+    <div className={`dashboard-container ${isDarkMode ? 'dark' : ''}`}>
+      {/* Header */}
+      <div className="dashboard-header">
+        <h1>Dashboard</h1>
       </div>
-      <div className="dashboard-main-row" style={{ display: 'flex', gap: '32px', marginTop: 32 }}>
-        {/* Left: Schedule List */}
-        <div style={{ flex: 2, minWidth: 0 }}>
-          {/* Tabs */}
-          <div className="dashboard-tabs">
-            {['Upcoming', 'Available', 'History'].map(tab => (
-              <button key={tab} className={`dashboard-tab${activeTab === tab ? ' active' : ''}`} onClick={() => setActiveTab(tab)}>{tab}</button>
-            ))}
-            <button className="dashboard-tab filter"><FaFilter /> Filter</button>
-            <button className="dashboard-tab add-session"><FaPlus /> Add Session</button>
+
+      {/* Minimalist Stats Bar */}
+      <div className="stats-bar">
+        <span className="stat-item">
+          <span className="stat-icon">📚</span>
+          <span className="stat-value">{stats.inProgress}</span>
+          <span className="stat-label">in progress</span>
+        </span>
+        <span className="stat-divider">·</span>
+        <span className="stat-item">
+          <span className="stat-icon">✅</span>
+          <span className="stat-value">{stats.completed}</span>
+          <span className="stat-label">completed</span>
+        </span>
+        <span className="stat-divider">·</span>
+        <span className="stat-item">
+          <span className="stat-icon">👥</span>
+          <span className="stat-value">{stats.sessionsThisMonth}</span>
+          <span className="stat-label">sessions</span>
+        </span>
+        <span className="stat-divider">·</span>
+        <span className="stat-item">
+          <span className="stat-icon">💰</span>
+          <span className="stat-value">${stats.earningsThisMonth.toLocaleString()}</span>
+          <span className="stat-label">this month</span>
+        </span>
+      </div>
+
+      {/* Full Width Calendar */}
+      <div className="calendar-container">
+        <div className="calendar-nav">
+          <h2 className="calendar-title">
+            {currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}
+          </h2>
+          <div className="calendar-nav-buttons">
+            <button onClick={prevMonth} className="nav-btn">
+              <FaChevronLeft />
+            </button>
+            <button onClick={nextMonth} className="nav-btn">
+              <FaChevronRight />
+            </button>
           </div>
-          {/* Lessons List */}
-          <div className="schedule-list">
-            {lessons.map(lesson => (
-              <div key={lesson.id} className="lesson-card">
-                <div className="lesson-card-main">
-                  <img src={lesson.thumbnail} alt={lesson.title} className="lesson-thumb" />
-                  <div className="lesson-info">
-                    <div className="lesson-title">
-                      <span className={`lesson-type ${lesson.type}`}>{lesson.type}</span>
-                      {lesson.title}
-                    </div>
-                    <div className="lesson-meta">
-                      <span><FaUser style={{ marginRight: 4 }} /> {lesson.instructor}</span>
-                      <span><FaBook style={{ marginRight: 4 }} /> {lesson.category}</span>
-                    </div>
-                    <div className="lesson-date">
-                      <FaCalendar style={{ marginRight: 4 }} /> {formatDate(lesson.date)} &nbsp;
-                      <FaClock style={{ marginRight: 4 }} /> {lesson.time}
-                    </div>
-                    <div className="lesson-status-row">
-                      <span className={`lesson-status ${lesson.type}`}>{lesson.type}</span>
-                      <span className={`lesson-status ${lesson.status}`}>{lesson.status}</span>
-                      <span className="lesson-reschedule">Reschedule</span>
-                      <span className="lesson-earnings">{lesson.type === 'teaching' ? `+$${lesson.earnings}` : lesson.type === 'learning' ? `-$${lesson.earnings}` : ''}</span>
+        </div>
+
+        <div className="calendar-grid">
+          <div className="calendar-weekdays">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="weekday">{day}</div>
+            ))}
+          </div>
+          <div className="calendar-days">
+            {renderCalendar()}
+          </div>
+        </div>
+
+        <div className="calendar-legend">
+          <span className="legend-item">
+            <span className="session-dot learning"></span>
+            Learning Sessions
+          </span>
+          <span className="legend-item">
+            <span className="session-dot teaching"></span>
+            Teaching Sessions
+          </span>
+        </div>
+      </div>
+
+      {/* Upcoming Sessions List */}
+      <div className="sessions-list">
+        <h2 className="sessions-title">Upcoming Sessions</h2>
+
+        {groupedSessions.map((group, groupIdx) => (
+          <div key={groupIdx} className="session-group">
+            <div className="session-date-header">
+              {formatDayLabel(group.date)}
+            </div>
+            
+            {group.sessions.map(session => {
+              const isSessionToday = session.date.getDate() === today.getDate() && 
+                                     session.date.getMonth() === today.getMonth();
+              return (
+                <div key={session.id} className="session-item">
+                  <div className={`session-type-indicator ${session.type}`}></div>
+                  <div className="session-time">{formatTime(session.date)}</div>
+                  <div className="session-details">
+                    <div className="session-course-title">{session.title}</div>
+                    <div className="session-meta">
+                      {session.type === 'learning' ? 'with' : 'Teaching'} {session.instructorHandle} · {session.module}
                     </div>
                   </div>
-                  <div className="lesson-actions">
-                    <button className="join-btn"><FaVideo style={{ marginRight: 4 }} /> Join</button>
-                  </div>
+                  <button className={`session-action-btn ${isSessionToday ? 'join' : 'details'}`}>
+                    {isSessionToday ? (
+                      <>
+                        <FaVideo style={{ marginRight: 4 }} />
+                        Join
+                      </>
+                    ) : (
+                      'Details'
+                    )}
+                  </button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
-        {/* Right: Sidebar */}
-        <div style={{ flex: 1, minWidth: 320 }}>
-          {/* Calendar */}
-          <div className="calendar-section">
-            <div className="calendar-header">
-              <h2>Calendar</h2>
-              <span className="calendar-month">{currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}</span>
-            </div>
-            <div className="calendar">
-              <div className="calendar-weekdays">
-                <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
-              </div>
-              <div className="calendar-days">
-                {renderCalendar()}
-              </div>
-            </div>
-          </div>
-          {/* Quick Actions */}
-          <div className="quick-actions">
-            <div className="quick-actions-title">Quick Actions</div>
-            <button className="quick-action-btn">Schedule Teaching Session</button>
-            <button className="quick-action-btn">Book Learning Session</button>
-            <button className="quick-action-btn">Set Availability</button>
-          </div>
-          {/* This Week Summary */}
-          <div className="week-summary">
-            <div className="week-summary-title">This Week Summary</div>
-            <div className="week-summary-row"><span>Teaching sessions:</span> <span>{summary.teachingSessions}</span></div>
-            <div className="week-summary-row"><span>Learning sessions:</span> <span>{summary.learningSessions}</span></div>
-            <div className="week-summary-row"><span>Potential earnings:</span> <span style={{ color: '#16a34a' }}>${summary.potentialEarnings}</span></div>
-            <div className="week-summary-row"><span>Learning investment:</span> <span style={{ color: '#2563eb' }}>${summary.learningInvestment}</span></div>
-          </div>
-        </div>
+        ))}
+
+        <button className="show-more-btn">Show More Sessions...</button>
       </div>
     </div>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

@@ -1247,20 +1247,20 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           const isFollowed = isCourseFollowed(course.id);
                           const isViaCreator = isCourseFollowedViaCreator(course.id);
                           return (
-                            <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: 1.35, width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: '#222' }}>
+                            <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: isDarkMode ? '#000' : '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: 1.35, width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: isDarkMode ? '#e7e9ea' : '#222' }}>
                               <div className="post-content" style={{ padding: 0 }}>
                                 {/* Title, Duration, and Follow Button Row */}
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#222', flex: 1, minWidth: 0 }}>
-                                    <span style={{ fontWeight: 700, fontSize: 16, color: '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.title}</span>
-                                    <span style={{ color: '#888', fontSize: 13, fontWeight: 500, flexShrink: 0 }}>• {course.duration}</span>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: isDarkMode ? '#e7e9ea' : '#222', flex: 1, minWidth: 0 }}>
+                                    <span style={{ fontWeight: 700, fontSize: 16, color: isDarkMode ? '#e7e9ea' : '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.title}</span>
+                                    <span style={{ color: isDarkMode ? '#71767b' : '#888', fontSize: 13, fontWeight: 500, flexShrink: 0 }}>• {course.duration}</span>
                                   </div>
                                   <button 
                                     onClick={e => { e.stopPropagation(); handleFollowCourse(course.id); }}
                                     disabled={isFollowingLoading}
                                     style={{ 
-                                      background: isFollowed ? '#e2e8f0' : '#1d9bf0',
-                                      color: isFollowed ? '#64748b' : '#fff',
+                                      background: isFollowed ? (isDarkMode ? '#2f3336' : '#e2e8f0') : '#1d9bf0',
+                                      color: isFollowed ? (isDarkMode ? '#71767b' : '#64748b') : '#fff',
                                       border: 'none', 
                                       padding: '6px 14px', 
                                       borderRadius: 20, 
@@ -1274,13 +1274,13 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                     {isFollowed ? '✓ Following' : 'Follow'}
                                   </button>
                                 </div>
-                                <div style={{ fontSize: 14, color: '#64748b', fontWeight: 500, margin: '2px 0 6px 0' }}>Created by {instructorData?.name}</div>
+                                <div style={{ fontSize: 14, color: isDarkMode ? '#71767b' : '#64748b', fontWeight: 500, margin: '2px 0 6px 0' }}>Created by {instructorData?.name}</div>
                                 {/* Description Row - show all text */}
-                                <div className="post-text" style={{ color: '#222' }}>
+                                <div className="post-text" style={{ color: isDarkMode ? '#e7e9ea' : '#222' }}>
                                   {course.description} Master AI skills, earn certificates, and unlock the option to teach and earn commissions.
                                 </div>
                                 {/* Teacher Stats - tight */}
-                                <div style={{ color: '#888', fontSize: 12, marginBottom: 2 }}>
+                                <div style={{ color: isDarkMode ? '#71767b' : '#888', fontSize: 12, marginBottom: 2 }}>
                                   Student-Teachers: 158 | Avg. Taught: 12
                                 </div>
                                 {/* Action Buttons Row - social media style */}

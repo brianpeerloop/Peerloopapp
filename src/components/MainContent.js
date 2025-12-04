@@ -1012,71 +1012,37 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
           </div>
         </div>
 
-        {/* ===== CTA CARDS ===== */}
+        {/* ===== CTA - Single Minimalist Button ===== */}
         <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '1fr 1fr', 
-          gap: 16,
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          padding: '16px 20px',
+          background: bgSecondary,
+          borderRadius: 12,
+          border: `1px solid ${borderColor}`,
           marginBottom: 24
         }}>
-          {/* Enroll Card */}
-          <div style={{ 
-            background: bgCard, 
-            borderRadius: 12, 
-            padding: 20,
-            border: `1px solid ${borderColor}`,
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: 32, fontWeight: 700, color: textPrimary, marginBottom: 4 }}>
+          <div>
+            <div style={{ fontSize: 28, fontWeight: 700, color: textPrimary }}>
               {courseData.price}
             </div>
-            <div style={{ color: textMuted, fontSize: 13, marginBottom: 16 }}>
-              Full course access
+            <div style={{ color: textMuted, fontSize: 13 }}>
+              Includes 1-on-1 sessions
             </div>
-            <button style={{ 
-              width: '100%',
-              background: accentBlue, 
-              color: '#fff', 
-              fontWeight: 600, 
-              fontSize: 15, 
-              cursor: 'pointer', 
-              padding: '12px 24px', 
-              borderRadius: 8, 
-              border: 'none'
-            }}>
-              Enroll Now
-            </button>
           </div>
-
-          {/* 1-on-1 Session Card */}
-          <div style={{ 
-            background: bgCard, 
-            borderRadius: 12, 
-            padding: 20,
-            border: `2px solid ${accentBlue}`,
-            textAlign: 'center'
+          <button style={{ 
+            background: accentBlue, 
+            color: '#fff', 
+            fontWeight: 600, 
+            fontSize: 16, 
+            cursor: 'pointer', 
+            padding: '14px 32px', 
+            borderRadius: 8, 
+            border: 'none'
           }}>
-            <div style={{ fontSize: 20, marginBottom: 4 }}>📅</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: textPrimary, marginBottom: 4 }}>
-              1-on-1 Session
-            </div>
-            <div style={{ color: textMuted, fontSize: 13, marginBottom: 16 }}>
-              Learn with a Student-Teacher
-            </div>
-            <button style={{ 
-              width: '100%',
-              background: 'transparent', 
-              color: accentBlue, 
-              fontWeight: 600, 
-              fontSize: 15, 
-              cursor: 'pointer', 
-              padding: '12px 24px', 
-              borderRadius: 8, 
-              border: `2px solid ${accentBlue}`
-            }}>
-              Book Session
-            </button>
-          </div>
+            Enroll Now
+          </button>
         </div>
 
         {/* ===== LEARN & EARN SECTION ===== */}

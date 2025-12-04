@@ -1358,36 +1358,18 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                     onMouseLeave={e => e.target.style.textDecoration = 'none'}
                                   >{instructorData?.name}</span>
                                 </div>
-                                {/* Description Row - show all text */}
-                                <div className="post-text" style={{ color: isDarkMode ? '#e7e9ea' : '#0f1419', fontSize: 15, lineHeight: '20px' }}>
-                                  {course.description} Master AI skills, earn certificates, and unlock the option to teach and earn commissions.
-                                </div>
-                                {/* Teacher Stats - tight */}
-                                <div style={{ color: isDarkMode ? '#71767b' : '#536471', fontSize: 13, marginTop: 4, marginBottom: 2 }}>
-                                  Student-Teachers: 158 | Avg. Taught: 12
-                                </div>
-                                {/* Action Buttons Row - social media style */}
-                                <div className="post-actions" style={{ display: 'flex', justifyContent: 'flex-start', gap: '40px', maxWidth: '425px', marginTop: 8 }} onClick={e => e.stopPropagation()}>
-                                  <button className="action-btn">
-                                    <MdChatBubbleOutline className="action-icon" />
-                                  </button>
-                                  <button className="action-btn">
-                                    <BiRepost className="action-icon retweet-icon" />
-                                    <span className="action-count">1</span>
-                                  </button>
-                                  <button className="action-btn">
-                                    <AiOutlineHeart className="action-icon heart-icon" />
-                                    <span className="action-count">3</span>
-                                  </button>
-                                  <button className="action-btn">
-                                    <BsBookmark className="action-icon" />
-                                  </button>
-                                  <button className="action-btn">
-                                    <IoShareOutline className="action-icon" />
-                                  </button>
-                                  <button className="action-btn">
-                                    <BsThreeDots className="action-icon" />
-                                  </button>
+                                {/* Description Row - truncated to 2 lines */}
+                                <div className="post-text" style={{ 
+                                  color: isDarkMode ? '#e7e9ea' : '#0f1419', 
+                                  fontSize: 15, 
+                                  lineHeight: '20px',
+                                  display: '-webkit-box',
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: 'vertical',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis'
+                                }}>
+                                  {course.description}
                                 </div>
                               </div>
                             </div>

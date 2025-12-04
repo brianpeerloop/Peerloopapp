@@ -1657,7 +1657,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                 {notification.users.length > 0 && (
                   <div style={{ display: 'flex', marginBottom: 8, height: 32 }}>
                     {notification.users.slice(0, 3).map((user, idx) => {
-                      const colors = ['#FF6B6B', '#4ECDC4', '#9B59B6', '#00D2FF', '#FFD93D', '#6C5CE7', '#FF9900'];
+                      const colors = ['#2f3336', '#3a3f44', '#4a5056', '#5a6167', '#6a7178'];
                       const colorIndex = user.name.charCodeAt(0) % colors.length;
                       const initials = user.name.split(' ').map(n => n[0]).join('').substring(0, 2);
                       return (
@@ -1668,7 +1668,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                             height: 32, 
                             borderRadius: '50%',
                             marginLeft: idx > 0 ? -8 : 0,
-                            border: '2px solid #fff',
+                            border: isDarkMode ? '2px solid #000' : '2px solid #fff',
                             background: colors[colorIndex],
                             display: 'flex',
                             alignItems: 'center',

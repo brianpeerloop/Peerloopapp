@@ -956,7 +956,6 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                         {(creator.allCourses || []).map(course => {
                           if (!course) return null;
                           const isFollowed = creator.followedCourseIds.includes(course.id);
-                          const isSelected = selectedCourseFilters.includes(course.id);
                           return (
                             <div 
                               key={course.id}
@@ -964,21 +963,33 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                 padding: '8px 12px',
                                 cursor: 'pointer',
                                 fontSize: 13,
-                                color: isSelected ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
-                                fontWeight: isSelected ? 500 : 400,
+                                color: isFollowed ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
+                                fontWeight: isFollowed ? 500 : 400,
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'space-between',
-                                opacity: isFollowed ? 1 : 0.5
+                                justifyContent: 'space-between'
                               }}
                               onClick={() => {
+                                // Toggle follow/unfollow for this course
+                                const courseCommunityId = `course-${course.id}`;
                                 if (isFollowed) {
-                                  // Only allow selecting/deselecting followed courses
-                                  if (isSelected) {
-                                    setSelectedCourseFilters(prev => prev.filter(id => id !== course.id));
-                                  } else {
-                                    setSelectedCourseFilters(prev => [...prev, course.id]);
-                                  }
+                                  // Unfollow this course
+                                  actualSetFollowedCommunities(prev => 
+                                    prev.filter(c => c.id !== courseCommunityId)
+                                  );
+                                } else {
+                                  // Follow this course
+                                  const courseCommunity = {
+                                    id: courseCommunityId,
+                                    name: course.title,
+                                    type: 'course',
+                                    courseId: course.id,
+                                    instructorId: creator.instructorId
+                                  };
+                                  actualSetFollowedCommunities(prev => {
+                                    if (prev.some(c => c.id === courseCommunityId)) return prev;
+                                    return [...prev, courseCommunity];
+                                  });
                                 }
                               }}
                               onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
@@ -990,7 +1001,6 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                 textOverflow: 'ellipsis'
                               }}>
                                 {course.title}
-                                {!isFollowed && <span style={{ marginLeft: 6, fontSize: 11, color: isDarkMode ? '#536471' : '#94a3b8' }}>(not followed)</span>}
                               </span>
                               {isFollowed && <span style={{ color: '#1d9bf0' }}>✓</span>}
                             </div>

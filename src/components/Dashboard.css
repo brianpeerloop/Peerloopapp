@@ -2,10 +2,9 @@
   min-height: 100vh;
   background: var(--bg-primary, #fff);
   color: var(--text-primary, #0f1419);
-  max-width: 800px;
-  margin: 0 auto;
-  border-left: 1px solid var(--border-color, #eff3f4);
-  border-right: 1px solid var(--border-color, #eff3f4);
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Header */

@@ -30,7 +30,33 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     // Load existing follow states from localStorage
     try {
       const stored = localStorage.getItem('followedCommunities');
-      return stored ? JSON.parse(stored) : [];
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      // Default: Follow all creators (Jane Doe and Albert Einstein are the main ones)
+      const allInstructors = getAllInstructors();
+      const defaultFollowed = allInstructors.map(instructor => {
+        const courseIds = instructor.courses || [];
+        let totalStudents = 0;
+        courseIds.forEach(cid => {
+          const course = getCourseById(cid);
+          if (course) totalStudents += course.students;
+        });
+        return {
+          id: `creator-${instructor.id}`,
+          type: 'creator',
+          name: instructor.name,
+          instructorId: instructor.id,
+          instructorName: instructor.name,
+          courseIds: courseIds,
+          followedCourseIds: courseIds, // Follow all their courses by default
+          description: instructor.bio,
+          members: Math.floor(totalStudents * 0.8),
+          posts: Math.floor(totalStudents * 0.24),
+          avatar: instructor.avatar
+        };
+      });
+      return defaultFollowed;
     } catch (error) {
       console.error('Error parsing followedCommunities from localStorage:', error);
       return [];
@@ -1431,7 +1457,14 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   if (activeMenu === 'Dashboard') {
     return (
       <div className="main-content">
-        <Dashboard isDarkMode={isDarkMode} />
+        <div className="three-column-layout">
+          <div className="center-column">
+            <Dashboard isDarkMode={isDarkMode} />
+          </div>
+          <div className="right-pane">
+            {/* Right pane placeholder for Dashboard */}
+          </div>
+        </div>
       </div>
     );
   }

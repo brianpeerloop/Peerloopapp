@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Community.css';
-import { FaUsers, FaStar, FaClock, FaPlay, FaBook, FaGraduationCap, FaHome, FaChevronLeft, FaChevronRight, FaHeart, FaComment, FaRetweet, FaBookmark, FaShare, FaChevronDown } from 'react-icons/fa';
+import { FaUsers, FaStar, FaClock, FaPlay, FaBook, FaGraduationCap, FaHome, FaChevronLeft, FaChevronRight, FaHeart, FaComment, FaRetweet, FaBookmark, FaShare, FaChevronDown, FaInfoCircle } from 'react-icons/fa';
 import { getAllCourses, getInstructorById, getCourseById } from '../data/database';
 
 const Community = ({ followedCommunities = [], setFollowedCommunities = null, isDarkMode = false }) => {
@@ -16,6 +16,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
   const [isComposerFocused, setIsComposerFocused] = useState(false); // Track if composer is focused
   const [postAudience, setPostAudience] = useState('everyone'); // 'everyone' or creator id
   const [showAudienceDropdown, setShowAudienceDropdown] = useState(false); // Track audience dropdown visibility
+  const [showInfoTooltip, setShowInfoTooltip] = useState(null); // Track which info tooltip is visible
   
   // Use props directly - the parent (MainContent) manages the state and localStorage
   // This ensures consistency between Browse follows and Community display
@@ -864,6 +865,71 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                         maxWidth: 280,
                         padding: '4px 0'
                       }}>
+                        {/* Welcome message with info tooltip */}
+                        <div style={{
+                          padding: '10px 12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
+                          marginBottom: 4
+                        }}>
+                          <span style={{
+                            fontSize: 13,
+                            fontWeight: 600,
+                            color: isDarkMode ? '#e7e9ea' : '#0f1419'
+                          }}>
+                            Welcome to your communities
+                          </span>
+                          <div 
+                            style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                            onMouseEnter={() => setShowInfoTooltip(creator.id)}
+                            onMouseLeave={() => setShowInfoTooltip(null)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowInfoTooltip(showInfoTooltip === creator.id ? null : creator.id);
+                            }}
+                          >
+                            <FaInfoCircle 
+                              style={{ 
+                                color: '#1d9bf0', 
+                                fontSize: 14, 
+                                cursor: 'pointer',
+                                opacity: 0.8
+                              }} 
+                            />
+                            {/* Info tooltip */}
+                            {showInfoTooltip === creator.id && (
+                              <div style={{
+                                position: 'absolute',
+                                top: '100%',
+                                right: 0,
+                                marginTop: 8,
+                                background: isDarkMode ? '#000' : '#0f1419',
+                                color: '#fff',
+                                padding: '8px 12px',
+                                borderRadius: 8,
+                                fontSize: 12,
+                                lineHeight: 1.4,
+                                width: 200,
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                                zIndex: 100000
+                              }}>
+                                This is where you find the communities you followed
+                                <div style={{
+                                  position: 'absolute',
+                                  top: -6,
+                                  right: 8,
+                                  width: 0,
+                                  height: 0,
+                                  borderLeft: '6px solid transparent',
+                                  borderRight: '6px solid transparent',
+                                  borderBottom: isDarkMode ? '6px solid #000' : '6px solid #0f1419'
+                                }} />
+                              </div>
+                            )}
+                          </div>
+                        </div>
                         {/* All option */}
                         <div 
                           style={{ 
@@ -973,28 +1039,30 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
               
               {/* Composer Input Area */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                {/* Audience Selector Dropdown */}
-                <div style={{ position: 'relative', marginBottom: 8 }}>
-                  <button
-                    onClick={() => setShowAudienceDropdown(!showAudienceDropdown)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 4,
-                      background: 'none',
-                      border: isDarkMode ? '1px solid #536471' : '1px solid #cfd9de',
-                      borderRadius: 16,
-                      padding: '4px 12px',
-                      fontSize: 14,
-                      fontWeight: 700,
-                      color: '#1d9bf0',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {postAudience === 'everyone' ? '🌍 Everyone' : 
-                      groupedByCreator.find(c => c.id === postAudience)?.name || 'Everyone'}
-                    <span style={{ fontSize: 10 }}>▼</span>
-                  </button>
+                {/* Audience Selector Row with Welcome Message */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                  {/* Audience Selector Dropdown */}
+                  <div style={{ position: 'relative' }}>
+                    <button
+                      onClick={() => setShowAudienceDropdown(!showAudienceDropdown)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                        background: 'none',
+                        border: isDarkMode ? '1px solid #536471' : '1px solid #cfd9de',
+                        borderRadius: 16,
+                        padding: '4px 12px',
+                        fontSize: 14,
+                        fontWeight: 700,
+                        color: '#1d9bf0',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {postAudience === 'everyone' ? '🌍 Everyone' : 
+                        groupedByCreator.find(c => c.id === postAudience)?.name || 'Everyone'}
+                      <span style={{ fontSize: 10 }}>▼</span>
+                    </button>
                   
                   {/* Audience Dropdown Menu */}
                   {showAudienceDropdown && (
@@ -1085,6 +1153,65 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                       ))}
                     </div>
                   )}
+                  </div>
+                  
+                  {/* Welcome Message with Info Icon */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{
+                      fontSize: 13,
+                      color: isDarkMode ? '#71767b' : '#536471',
+                      fontWeight: 500
+                    }}>
+                      Welcome to your communities
+                    </span>
+                    <div 
+                      style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                      onMouseEnter={() => setShowInfoTooltip('composer')}
+                      onMouseLeave={() => setShowInfoTooltip(null)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowInfoTooltip(showInfoTooltip === 'composer' ? null : 'composer');
+                      }}
+                    >
+                      <FaInfoCircle 
+                        style={{ 
+                          color: '#1d9bf0', 
+                          fontSize: 14, 
+                          cursor: 'pointer'
+                        }} 
+                      />
+                      {/* Info tooltip */}
+                      {showInfoTooltip === 'composer' && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '100%',
+                          right: -10,
+                          marginTop: 8,
+                          background: isDarkMode ? '#000' : '#0f1419',
+                          color: '#fff',
+                          padding: '10px 14px',
+                          borderRadius: 8,
+                          fontSize: 13,
+                          lineHeight: 1.4,
+                          width: 220,
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                          zIndex: 100000
+                        }}>
+                          This is where you find the communities you followed
+                          <div style={{
+                            position: 'absolute',
+                            top: -6,
+                            right: 16,
+                            width: 0,
+                            height: 0,
+                            borderLeft: '6px solid transparent',
+                            borderRight: '6px solid transparent',
+                            borderBottom: isDarkMode ? '6px solid #000' : '6px solid #0f1419'
+                          }} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 
                 <textarea

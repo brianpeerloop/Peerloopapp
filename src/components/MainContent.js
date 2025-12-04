@@ -1247,13 +1247,13 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           const isFollowed = isCourseFollowed(course.id);
                           const isViaCreator = isCourseFollowedViaCreator(course.id);
                           return (
-                            <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: isDarkMode ? '#000' : '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: 1.35, width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: isDarkMode ? '#e7e9ea' : '#222' }}>
+                            <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: isDarkMode ? '#000' : '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: '20px', width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: isDarkMode ? '#e7e9ea' : '#222' }}>
                               <div className="post-content" style={{ padding: 0 }}>
                                 {/* Title, Duration, and Follow Button Row */}
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: isDarkMode ? '#e7e9ea' : '#222', flex: 1, minWidth: 0 }}>
-                                    <span style={{ fontWeight: 700, fontSize: 16, color: isDarkMode ? '#e7e9ea' : '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.title}</span>
-                                    <span style={{ color: isDarkMode ? '#71767b' : '#888', fontSize: 13, fontWeight: 500, flexShrink: 0 }}>• {course.duration}</span>
+                                    <span style={{ fontWeight: 700, fontSize: 15, lineHeight: '20px', color: isDarkMode ? '#e7e9ea' : '#0f1419', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.title}</span>
+                                    <span style={{ color: isDarkMode ? '#71767b' : '#536471', fontSize: 15, fontWeight: 400, flexShrink: 0 }}>• {course.duration}</span>
                                   </div>
                                   <button 
                                     onClick={e => { e.stopPropagation(); handleFollowCourse(course.id); }}
@@ -1274,13 +1274,13 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                     {isFollowed ? '✓ Following' : 'Follow'}
                                   </button>
                                 </div>
-                                <div style={{ fontSize: 14, color: isDarkMode ? '#71767b' : '#64748b', fontWeight: 500, margin: '2px 0 6px 0' }}>Created by {instructorData?.name}</div>
+                                <div style={{ fontSize: 15, lineHeight: '20px', color: isDarkMode ? '#1d9bf0' : '#1d9bf0', fontWeight: 400, margin: '0 0 4px 0' }}>Created by {instructorData?.name}</div>
                                 {/* Description Row - show all text */}
-                                <div className="post-text" style={{ color: isDarkMode ? '#e7e9ea' : '#222' }}>
+                                <div className="post-text" style={{ color: isDarkMode ? '#e7e9ea' : '#0f1419', fontSize: 15, lineHeight: '20px' }}>
                                   {course.description} Master AI skills, earn certificates, and unlock the option to teach and earn commissions.
                                 </div>
                                 {/* Teacher Stats - tight */}
-                                <div style={{ color: isDarkMode ? '#71767b' : '#888', fontSize: 12, marginBottom: 2 }}>
+                                <div style={{ color: isDarkMode ? '#71767b' : '#536471', fontSize: 13, marginTop: 4, marginBottom: 2 }}>
                                   Student-Teachers: 158 | Avg. Taught: 12
                                 </div>
                                 {/* Action Buttons Row - social media style */}

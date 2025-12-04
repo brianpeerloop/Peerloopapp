@@ -371,7 +371,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           padding: '8px 12px',
                           cursor: 'pointer',
                           fontSize: 13,
-                          color: isInstructorFollowed(creator.id) ? '#dc2626' : '#1d9bf0',
+                          color: hasAnyCreatorCourseFollowed(creator.id) ? '#dc2626' : '#1d9bf0',
                           fontWeight: 500,
                           borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9',
                           background: 'transparent',
@@ -389,7 +389,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                         onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                       >
-                        {isInstructorFollowed(creator.id) ? 'Unfollow All' : 'Follow All'}
+                        {hasAnyCreatorCourseFollowed(creator.id) ? 'Unfollow All' : 'Follow All'}
                       </button>
                       <div style={{ maxHeight: 200, overflowY: 'auto' }}>
                         {creatorCourses.map(course => {
@@ -1348,7 +1348,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                             padding: '8px 12px',
                             cursor: 'pointer',
                             fontSize: 13,
-                            color: isInstructorFollowed(creator.id) ? '#dc2626' : '#1d9bf0',
+                            color: hasAnyCreatorCourseFollowed(creator.id) ? '#dc2626' : '#1d9bf0',
                             fontWeight: 500,
                             borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9',
                             background: 'transparent',
@@ -1366,7 +1366,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
-                          {isInstructorFollowed(creator.id) ? 'Unfollow All' : 'Follow All'}
+                          {hasAnyCreatorCourseFollowed(creator.id) ? 'Unfollow All' : 'Follow All'}
                         </button>
                         
                         {/* Individual Courses */}

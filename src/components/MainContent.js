@@ -1002,17 +1002,17 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
               <div 
                 style={{ 
-                  width: 64, 
-                  height: 64, 
+                  width: 40, 
+                  height: 40, 
                   borderRadius: '50%', 
-                  border: '3px solid #1d9bf0',
+                  border: '2px solid #1d9bf0',
                   background: avatarColor,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#fff',
                   fontWeight: 700,
-                  fontSize: 20,
+                  fontSize: 14,
                   flexShrink: 0
                 }}
               >

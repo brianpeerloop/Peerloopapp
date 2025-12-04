@@ -977,28 +977,47 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     const filteredInstructors = indexedInstructors.filter(instructor =>
       instructor.searchIndex.includes(searchQuery.toLowerCase())
     );
+    // Avatar colors for initials
+    const avatarColors = ['#2f3336', '#3a3f44', '#4a5056', '#5a6167', '#6a7178'];
     return (
       <div className="creators-feed" style={{ padding: 0, margin: 0 }}>
-        {filteredInstructors.map(creator => (
+        {filteredInstructors.map(creator => {
+          const colorIndex = creator.name.charCodeAt(0) % avatarColors.length;
+          const avatarColor = avatarColors[colorIndex];
+          const initials = creator.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+          return (
           <div key={creator.id} className="creator-card" onClick={() => {
             const fullCreatorData = getInstructorWithCourses(creator.id);
             setSelectedInstructor(fullCreatorData || creator);
           }} style={{
-            background: isDarkMode ? '#16181c' : '#fff',
+            background: isDarkMode ? '#000' : '#fff',
             borderRadius: 12,
             padding: '20px',
             marginBottom: 16,
-            border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+            border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
             cursor: 'pointer',
             transition: 'all 0.2s ease'
           }}>
             {/* Creator Header */}
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-              <img 
-                src={creator.avatar} 
-                alt={creator.name}
-                style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '3px solid #1d9bf0' }}
-              />
+              <div 
+                style={{ 
+                  width: 64, 
+                  height: 64, 
+                  borderRadius: '50%', 
+                  border: '3px solid #1d9bf0',
+                  background: avatarColor,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 20,
+                  flexShrink: 0
+                }}
+              >
+                {initials}
+              </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                   <span style={{ fontWeight: 700, fontSize: 18, color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.name}</span>
@@ -1161,7 +1180,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
               </div>
             </div>
           </div>
-        ))}
+        );
+        })}
       </div>
     );
   };

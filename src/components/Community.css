@@ -685,7 +685,8 @@
 }
 
 .dark-mode .community-top-menu {
-  background: rgba(21, 32, 43, 0.85);
+  background: rgba(0, 0, 0, 0.95);
+  border-bottom: 1px solid #2f3336;
 }
 
 .community-tabs-wrapper {

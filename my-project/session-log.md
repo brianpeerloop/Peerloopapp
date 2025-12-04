@@ -50,17 +50,32 @@
 ---
 
 ### Session 2
-**Date:**
-**Duration:**
-**Phase:**
+**Date:** December 4, 2025
+**Duration:** ~2 hours
+**Phase:** Building & Polish
 
 **What we did:**
--
+- Added "Welcome to your communities" message with info tooltip to Community tab
+- Positioned message next to "Everyone" dropdown in post composer
+- Updated tooltip text: "Go to Browse and follow courses or Creators. Feeds will show in your community here"
+- **Cleaned up Course Listing:**
+  - Removed fake "Student-Teachers: 158 | Avg. Taught: 12" stats line
+  - Removed confusing action icons row (chat, repost, heart, bookmark, share)
+  - Truncated descriptions to 2 lines max with ellipsis
+- Fixed runtime error in course detail view (added null checks)
+- Multiple deployments to GitHub Pages
+- Started fresh dev server on port 3001 for testing
 
 **Decisions made:**
--
+- Course cards should be clean and scannable (removed clutter)
+- Keep action icons only where they make sense (Community posts, not course listings)
+- Descriptions truncated for better scannability
 
-**Next session:**
+**Technical notes:**
+- Dev server running on http://localhost:3001/Peerloopapp
+- GitHub Pages: https://brianpeerloop.github.io/Peerloopapp/
+
+**Next session:** Continue UI polish, verify course listing changes visible
 
 
 ---
@@ -73,11 +88,11 @@
 
 | Milestone | Date | Notes |
 |-----------|------|-------|
-| Project started | | |
-| Architecture complete | | |
-| First working version | | |
-| First successful test | | |
-| Deployed | | |
+| Project started | Dec 3, 2025 | Imported existing PeerLoop app |
+| Architecture complete | Dec 3, 2025 | React component-based structure |
+| First working version | Dec 3, 2025 | App runs locally |
+| First successful test | Dec 4, 2025 | Community & Browse working |
+| Deployed | Dec 4, 2025 | GitHub Pages live |
 | First real user | | |
 | Shipped | | |
 

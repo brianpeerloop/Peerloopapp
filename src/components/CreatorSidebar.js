@@ -13,7 +13,9 @@ import {
   FaBook,
   FaVideo,
   FaFileAlt,
-  FaComments
+  FaComments,
+  FaMoon,
+  FaSun
 } from 'react-icons/fa';
 import { UserPropType } from './PropTypes';
 
@@ -28,7 +30,7 @@ import { UserPropType } from './PropTypes';
  * @param {Object} currentUser - The current user object
  * @param {Function} onBackToMain - Callback to return to main app
  */
-const CreatorSidebar = ({ onMenuChange, activeMenu, currentUser, onBackToMain }) => {
+const CreatorSidebar = ({ onMenuChange, activeMenu, currentUser, onBackToMain, isDarkMode, toggleDarkMode }) => {
 
   /**
    * Creator menu items numbered 1-5
@@ -156,6 +158,22 @@ const CreatorSidebar = ({ onMenuChange, activeMenu, currentUser, onBackToMain })
         </div>
       </div>
 
+      {/* Dark Mode Toggle */}
+      <div className="creator-dark-mode-toggle-container">
+        <button 
+          className="creator-dark-mode-toggle"
+          onClick={toggleDarkMode}
+          title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          <div className="creator-toggle-icon">
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+          </div>
+          <span className="creator-toggle-label">
+            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+          </span>
+        </button>
+      </div>
+
       {/* Creator profile section at the bottom */}
       <div className="creator-sidebar-profile-container">
         <div className="creator-sidebar-profile">
@@ -184,11 +202,15 @@ CreatorSidebar.propTypes = {
   onMenuChange: PropTypes.func.isRequired,
   activeMenu: PropTypes.string.isRequired,
   currentUser: UserPropType,
-  onBackToMain: PropTypes.func.isRequired
+  onBackToMain: PropTypes.func.isRequired,
+  isDarkMode: PropTypes.bool,
+  toggleDarkMode: PropTypes.func
 };
 
 CreatorSidebar.defaultProps = {
-  currentUser: null
+  currentUser: null,
+  isDarkMode: false,
+  toggleDarkMode: () => {}
 };
 
 export default CreatorSidebar; 

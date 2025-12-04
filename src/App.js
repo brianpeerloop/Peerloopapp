@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
 import Sidebar from './components/Sidebar';
@@ -20,6 +20,21 @@ function App() {
   
   // State for tracking if we're in creator mode
   const [isCreatorMode, setIsCreatorMode] = useState(false);
+
+  // Dark mode state - persisted in localStorage (dark mode is default)
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+
+  // Apply dark mode class to body and persist preference
+  useEffect(() => {
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
+
+  // Toggle dark mode
+  const toggleDarkMode = () => setIsDarkMode(prev => !prev);
 
   // Define two different user profiles for demonstration purposes
   // Each user has different roles and permissions
@@ -73,7 +88,7 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className="app">
+      <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
         {/* Left Sidebar - Navigation and user profile */}
         {isCreatorMode ? (
           <CreatorSidebar 
@@ -81,9 +96,17 @@ function App() {
             activeMenu={activeMenu} 
             currentUser={currentUser}
             onBackToMain={handleBackToMain}
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
           />
         ) : (
-          <Sidebar onMenuChange={handleMenuChange} activeMenu={activeMenu} currentUser={currentUser} />
+          <Sidebar 
+            onMenuChange={handleMenuChange} 
+            activeMenu={activeMenu} 
+            currentUser={currentUser}
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
+          />
         )}
         
         {/* Main Content Area - Displays different content based on active menu */}
@@ -92,6 +115,7 @@ function App() {
           currentUser={currentUser} 
           onSwitchUser={toggleUser}
           onMenuChange={handleMenuChange}
+          isDarkMode={isDarkMode}
         />
       </div>
     </ErrorBoundary>

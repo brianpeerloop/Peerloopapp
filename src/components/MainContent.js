@@ -18,7 +18,7 @@ import JobExchange from './JobExchange';
 import { getAllInstructors, getInstructorWithCourses, getCourseById, getAllCourses, getInstructorById, getIndexedCourses, getIndexedInstructors } from '../data/database';
 import { UserPropType } from './PropTypes';
 
-const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) => {
+const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDarkMode }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const lastTopMenuRef = useRef('courses');
   const [activeTopMenu, setActiveTopMenu] = useState('courses');
@@ -1557,25 +1557,33 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
       }
     ];
 
+    // Dark mode colors for notifications
+    const notifBg = isDarkMode ? '#0f172a' : '#fff';
+    const notifBgHover = isDarkMode ? '#1e293b' : '#f8fafc';
+    const notifHeaderBg = isDarkMode ? 'rgba(15,23,42,0.85)' : 'rgba(255,255,255,0.85)';
+    const notifBorder = isDarkMode ? '#334155' : '#e2e8f0';
+    const notifTextPrimary = isDarkMode ? '#f1f5f9' : '#0f1419';
+    const notifTextSecondary = isDarkMode ? '#94a3b8' : '#536471';
+
     return (
       <div className="main-content">
         <div style={{ 
           position: 'sticky', 
           top: 0, 
-          background: 'rgba(255,255,255,0.85)', 
+          background: notifHeaderBg, 
           backdropFilter: 'saturate(180%) blur(20px)',
-          borderBottom: '1px solid #e2e8f0',
+          borderBottom: `1px solid ${notifBorder}`,
           padding: '16px 20px',
           zIndex: 100
         }}>
-          <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0f1419', margin: 0 }}>Notifications</h1>
+          <h1 style={{ fontSize: 20, fontWeight: 700, color: notifTextPrimary, margin: 0 }}>Notifications</h1>
         </div>
         
         {/* Notification Tabs */}
         <div style={{ 
           display: 'flex', 
-          borderBottom: '1px solid #e2e8f0',
-          background: '#fff'
+          borderBottom: `1px solid ${notifBorder}`,
+          background: notifBg
         }}>
           <button style={{ 
             flex: 1, 
@@ -1583,7 +1591,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
             background: 'none', 
             border: 'none', 
             fontWeight: 600, 
-            color: '#0f1419',
+            color: notifTextPrimary,
             borderBottom: '2px solid #1d9bf0',
             cursor: 'pointer'
           }}>All</button>
@@ -1593,7 +1601,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
             background: 'none', 
             border: 'none', 
             fontWeight: 500, 
-            color: '#536471',
+            color: notifTextSecondary,
             cursor: 'pointer'
           }}>Mentions</button>
           <button style={{ 
@@ -1602,7 +1610,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
             background: 'none', 
             border: 'none', 
             fontWeight: 500, 
-            color: '#536471',
+            color: notifTextSecondary,
             cursor: 'pointer'
           }}>Sessions</button>
           <button style={{ 
@@ -1611,26 +1619,26 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
             background: 'none', 
             border: 'none', 
             fontWeight: 500, 
-            color: '#536471',
+            color: notifTextSecondary,
             cursor: 'pointer'
           }}>Earnings</button>
         </div>
 
         {/* Notifications List */}
-        <div style={{ background: '#fff' }}>
+        <div style={{ background: notifBg }}>
           {notifications.map(notification => (
             <div 
               key={notification.id} 
               style={{ 
                 display: 'flex',
                 padding: '16px 20px',
-                borderBottom: '1px solid #e2e8f0',
-                background: '#fff',
+                borderBottom: `1px solid ${notifBorder}`,
+                background: notifBg,
                 cursor: 'pointer',
                 transition: 'background 0.15s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
-              onMouseLeave={(e) => e.currentTarget.style.background = '#fff'}
+              onMouseEnter={(e) => e.currentTarget.style.background = notifBgHover}
+              onMouseLeave={(e) => e.currentTarget.style.background = notifBg}
             >
               {/* Icon */}
               <div style={{ 
@@ -1680,7 +1688,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
                 )}
                 
                 {/* Notification Text */}
-                <div style={{ fontSize: 15, color: '#0f1419', lineHeight: 1.4 }}>
+                <div style={{ fontSize: 15, color: notifTextPrimary, lineHeight: 1.4 }}>
                   {notification.users.length > 0 && (
                     <span style={{ fontWeight: 700 }}>
                       {notification.users.length === 1 
@@ -1697,7 +1705,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
                 {notification.postPreview && (
                   <div style={{ 
                     marginTop: 8, 
-                    color: '#536471', 
+                    color: notifTextSecondary, 
                     fontSize: 14,
                     lineHeight: 1.4
                   }}>
@@ -1708,7 +1716,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange }) =>
               
               {/* Timestamp & Unread Dot */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                <span style={{ fontSize: 13, color: '#536471' }}>{notification.timestamp}</span>
+                <span style={{ fontSize: 13, color: notifTextSecondary }}>{notification.timestamp}</span>
                 {notification.unread && (
                   <div style={{ 
                     width: 8, 

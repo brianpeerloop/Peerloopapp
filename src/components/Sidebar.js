@@ -17,7 +17,11 @@ import {
   FaHeart,
   FaHistory,
   FaQuestionCircle,
-  FaBriefcase
+  FaBriefcase,
+  FaMoon,
+  FaSun,
+  FaTachometerAlt,
+  FaUsers
 } from 'react-icons/fa';
 import { UserPropType } from './PropTypes';
 
@@ -31,19 +35,20 @@ import { UserPropType } from './PropTypes';
  * @param {Function} onMenuChange - Callback function to handle menu item clicks
  * @param {string} activeMenu - The currently active menu item
  */
-const Sidebar = ({ onMenuChange, activeMenu, currentUser }) => {
+const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDarkMode }) => {
 
   /**
    * Main navigation menu items
    * Each item has an icon, label (for internal logic), and optional displayLabel (for UI)
    */
   const menuItems = [
-    { icon: <FaBell />, label: 'My Community', displayLabel: 'My Community' }, // Community features
-    { icon: <FaHome />, label: 'Browse', displayLabel: 'Browse Courses' }, // Browse courses and instructors
+    { icon: <FaUsers />, label: 'My Community', displayLabel: 'Community' }, // Community features
+    { icon: <FaHome />, label: 'Browse', displayLabel: 'Browse' }, // Browse courses and instructors
     { icon: <FaBell />, label: 'Notifications', displayLabel: 'Notifications' }, // Notification center
-    { icon: <FaSearch />, label: 'Dashboard' }, // User's learning dashboard
-    { icon: <FaUser />, label: 'Messages' }, // Messaging system
-    { icon: <FaBriefcase />, label: 'Job Exchange' }, // Job exchange system
+    { icon: <FaTachometerAlt />, label: 'Dashboard', displayLabel: 'Dashboard' }, // User's learning dashboard
+    { icon: <FaEnvelope />, label: 'Messages', displayLabel: 'Messages' }, // Messaging system
+    { icon: <FaBriefcase />, label: 'Job Exchange', displayLabel: 'Job Exchange' }, // Job exchange system
+    { icon: <FaUser />, label: 'Profile', displayLabel: 'Profile' }, // User profile
   ];
 
   /**
@@ -93,9 +98,31 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser }) => {
   return (
     <div className="sidebar">
       {/* Header section with logo */}
-      <div className="sidebar-header">
-        <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px' }}>
-          <img src="/assets/alphapeer-logo.svg" alt="AlphaPeer" style={{ width: '160px', height: 'auto', maxHeight: '70px' }} />
+      <div className="sidebar-header" style={{ padding: '4px 8px', marginBottom: '0px' }}>
+        <div className="logo" style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          padding: '6px 4px 4px 4px',
+          gap: '0px'
+        }}>
+          <span style={{ 
+            fontSize: '26px', 
+            color: '#1d9bf0',
+            lineHeight: 1
+          }}>
+            ∞
+          </span>
+          <span style={{ 
+            fontSize: '9px', 
+            fontWeight: '600', 
+            color: '#94a3b8',
+            letterSpacing: '0.5px',
+            textTransform: 'uppercase'
+          }}>
+            PeerLoop
+          </span>
         </div>
       </div>
       
@@ -115,6 +142,22 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser }) => {
           </div>
         ))}
       </nav>
+
+      {/* Dark Mode Toggle */}
+      <div className="dark-mode-toggle-container">
+        <button 
+          className="dark-mode-toggle"
+          onClick={toggleDarkMode}
+          title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          <div className="toggle-icon">
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+          </div>
+          <span className="toggle-label">
+            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+          </span>
+        </button>
+      </div>
 
       {/* User profile section at the bottom */}
       <div className="sidebar-profile-container">
@@ -143,11 +186,15 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser }) => {
 Sidebar.propTypes = {
   onMenuChange: PropTypes.func.isRequired,
   activeMenu: PropTypes.string.isRequired,
-  currentUser: UserPropType
+  currentUser: UserPropType,
+  isDarkMode: PropTypes.bool,
+  toggleDarkMode: PropTypes.func
 };
 
 Sidebar.defaultProps = {
-  currentUser: null
+  currentUser: null,
+  isDarkMode: false,
+  toggleDarkMode: () => {}
 };
 
 export default Sidebar; 

@@ -1,7 +1,7 @@
 /* Main Content Styles */
 .main-content {
   flex: 1;
-  background-color: #ffffff;
+  background-color: var(--bg-primary, #ffffff);
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
@@ -9,7 +9,7 @@
   width: calc(100vw - 240px);
   max-width: none;
   min-width: 0;
-  transition: margin-left 0.3s ease, width 0.3s ease;
+  transition: margin-left 0.3s ease, width 0.3s ease, background-color 0.3s ease;
   position: relative;
   box-sizing: border-box;
   padding: 0;
@@ -26,7 +26,7 @@
 
 .center-column {
   min-width: 0;
-  border-right: 1px solid #e2e8f0;
+  border-right: 1px solid var(--border-color, #e2e8f0);
   overflow-y: auto;
   height: 100vh;
 }
@@ -34,26 +34,28 @@
 .right-pane {
   width: 320px;
   padding: 16px;
-  background: #f8fafc;
+  background: var(--bg-secondary, #f8fafc);
   overflow-y: auto;
   height: 100vh;
   position: sticky;
   top: 0;
   box-sizing: border-box;
+  transition: background-color 0.3s ease;
 }
 
 .right-pane-section {
-  background: #fff;
+  background: var(--card-bg, #fff);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color, #e2e8f0);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .right-pane-section h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary, #1e293b);
   margin: 0 0 16px 0;
 }
 
@@ -62,7 +64,7 @@
   display: flex;
   flex-direction: column;
   padding: 12px 0;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border-color, #f1f5f9);
 }
 
 .trending-item:last-child {
@@ -71,19 +73,19 @@
 
 .trending-category {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted, #64748b);
 }
 
 .trending-title {
   font-size: 15px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary, #1e293b);
   margin: 2px 0;
 }
 
 .trending-posts {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-muted, #94a3b8);
 }
 
 /* Follow Suggestions */
@@ -180,12 +182,13 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  background: var(--bg-primary, rgba(255, 255, 255, 0.72));
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   padding: 0 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08));
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .tabs-section {
@@ -206,7 +209,7 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #536471;
+  color: var(--text-secondary, #536471);
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
   flex: 1;
@@ -214,12 +217,12 @@
 }
 
 .tab-btn:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #1d9bf0;
+  background-color: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
+  color: var(--accent-color, #1d9bf0);
 }
 
 .tab-btn.active {
-  color: #1d9bf0;
+  color: var(--accent-color, #1d9bf0);
   background: none;
   font-weight: 700;
   position: relative;
@@ -248,17 +251,18 @@
 .search-container {
   display: flex;
   align-items: center;
-  background-color: rgba(247, 249, 250, 0.9);
+  background-color: var(--bg-tertiary, rgba(247, 249, 250, 0.9));
   border-radius: 20px;
   padding: 8px 16px;
   margin-left: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
   flex: 1;
   max-width: 300px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .search-icon {
-  color: #536471;
+  color: var(--text-secondary, #536471);
   margin-right: 8px;
   font-size: 14px;
 }
@@ -268,12 +272,12 @@
   background: none;
   outline: none;
   font-size: 14px;
-  color: #000000;
+  color: var(--text-primary, #000000);
   width: 100%;
 }
 
 .search-input::placeholder {
-  color: #536471;
+  color: var(--text-muted, #536471);
 }
 
 /* Browse Content */
@@ -292,12 +296,12 @@
 .browse-header h1 {
   font-size: 24px;
   font-weight: 700;
-  color: #000000;
+  color: var(--text-primary, #000000);
   margin: 0 0 8px 0;
 }
 
 .browse-header p {
-  color: #536471;
+  color: var(--text-secondary, #536471);
   margin: 0;
   font-size: 14px;
 }
@@ -306,26 +310,26 @@
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: #536471;
+  color: var(--text-secondary, #536471);
 }
 
 .empty-icon {
   font-size: 48px;
-  color: #536471;
+  color: var(--text-muted, #536471);
   margin-bottom: 16px;
 }
 
 .empty-state h2 {
   font-size: 20px;
   font-weight: 600;
-  color: #000000;
+  color: var(--text-primary, #000000);
   margin: 0 0 8px 0;
 }
 
 .empty-state p {
   font-size: 14px;
   margin: 0;
-  color: #536471;
+  color: var(--text-secondary, #536471);
 }
 
 /* Instructor Styles */
@@ -344,11 +348,11 @@
 .instructor-card {
   display: flex;
   padding: 16px;
-  border: 1px solid #e1e8ed;
+  border: 1px solid var(--border-color, #e1e8ed);
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #ffffff;
+  transition: all 0.3s ease;
+  background-color: var(--card-bg, #ffffff);
   min-width: 0;
   overflow: hidden;
   width: 100%;
@@ -358,8 +362,8 @@
 }
 
 .instructor-card:hover {
-  border-color: #1d9bf0;
-  background-color: rgba(29, 155, 240, 0.05);
+  border-color: var(--accent-color, #1d9bf0);
+  background-color: var(--bg-tertiary, rgba(29, 155, 240, 0.05));
 }
 
 .instructor-avatar {
@@ -658,17 +662,18 @@
 /* Feed Header */
 .feed-header {
   padding: 16px 20px;
-  border-bottom: 1px solid #e1e8ed;
-  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color, #e1e8ed);
+  background-color: var(--bg-primary, #ffffff);
   position: sticky;
   top: 0;
   z-index: 10;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .feed-header h1 {
   font-size: 20px;
   font-weight: 700;
-  color: #000000;
+  color: var(--text-primary, #000000);
   margin: 0;
 }
 
@@ -676,8 +681,9 @@
 .post-composer {
   display: flex;
   padding: 16px 20px;
-  border-bottom: 1px solid #e1e8ed;
-  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color, #e1e8ed);
+  background-color: var(--bg-primary, #ffffff);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .composer-avatar {
@@ -703,14 +709,14 @@
   resize: none;
   font-size: 16px;
   line-height: 1.5;
-  color: #000000;
+  color: var(--text-primary, #000000);
   background: none;
   min-height: 80px;
   font-family: inherit;
 }
 
 .composer-content textarea::placeholder {
-  color: #71767b;
+  color: var(--text-muted, #71767b);
 }
 
 .composer-actions {
@@ -719,7 +725,7 @@
   align-items: center;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid #e1e8ed;
+  border-top: 1px solid var(--border-color, #e1e8ed);
 }
 
 .composer-icons {
@@ -788,25 +794,26 @@
 
 /* Feed Posts */
 .feed-posts {
-  background-color: #ffffff;
+  background-color: var(--bg-primary, #ffffff);
+  transition: background-color 0.3s ease;
 }
 
 /* Notification Styles */
 .notification-item {
   display: flex;
   padding: 16px 20px;
-  border-bottom: 1px solid #e1e8ed;
+  border-bottom: 1px solid var(--border-color, #e1e8ed);
   transition: background-color 0.2s ease;
   position: relative;
-  background-color: #ffffff;
+  background-color: var(--bg-primary, #ffffff);
 }
 
 .notification-item:hover {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: var(--bg-tertiary, rgba(0, 0, 0, 0.03));
 }
 
 .notification-item.unread {
-  background-color: rgba(29, 155, 240, 0.08);
+  background-color: rgba(29, 155, 240, 0.15);
 }
 
 .notification-content {
@@ -831,19 +838,19 @@
 }
 
 .notification-timestamp {
-  color: #71767b;
+  color: var(--text-muted);
   font-size: 12px;
 }
 
 .notification-title {
   font-size: 16px;
   font-weight: 600;
-  color: #000000;
+  color: var(--text-primary, #000000);
   margin-bottom: 4px;
 }
 
 .notification-message {
-  color: #71767b;
+  color: var(--text-secondary, #71767b);
   font-size: 14px;
   line-height: 1.4;
   margin-bottom: 12px;
@@ -872,6 +879,7 @@
   gap: 6px;
   background: none;
   border: none;
+  color: var(--text-secondary);
   color: #71767b;
   cursor: pointer;
   padding: 8px 12px;
@@ -896,13 +904,13 @@
 .post {
   display: flex;
   padding: 16px 20px;
-  border-bottom: 1px solid #e1e8ed;
+  border-bottom: 1px solid var(--border-color, #e1e8ed);
   transition: background-color 0.2s ease;
-  background-color: #ffffff;
+  background-color: var(--bg-primary, #ffffff);
 }
 
 .post:hover {
-  background-color: rgba(239, 243, 244, 0.05);
+  background-color: var(--bg-tertiary, rgba(239, 243, 244, 0.05));
 }
 
 .post-avatar {
@@ -931,21 +939,21 @@
 
 .post-author {
   font-weight: 600;
-  color: #000000;
+  color: var(--text-primary, #000000);
 }
 
 .post-handle {
-  color: #71767b;
+  color: var(--text-muted, #71767b);
 }
 
 .post-timestamp {
-  color: #71767b;
+  color: var(--text-muted, #71767b);
 }
 
 .post-text {
   font-size: 15px;
   line-height: 1.5;
-  color: #000000;
+  color: var(--text-primary, #000000);
   margin-bottom: 12px;
 }
 
@@ -961,7 +969,7 @@
   gap: 4px;
   background: none;
   border: none;
-  color: #536471;
+  color: var(--text-muted, #536471);
   cursor: pointer;
   padding: 2px;
   border-radius: 4px;
@@ -972,19 +980,19 @@
 }
 
 .action-btn:hover {
-  color: #0f1419;
-  background-color: rgba(15, 20, 25, 0.03);
+  color: var(--accent-color, #0f1419);
+  background-color: var(--bg-tertiary, rgba(15, 20, 25, 0.03));
 }
 
 .action-icon {
   font-size: 20px;
-  color: #536471;
+  color: var(--text-muted, #536471);
   line-height: 1;
 }
 
 .action-count {
   font-size: 13px;
-  color: #536471;
+  color: var(--text-muted, #536471);
   font-weight: 400;
   margin-left: 2px;
 }
@@ -1101,17 +1109,18 @@
   border-bottom: none;
   width: 100%;
   max-width: none;
+  background-color: var(--bg-primary, #ffffff);
 }
 
 .course-post {
   display: flex;
   padding: 10px;
   border: none;
-  border-bottom: 1px solid #e1e8ed;
+  border-bottom: 1px solid var(--border-color, #e1e8ed);
   border-radius: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #ffffff;
+  transition: all 0.3s ease;
+  background-color: var(--bg-primary, #ffffff);
   gap: 8px;
   position: relative;
   width: 100%;
@@ -1153,7 +1162,7 @@
 
 .course-post .post-author {
   font-weight: 600;
-  color: #000000;
+  color: var(--text-primary, #000000);
   font-size: 13px;
   margin: 0;
   white-space: nowrap;
@@ -1162,17 +1171,17 @@
 }
 
 .course-post .post-handle {
-  color: #536471;
+  color: var(--text-muted, #536471);
   font-size: 11px;
 }
 
 .course-post .post-timestamp {
-  color: #536471;
+  color: var(--text-muted, #536471);
   font-size: 11px;
 }
 
 .course-post .post-text {
-  color: #000000;
+  color: var(--text-secondary, #000000);
   font-size: 12px;
   line-height: 1.4;
   margin-bottom: 4px;
@@ -1204,7 +1213,7 @@
   gap: 4px;
   background: none;
   border: none;
-  color: #536471;
+  color: var(--text-muted, #536471);
   cursor: pointer;
   padding: 6px;
   border-radius: 50%;
@@ -1213,17 +1222,19 @@
 }
 
 .course-post .action-btn:hover {
-  color: #1d9bf0;
+  color: var(--accent-color, #1d9bf0);
   background-color: rgba(29, 155, 240, 0.1);
 }
 
 .course-post .action-icon {
   font-size: 15px;
+  color: var(--text-muted, #536471);
 }
 
 .course-post .action-count {
   font-size: 11px;
   font-weight: 400;
+  color: var(--text-muted, #536471);
 }
 
 /* Course Link Styles */
@@ -1238,17 +1249,17 @@
   display: flex;
   align-items: center;
   padding: 12px;
-  border: 1px solid #e1e8ed;
+  border: 1px solid var(--border-color, #e1e8ed);
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #ffffff;
+  transition: all 0.3s ease;
+  background-color: var(--card-bg, #ffffff);
   gap: 12px;
 }
 
 .course-link:hover {
-  border-color: #1d9bf0;
-  background-color: rgba(29, 155, 240, 0.05);
+  border-color: var(--accent-color, #1d9bf0);
+  background-color: var(--bg-tertiary, rgba(29, 155, 240, 0.05));
 }
 
 .course-link-thumbnail {
@@ -1270,12 +1281,12 @@
 .course-link-info h3 {
   font-size: 14px;
   font-weight: 600;
-  color: #000000;
+  color: var(--text-primary, #000000);
   margin: 0 0 6px 0;
 }
 
 .course-link-description {
-  color: #536471;
+  color: var(--text-secondary, #536471);
   font-size: 12px;
   margin: 0 0 8px 0;
   line-height: 1.3;
@@ -1294,8 +1305,8 @@
 
 .course-link-meta span {
   font-size: 10px;
-  color: #536471;
-  background-color: #f7f9fa;
+  color: var(--text-secondary, #536471);
+  background-color: var(--bg-tertiary, #f7f9fa);
   padding: 2px 6px;
   border-radius: 3px;
 }
@@ -1918,18 +1929,18 @@
 
 .instructor-single-col-card {
   display: block;
-  border: 1px solid #e1e8ed;
+  border: 1px solid var(--border-color, #e1e8ed);
   border-radius: 12px;
-  background: #fff;
+  background: var(--card-bg, #fff);
   margin-bottom: 18px;
   padding: 18px 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.03));
   cursor: pointer;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition: all 0.3s ease;
 }
 .instructor-single-col-card:hover {
-  border-color: #1d9bf0;
-  box-shadow: 0 4px 16px rgba(29,155,240,0.08);
+  border-color: var(--accent-color, #1d9bf0);
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(29,155,240,0.08));
 }
 .instructor-single-col-main {
   display: flex;
@@ -1939,22 +1950,22 @@
 .instructor-name {
   font-size: 18px;
   font-weight: 700;
-  color: #222;
+  color: var(--text-primary, #222);
   margin-bottom: 2px;
 }
 .instructor-title {
-  color: #888;
+  color: var(--text-muted, #888);
   font-size: 14px;
   margin-bottom: 6px;
 }
 .instructor-bio {
-  color: #222;
+  color: var(--text-secondary, #222);
   font-size: 14px;
   margin-bottom: 0;
 }
 .instructor-stats-block {
   font-size: 13px;
-  color: #444;
+  color: var(--text-secondary, #444);
   margin: 8px 0 0 0;
   display: flex;
   flex-direction: column;
@@ -1963,7 +1974,7 @@
 .instructor-stats-list {
   margin: 6px 0 0 18px;
   padding: 0;
-  color: #222;
+  color: var(--text-primary, #222);
   font-size: 13px;
 }
 .instructor-stats-list li {
@@ -2019,7 +2030,7 @@
   display: flex;
   align-items: center;
   font-size: 17px;
-  color: #222;
+  color: var(--text-primary, #222);
   font-weight: 400;
   gap: 6px;
 }

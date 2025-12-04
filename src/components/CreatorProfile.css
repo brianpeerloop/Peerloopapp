@@ -2,16 +2,16 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f8f9fa;
+  background: var(--bg-primary);
 }
 
 .creator-tab-bar {
   display: flex;
-  background: #fff;
-  border-bottom: 1px solid #e9ecef;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
   padding: 0 1rem;
   overflow-x: auto;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .creator-tab-item {
@@ -20,7 +20,7 @@
   padding: 1rem 1.5rem;
   border: none;
   background: none;
-  color: #6c757d;
+  color: var(--text-secondary);
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
@@ -30,28 +30,28 @@
 }
 
 .creator-tab-item:hover {
-  color: #495057;
-  background: #f8f9fa;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
 }
 
 .creator-tab-item.active {
-  color: #4A90E2;
-  border-bottom-color: #4A90E2;
-  background: #f8f9fa;
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+  background: var(--bg-tertiary);
 }
 
 .creator-tab-item.back-btn {
   margin-left: auto;
-  color: #6c757d;
-  border: 1px solid #dee2e6;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 0.75rem 1rem;
   margin: 0.5rem 0;
 }
 
 .creator-tab-item.back-btn:hover {
-  background: #e9ecef;
-  color: #495057;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 .tab-icon {
@@ -63,6 +63,7 @@
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
+  background: var(--bg-primary);
 }
 
 /* Creator Overview */
@@ -76,10 +77,11 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 2rem;
-  background: #fff;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 .creator-info {
@@ -93,30 +95,30 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #4A90E2;
+  border: 4px solid var(--accent-color);
 }
 
 .creator-details h1 {
   margin: 0 0 0.5rem 0;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 2rem;
 }
 
 .creator-handle {
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 1.1rem;
   margin: 0 0 1rem 0;
 }
 
 .creator-bio {
-  color: #495057;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0 0 1rem 0;
   max-width: 600px;
 }
 
 .creator-expertise {
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -124,7 +126,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #4A90E2;
+  background: var(--accent-color);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -133,13 +135,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.3);
+  box-shadow: 0 2px 4px rgba(29, 155, 240, 0.3);
 }
 
 .create-course-btn:hover {
-  background: #357abd;
+  background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.4);
+  box-shadow: 0 4px 8px rgba(29, 155, 240, 0.4);
 }
 
 .create-course-btn.primary {
@@ -164,10 +166,11 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: #fff;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
   transition: transform 0.2s ease;
 }
 
@@ -177,33 +180,34 @@
 
 .stat-card svg {
   font-size: 2rem;
-  color: #4A90E2;
+  color: var(--accent-color);
 }
 
 .stat-content h3 {
   margin: 0;
   font-size: 1.8rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
 .stat-content p {
   margin: 0;
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 /* Creator Credentials */
 .creator-credentials {
-  background: #fff;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 .creator-credentials h3 {
   margin: 0 0 1rem 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .creator-credentials ul {
@@ -214,8 +218,8 @@
 
 .creator-credentials li {
   padding: 0.5rem 0;
-  color: #495057;
-  border-bottom: 1px solid #f1f3f4;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .creator-credentials li:last-child {
@@ -237,7 +241,7 @@
 
 .courses-header h2 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .courses-grid {
@@ -247,10 +251,11 @@
 }
 
 .course-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
   transition: transform 0.2s ease;
 }
 
@@ -267,7 +272,7 @@
 
 .course-header h3 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 1.2rem;
 }
 
@@ -289,6 +294,17 @@
   color: #856404;
 }
 
+/* Dark mode status badges */
+.dark-mode .course-status.published {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.dark-mode .course-status.draft {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
 .course-stats {
   display: flex;
   gap: 1rem;
@@ -299,7 +315,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -322,7 +338,7 @@
 }
 
 .action-btn.edit {
-  background: #4A90E2;
+  background: var(--accent-color);
   color: white;
 }
 
@@ -342,7 +358,7 @@
 }
 
 .course-meta {
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.8rem;
 }
 
@@ -354,7 +370,7 @@
 
 .creator-analytics h2 {
   margin: 0 0 2rem 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .analytics-grid {
@@ -364,15 +380,16 @@
 }
 
 .analytics-card {
-  background: #fff;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 .analytics-card h3 {
   margin: 0 0 1rem 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .chart-placeholder {
@@ -380,9 +397,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   border-radius: 8px;
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -394,7 +411,7 @@
 
 .creator-students h2 {
   margin: 0 0 2rem 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .students-stats {
@@ -405,31 +422,33 @@
 }
 
 .student-stat {
-  background: #fff;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 .student-stat h3 {
   margin: 0 0 0.5rem 0;
-  color: #4A90E2;
+  color: var(--accent-color);
   font-size: 2rem;
 }
 
 .student-stat p {
   margin: 0;
-  color: #6c757d;
+  color: var(--text-muted);
 }
 
 .students-list-placeholder {
-  background: #fff;
+  background: var(--card-bg);
   padding: 3rem;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  color: #6c757d;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -441,7 +460,7 @@
 
 .creator-settings h2 {
   margin: 0 0 2rem 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .settings-grid {
@@ -450,15 +469,16 @@
 }
 
 .setting-group {
-  background: #fff;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 .setting-group h3 {
   margin: 0 0 1rem 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .setting-item {
@@ -466,7 +486,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .setting-item:last-child {
@@ -474,13 +494,13 @@
 }
 
 .setting-item span {
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .setting-item input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #4A90E2;
+  accent-color: var(--accent-color);
 }
 
 /* Responsive Design */
@@ -523,4 +543,4 @@
   .creator-main {
     padding: 1rem;
   }
-} 
+}

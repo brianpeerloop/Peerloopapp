@@ -230,7 +230,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     const creatorCourses = creator.courses ? creator.courses.map(c => typeof c === 'object' ? c : indexedCourses.find(course => course.id === c)).filter(Boolean) : [];
 
     return (
-      <div style={{ background: '#f8fafc', minHeight: '100vh', padding: '0' }}>
+      <div style={{ background: isDarkMode ? '#000' : '#f8fafc', minHeight: '100vh', padding: '0' }}>
         {/* Back Button */}
         <button 
           onClick={() => setSelectedInstructor(null)}
@@ -238,21 +238,21 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             display: 'flex',
             alignItems: 'center',
             gap: 8,
-            background: '#fff',
-            border: '1px solid #e2e8f0',
+            background: isDarkMode ? '#16181c' : '#fff',
+            border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
             borderRadius: 8,
             padding: '10px 16px',
             margin: '16px',
             cursor: 'pointer',
             fontWeight: 600,
-            color: '#64748b'
+            color: isDarkMode ? '#e7e9ea' : '#64748b'
           }}
         >
           ← Back to Creators
         </button>
 
         {/* Creator Profile Card */}
-        <div style={{ background: '#fff', borderRadius: 16, margin: '0 16px 24px 16px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+        <div style={{ background: isDarkMode ? '#16181c' : '#fff', borderRadius: 16, margin: '0 16px 24px 16px', overflow: 'hidden', boxShadow: isDarkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.08)', border: isDarkMode ? '1px solid #2f3336' : 'none' }}>
           {/* Header Banner */}
           <div style={{ background: 'linear-gradient(135deg, #1d9bf0 0%, #0284c7 100%)', height: 120 }} />
           
@@ -267,17 +267,17 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                   width: 100, 
                   height: 100, 
                   borderRadius: '50%', 
-                  border: '4px solid #fff',
+                  border: isDarkMode ? '4px solid #000' : '4px solid #fff',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                   objectFit: 'cover'
                 }}
               />
               <div style={{ flex: 1, paddingBottom: 8 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
-                  <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: '#1e293b' }}>{creator.name}</h1>
-                  <span style={{ background: '#dbeafe', color: '#1e40af', fontSize: 12, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>CREATOR</span>
+                  <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>{creator.name}</h1>
+                  <span style={{ background: isDarkMode ? 'rgba(29, 155, 240, 0.2)' : '#dbeafe', color: '#1d9bf0', fontSize: 12, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>CREATOR</span>
                 </div>
-                <p style={{ margin: 0, color: '#64748b', fontSize: 16 }}>{creator.title}</p>
+                <p style={{ margin: 0, color: isDarkMode ? '#71767b' : '#64748b', fontSize: 16 }}>{creator.title}</p>
               </div>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button 
@@ -305,9 +305,9 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                       setOpenCreatorFollowDropdown(openCreatorFollowDropdown === `detail-${creator.id}` ? null : `detail-${creator.id}`);
                     }}
                     style={{ 
-                      background: hasAnyCreatorCourseFollowed(creator.id) ? '#e2e8f0' : '#fff',
-                      color: hasAnyCreatorCourseFollowed(creator.id) ? '#64748b' : '#1d9bf0',
-                      border: '2px solid #e2e8f0', 
+                      background: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : (isDarkMode ? '#16181c' : '#fff'),
+                      color: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#71767b' : '#64748b') : '#1d9bf0',
+                      border: isDarkMode ? '2px solid #2f3336' : '2px solid #e2e8f0', 
                       padding: '12px 24px', 
                       borderRadius: 8, 
                       fontWeight: 600, 
@@ -329,10 +329,10 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                       top: '100%',
                       right: 0,
                       marginTop: 4,
-                      background: '#fff',
-                      border: '1px solid #e2e8f0',
+                      background: isDarkMode ? '#16181c' : '#fff',
+                      border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
                       borderRadius: 8,
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                      boxShadow: isDarkMode ? '0 2px 12px rgba(0,0,0,0.4)' : '0 2px 12px rgba(0,0,0,0.1)',
                       zIndex: 1000,
                       minWidth: 200,
                       maxWidth: 280,
@@ -346,7 +346,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           fontSize: 13,
                           color: isInstructorFollowed(creator.id) ? '#dc2626' : '#1d9bf0',
                           fontWeight: 500,
-                          borderBottom: '1px solid #f1f5f9',
+                          borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9',
                           background: 'transparent',
                           border: 'none',
                           width: '100%',
@@ -359,7 +359,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           handleFollowInstructor(creator.id);
                           setOpenCreatorFollowDropdown(null);
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                        onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                       >
                         {isInstructorFollowed(creator.id) ? 'Unfollow All' : 'Follow All'}
@@ -378,14 +378,14 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                 justifyContent: 'space-between',
                                 gap: 8,
                                 fontSize: 13,
-                                color: isFollowed ? '#1d9bf0' : '#475569',
+                                color: isFollowed ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
                                 fontWeight: isFollowed ? 500 : 400
                               }}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleFollowCourse(course.id);
                               }}
-                              onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                              onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                               onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                               <span style={{ 
@@ -411,41 +411,41 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
               display: 'flex', 
               gap: 32, 
               padding: '16px 0', 
-              borderTop: '1px solid #e2e8f0',
-              borderBottom: '1px solid #e2e8f0',
+              borderTop: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
+              borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
               marginBottom: 20
             }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>{creator.stats?.studentsTaught?.toLocaleString() || 0}</div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>Students Taught</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>{creator.stats?.studentsTaught?.toLocaleString() || 0}</div>
+                <div style={{ fontSize: 13, color: isDarkMode ? '#71767b' : '#64748b' }}>Students Taught</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>⭐ {creator.stats?.averageRating || 0}</div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>Avg Rating</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>⭐ {creator.stats?.averageRating || 0}</div>
+                <div style={{ fontSize: 13, color: isDarkMode ? '#71767b' : '#64748b' }}>Avg Rating</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>{creator.stats?.coursesCreated || creatorCourses.length}</div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>Courses</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>{creator.stats?.coursesCreated || creatorCourses.length}</div>
+                <div style={{ fontSize: 13, color: isDarkMode ? '#71767b' : '#64748b' }}>Courses</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#1e293b' }}>{creator.stats?.totalReviews?.toLocaleString() || 0}</div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>Reviews</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>{creator.stats?.totalReviews?.toLocaleString() || 0}</div>
+                <div style={{ fontSize: 13, color: isDarkMode ? '#71767b' : '#64748b' }}>Reviews</div>
               </div>
             </div>
 
             {/* Bio */}
             <div style={{ marginBottom: 24 }}>
-              <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: '#1e293b' }}>About</h3>
-              <p style={{ margin: 0, color: '#475569', fontSize: 15, lineHeight: 1.7 }}>{creator.bio}</p>
+              <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>About</h3>
+              <p style={{ margin: 0, color: isDarkMode ? '#e7e9ea' : '#475569', fontSize: 15, lineHeight: 1.7 }}>{creator.bio}</p>
             </div>
 
             {/* Credentials */}
             {creator.qualifications && creator.qualifications.length > 0 && (
               <div style={{ marginBottom: 24 }}>
-                <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Credentials</h3>
+                <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>Credentials</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {creator.qualifications.map((qual, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#475569', fontSize: 14 }}>
+                    <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 8, color: isDarkMode ? '#e7e9ea' : '#475569', fontSize: 14 }}>
                       <span style={{ color: '#1d9bf0' }}>✓</span>
                       <span>{qual.sentence}</span>
                     </div>
@@ -467,12 +467,12 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             {/* Expertise Tags */}
             {creator.expertise && creator.expertise.length > 0 && (
               <div style={{ marginBottom: 24 }}>
-                <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Expertise</h3>
+                <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 600, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>Expertise</h3>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {creator.expertise.map((skill, index) => (
                     <span key={index} style={{ 
-                      background: '#f1f5f9', 
-                      color: '#475569', 
+                      background: isDarkMode ? '#2f3336' : '#f1f5f9', 
+                      color: isDarkMode ? '#e7e9ea' : '#475569', 
                       padding: '6px 14px', 
                       borderRadius: 20, 
                       fontSize: 13,
@@ -490,7 +490,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
         {/* Courses Section */}
         {creatorCourses.length > 0 && (
           <div style={{ margin: '0 16px 24px 16px' }}>
-            <h2 style={{ margin: '0 0 16px 0', fontSize: 20, fontWeight: 700, color: '#1e293b' }}>
+            <h2 style={{ margin: '0 0 16px 0', fontSize: 20, fontWeight: 700, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>
               Courses by {creator.name}
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -505,11 +505,11 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                       setCurrentInstructorForCourse(creator);
                     }}
                     style={{ 
-                      background: '#fff', 
+                      background: isDarkMode ? '#16181c' : '#fff', 
                       borderRadius: 12, 
                       padding: 20, 
                       cursor: 'pointer',
-                      border: '1px solid #e2e8f0',
+                      border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
                       display: 'flex',
                       gap: 20,
                       alignItems: 'flex-start',
@@ -522,9 +522,9 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                       style={{ width: 160, height: 100, borderRadius: 8, objectFit: 'cover' }}
                     />
                     <div style={{ flex: 1 }}>
-                      <h3 style={{ margin: '0 0 8px 0', fontSize: 18, fontWeight: 600, color: '#1e293b' }}>{course.title}</h3>
-                      <p style={{ margin: '0 0 12px 0', color: '#64748b', fontSize: 14, lineHeight: 1.5 }}>{course.description}</p>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: '#64748b' }}>
+                      <h3 style={{ margin: '0 0 8px 0', fontSize: 18, fontWeight: 600, color: isDarkMode ? '#e7e9ea' : '#1e293b' }}>{course.title}</h3>
+                      <p style={{ margin: '0 0 12px 0', color: isDarkMode ? '#71767b' : '#64748b', fontSize: 14, lineHeight: 1.5 }}>{course.description}</p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: isDarkMode ? '#71767b' : '#64748b' }}>
                         <span>⭐ {course.rating}</span>
                         <span>👥 {course.students?.toLocaleString()} students</span>
                         <span>⏱️ {course.duration}</span>
@@ -537,8 +537,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                         onClick={e => { e.stopPropagation(); handleFollowCourse(course.id); }}
                         disabled={isFollowingLoading}
                         style={{ 
-                          background: isFollowed ? '#e2e8f0' : '#1d9bf0',
-                          color: isFollowed ? '#64748b' : '#fff',
+                          background: isFollowed ? (isDarkMode ? '#2f3336' : '#e2e8f0') : '#1d9bf0',
+                          color: isFollowed ? (isDarkMode ? '#71767b' : '#64748b') : '#fff',
                           border: 'none', 
                           padding: '10px 20px', 
                           borderRadius: 8, 

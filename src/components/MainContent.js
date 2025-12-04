@@ -984,11 +984,11 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             const fullCreatorData = getInstructorWithCourses(creator.id);
             setSelectedInstructor(fullCreatorData || creator);
           }} style={{
-            background: '#fff',
+            background: isDarkMode ? '#1e293b' : '#fff',
             borderRadius: 12,
             padding: '20px',
             marginBottom: 16,
-            border: '1px solid #e2e8f0',
+            border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
             cursor: 'pointer',
             transition: 'all 0.2s ease'
           }}>
@@ -1001,25 +1001,25 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
               />
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontWeight: 700, fontSize: 18, color: '#1e293b' }}>{creator.name}</span>
-                  <span style={{ background: '#dbeafe', color: '#1e40af', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 12 }}>CREATOR</span>
+                  <span style={{ fontWeight: 700, fontSize: 18, color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.name}</span>
+                  <span style={{ background: isDarkMode ? '#1e3a5f' : '#dbeafe', color: isDarkMode ? '#93c5fd' : '#1e40af', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 12 }}>CREATOR</span>
                 </div>
-                <div style={{ color: '#64748b', fontSize: 14, marginBottom: 8 }}>{creator.title}</div>
-                <div style={{ color: '#475569', fontSize: 14, lineHeight: 1.5, marginBottom: 12 }}>{creator.bio}</div>
+                <div style={{ color: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 14, marginBottom: 8 }}>{creator.title}</div>
+                <div style={{ color: isDarkMode ? '#cbd5e1' : '#475569', fontSize: 14, lineHeight: 1.5, marginBottom: 12 }}>{creator.bio}</div>
                 
                 {/* Stats Row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, color: '#64748b', marginBottom: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, color: isDarkMode ? '#94a3b8' : '#64748b', marginBottom: 12 }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <FaUsers style={{ color: '#1d9bf0' }} />
-                    <strong style={{ color: '#1e293b' }}>{creator.stats?.studentsTaught?.toLocaleString() || 0}</strong> students
+                    <strong style={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.stats?.studentsTaught?.toLocaleString() || 0}</strong> students
                   </span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <FaStar style={{ color: '#f59e0b' }} />
-                    <strong style={{ color: '#1e293b' }}>{creator.stats?.averageRating || 0}</strong> rating
+                    <strong style={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.stats?.averageRating || 0}</strong> rating
                   </span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <FaBook style={{ color: '#3b82f6' }} />
-                    <strong style={{ color: '#1e293b' }}>{creator.stats?.coursesCreated || 0}</strong> courses
+                    <strong style={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}>{creator.stats?.coursesCreated || 0}</strong> courses
                   </span>
                 </div>
                 
@@ -1052,9 +1052,9 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                       }}
                       disabled={isFollowingLoading}
                       style={{ 
-                        background: hasAnyCreatorCourseFollowed(creator.id) ? '#e2e8f0' : '#fff',
-                        color: hasAnyCreatorCourseFollowed(creator.id) ? '#64748b' : '#1d9bf0',
-                        border: '1px solid #e2e8f0', 
+                        background: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#334155' : '#e2e8f0') : (isDarkMode ? '#1e293b' : '#fff'),
+                        color: hasAnyCreatorCourseFollowed(creator.id) ? (isDarkMode ? '#94a3b8' : '#64748b') : '#1d9bf0',
+                        border: isDarkMode ? '1px solid #475569' : '1px solid #e2e8f0', 
                         padding: '8px 16px', 
                         borderRadius: 8, 
                         fontWeight: 600, 

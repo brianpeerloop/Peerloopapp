@@ -458,6 +458,78 @@ body.dark-mode .empty-state h2 {
   color: var(--text-secondary);
 }
 
+/* Student/Teacher Cards (Browse Creators) */
+.dark-mode .student-teacher-card,
+body.dark-mode .student-teacher-card {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.dark-mode .student-teacher-card.creator-card,
+body.dark-mode .student-teacher-card.creator-card {
+  background: linear-gradient(135deg, #1e293b 0%, #2d3a4f 100%) !important;
+  border-color: #667eea !important;
+}
+
+.dark-mode .student-teacher-card:hover,
+body.dark-mode .student-teacher-card:hover {
+  border-color: var(--accent-color) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.dark-mode .st-info h4,
+body.dark-mode .st-info h4 {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .st-info .specialty,
+body.dark-mode .st-info .specialty {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .st-info .bio,
+body.dark-mode .st-info .bio {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .st-stats,
+body.dark-mode .st-stats {
+  color: var(--text-muted) !important;
+}
+
+.dark-mode .st-stats span,
+body.dark-mode .st-stats span {
+  color: var(--text-muted) !important;
+}
+
+.dark-mode .section-title,
+body.dark-mode .section-title {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .section-subtitle,
+body.dark-mode .section-subtitle {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .follow-dropdown-btn,
+body.dark-mode .follow-dropdown-btn {
+  background-color: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .follow-dropdown-btn:hover,
+body.dark-mode .follow-dropdown-btn:hover {
+  background-color: var(--bg-secondary) !important;
+}
+
+.dark-mode .creator-badge,
+body.dark-mode .creator-badge {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+}
+
 /* Follow Button */
 .dark-mode .follow-btn-small {
   background-color: var(--text-primary);

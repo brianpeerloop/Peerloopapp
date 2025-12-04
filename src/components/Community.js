@@ -942,8 +942,8 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null }) 
                 {displayedPosts.length > 0 ? (
                   displayedPosts.map(post => {
                     const course = getCourseById(post.courseId);
-                    // Generate avatar color and initials
-                    const avatarColors = ['#FF6B6B', '#4ECDC4', '#9B59B6', '#00D2FF', '#FFD93D', '#6C5CE7', '#FF9900', '#17bf63', '#E74C3C', '#3498DB'];
+                    // Generate avatar color and initials - black/gray tones
+                    const avatarColors = ['#2f3336', '#3a3f44', '#4a5056', '#5a6167', '#6a7178'];
                     const colorIndex = post.author.charCodeAt(0) % avatarColors.length;
                     const avatarColor = avatarColors[colorIndex];
                     const initials = post.author.replace(/[^A-Z0-9]/gi, '').substring(0, 2).toUpperCase();

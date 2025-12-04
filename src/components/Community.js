@@ -881,20 +881,43 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                         maxWidth: 280,
                         padding: '4px 0'
                       }}>
-                        {/* All option - filter view */}
+                        {/* Follow All option */}
                         <div 
                           style={{ 
                             padding: '8px 12px',
                             cursor: 'pointer',
                             fontSize: 13,
-                            color: selectedCourseFilters.length === 0 || selectedCourseFilters.length === creator.followedCourseIds.length ? '#1d9bf0' : (isDarkMode ? '#e7e9ea' : '#475569'),
+                            color: '#1d9bf0',
                             fontWeight: 500
                           }}
-                          onClick={() => setSelectedCourseFilters([])}
+                          onClick={() => {
+                            // Follow all courses from this creator
+                            const allCourseIds = (creator.allCourses || []).map(c => c.id);
+                            allCourseIds.forEach(courseId => {
+                              const isAlreadyFollowed = creator.followedCourseIds.includes(courseId);
+                              if (!isAlreadyFollowed) {
+                                const course = (creator.allCourses || []).find(c => c.id === courseId);
+                                if (course) {
+                                  const courseCommunity = {
+                                    id: `course-${courseId}`,
+                                    name: course.title,
+                                    type: 'course',
+                                    courseId: courseId,
+                                    instructorId: creator.instructorId
+                                  };
+                                  actualSetFollowedCommunities(prev => {
+                                    if (prev.some(c => c.id === courseCommunity.id)) return prev;
+                                    return [...prev, courseCommunity];
+                                  });
+                                }
+                              }
+                            });
+                            setOpenCreatorDropdown(null);
+                          }}
                           onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
-                          All
+                          Follow All
                         </div>
                         
                         {/* Unfollow All option */}

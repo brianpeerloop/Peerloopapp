@@ -1246,9 +1246,40 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                           const instructorData = getInstructorById(course.instructorId);
                           const isFollowed = isCourseFollowed(course.id);
                           const isViaCreator = isCourseFollowedViaCreator(course.id);
+                          // Generate avatar initials and color for creator
+                          const creatorInitials = instructorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '??';
+                          const avatarColors = ['#2f3336', '#3a3f44', '#4a5056', '#5a6167', '#6a7178'];
+                          const colorIndex = instructorData?.name?.charCodeAt(0) % avatarColors.length || 0;
+                          const avatarColor = avatarColors[colorIndex];
                           return (
-                            <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: isDarkMode ? '#000' : '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: '20px', width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: isDarkMode ? '#e7e9ea' : '#222' }}>
-                              <div className="post-content" style={{ padding: 0 }}>
+                            <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: isDarkMode ? '#000' : '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: '20px', width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: isDarkMode ? '#e7e9ea' : '#222', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                              {/* Creator Avatar */}
+                              <div 
+                                onClick={e => { 
+                                  e.stopPropagation(); 
+                                  const fullCreatorData = getInstructorWithCourses(course.instructorId);
+                                  setSelectedInstructor(fullCreatorData || instructorData);
+                                  setActiveTopMenu('instructors');
+                                }}
+                                style={{
+                                  width: 40,
+                                  height: 40,
+                                  borderRadius: '50%',
+                                  background: avatarColor,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: '#fff',
+                                  fontSize: 14,
+                                  fontWeight: 700,
+                                  flexShrink: 0,
+                                  cursor: 'pointer'
+                                }}
+                                title={`View ${instructorData?.name}'s profile`}
+                              >
+                                {creatorInitials}
+                              </div>
+                              <div className="post-content" style={{ padding: 0, flex: 1, minWidth: 0 }}>
                                 {/* Title, Duration, and Follow Button Row */}
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: isDarkMode ? '#e7e9ea' : '#222', flex: 1, minWidth: 0 }}>
@@ -1274,7 +1305,23 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                     {isFollowed ? '✓ Following' : 'Follow'}
                                   </button>
                                 </div>
-                                <div style={{ fontSize: 15, lineHeight: '20px', color: isDarkMode ? '#1d9bf0' : '#1d9bf0', fontWeight: 400, margin: '0 0 4px 0' }}>Created by {instructorData?.name}</div>
+                                <div style={{ fontSize: 15, lineHeight: '20px', color: isDarkMode ? '#71767b' : '#536471', fontWeight: 400, margin: '0 0 4px 0' }}>
+                                  Created by <span 
+                                    onClick={e => { 
+                                      e.stopPropagation(); 
+                                      const fullCreatorData = getInstructorWithCourses(course.instructorId);
+                                      setSelectedInstructor(fullCreatorData || instructorData);
+                                      setActiveTopMenu('instructors');
+                                    }}
+                                    style={{ 
+                                      color: '#1d9bf0', 
+                                      cursor: 'pointer',
+                                      fontWeight: 500
+                                    }}
+                                    onMouseEnter={e => e.target.style.textDecoration = 'underline'}
+                                    onMouseLeave={e => e.target.style.textDecoration = 'none'}
+                                  >{instructorData?.name}</span>
+                                </div>
                                 {/* Description Row - show all text */}
                                 <div className="post-text" style={{ color: isDarkMode ? '#e7e9ea' : '#0f1419', fontSize: 15, lineHeight: '20px' }}>
                                   {course.description} Master AI skills, earn certificates, and unlock the option to teach and earn commissions.

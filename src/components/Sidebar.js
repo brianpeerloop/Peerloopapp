@@ -158,27 +158,6 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDark
           </span>
         </button>
       </div>
-
-      {/* User profile section at the bottom */}
-      <div className="sidebar-profile-container">
-        <div className="sidebar-profile" onClick={handleProfileClick}>
-          <div className="profile-info">
-            {/* User avatar */}
-            <div className="profile-avatar">
-              <img src="https://via.placeholder.com/40x40/FFD700/000000?text=AE" alt="Profile" />
-            </div>
-            {/* User details */}
-            <div className="profile-details">
-              <div className="profile-name">{currentUser?.name || 'User'}</div>
-              <div className="profile-handle">@{currentUser?.name?.toLowerCase().replace(/\s+/g, '') || 'user'}</div>
-            </div>
-          </div>
-          {/* Profile menu button */}
-          <div className="profile-menu">
-            <FaEllipsisH />
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

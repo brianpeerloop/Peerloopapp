@@ -1166,10 +1166,27 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
               {creatorInitials}
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 16, marginBottom: 2 }}>
+              <div 
+                onClick={() => {
+                  const fullCreatorData = getInstructorWithCourses(courseData.instructorId);
+                  setSelectedInstructor(fullCreatorData || instructorData);
+                  setSelectedCourse(null);
+                  setActiveTopMenu('instructors');
+                }}
+                style={{ 
+                  fontWeight: 600, 
+                  color: accentBlue, 
+                  fontSize: 16, 
+                  marginBottom: 2,
+                  cursor: 'pointer',
+                  transition: 'opacity 0.15s'
+                }}
+                onMouseEnter={e => e.target.style.opacity = '0.7'}
+                onMouseLeave={e => e.target.style.opacity = '1'}
+              >
                 {instructorData?.name}
               </div>
-              <div style={{ color: accentBlue, fontSize: 14, marginBottom: 8 }}>
+              <div style={{ color: textSecondary, fontSize: 14, marginBottom: 8 }}>
                 {instructorData?.title}
               </div>
               <div style={{ color: textSecondary, fontSize: 14, lineHeight: 1.5, marginBottom: 12 }}>

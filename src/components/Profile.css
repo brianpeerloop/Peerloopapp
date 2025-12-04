@@ -1,27 +1,27 @@
 .profile {
-  background-color: #000000;
+  background-color: var(--bg-primary);
   min-height: 100vh;
   padding: 0;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .profile-header {
   padding: 16px 24px;
-  border-bottom: 1px solid #2f3336;
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 24px;
-  background-color: #000000;
+  background-color: var(--bg-primary);
 }
 
 .profile-header h1 {
   font-size: 20px;
   font-weight: 700;
   margin: 0 0 4px 0;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .profile-header p {
   font-size: 14px;
-  color: #71767b;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -39,8 +39,8 @@
   justify-content: flex-start;
   align-items: center;
   gap: 4px;
-  background: #111;
-  border-bottom: 1px solid #222;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
   padding: 0 10px;
   min-height: 40px;
   position: sticky;
@@ -53,7 +53,7 @@
   gap: 4px;
   background: none;
   border: none;
-  color: #aaa;
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 500;
   padding: 7px 10px 6px 10px;
@@ -64,14 +64,14 @@
   min-width: 0;
 }
 .profile-tab-item.active {
-  color: #ffffff;
-  background: #181c20;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
   font-weight: 700;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 2px solid var(--accent-color);
 }
 .profile-tab-item:hover {
-  color: #fff;
-  background: #181c20;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
 }
 .tab-icon {
   display: flex;
@@ -80,15 +80,15 @@
 }
 .edit-profile-tab-btn {
   margin-left: 8px;
-  color: #1d9bf0;
+  color: var(--accent-color);
   font-weight: 600;
-  background: #181c20;
-  border-bottom: 2px solid #1d9bf0;
+  background: var(--bg-tertiary);
+  border-bottom: 2px solid var(--accent-color);
   border-radius: 0 0 6px 6px;
 }
 .edit-profile-tab-btn:hover {
   color: #fff;
-  background: #1d9bf0;
+  background: var(--accent-color);
 }
 .edit-actions-inline {
   display: flex;
@@ -117,9 +117,9 @@
 
 .profile-main {
   flex: 1;
-  background-color: #000000;
+  background-color: var(--bg-primary);
   border-radius: 12px;
-  border: 1px solid #2f3336;
+  border: 1px solid var(--border-color);
   padding: 8px 12px 18px 12px;
   margin-top: 0;
 }
@@ -163,7 +163,7 @@
   position: absolute;
   bottom: 8px;
   right: 8px;
-  background-color: #1d9bf0;
+  background-color: var(--accent-color);
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -177,7 +177,7 @@
 }
 
 .avatar-edit-btn:hover {
-  background-color: #1a8cd8;
+  background-color: var(--accent-hover);
 }
 
 .profile-info-section {
@@ -196,7 +196,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #1d9bf0;
+  background-color: var(--accent-color);
   color: #ffffff;
   border: none;
   border-radius: 6px;
@@ -208,7 +208,7 @@
 }
 
 .edit-profile-btn:hover {
-  background-color: #1a8cd8;
+  background-color: var(--accent-hover);
 }
 
 .edit-actions {
@@ -240,8 +240,8 @@
   align-items: center;
   gap: 6px;
   background-color: transparent;
-  color: #71767b;
-  border: 1px solid #2f3336;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 10px 16px;
   font-size: 14px;
@@ -251,8 +251,8 @@
 }
 
 .cancel-btn:hover {
-  background-color: rgba(239, 243, 244, 0.1);
-  color: #ffffff;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 .profile-stats {
@@ -265,15 +265,15 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background-color: #202327;
-  border: 1px solid #2f3336;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   flex: 1;
 }
 
 .stat-item svg {
   font-size: 20px;
-  color: #1d9bf0;
+  color: var(--accent-color);
 }
 
 .stat-content {
@@ -284,13 +284,13 @@
 .stat-number {
   font-size: 24px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   line-height: 1;
 }
 
 .stat-label {
   font-size: 12px;
-  color: #71767b;
+  color: var(--text-muted);
   margin-top: 2px;
 }
 
@@ -315,24 +315,24 @@
 .form-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .form-group input,
 .form-group textarea {
   padding: 12px 16px;
-  border: 1px solid #2f3336;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 14px;
-  color: #ffffff;
-  background-color: #202327;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
   transition: border-color 0.2s;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #1d9bf0;
+  border-color: var(--accent-color);
 }
 
 .form-group textarea {
@@ -343,7 +343,7 @@
 .profile-info-display h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 8px 0;
   margin-top: 0;
   padding-top: 0;
@@ -351,14 +351,14 @@
 
 .profile-handle {
   font-size: 14px;
-  color: #71767b;
+  color: var(--text-muted);
   margin-bottom: 12px;
 }
 
 .profile-bio {
   font-size: 14px;
   line-height: 1.5;
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 16px;
 }
 
@@ -373,7 +373,7 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #71767b;
+  color: var(--text-muted);
 }
 
 .profile-links {
@@ -390,12 +390,12 @@
 }
 
 .link-item strong {
-  color: #ffffff;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 .link-item a {
-  color: #1d9bf0;
+  color: var(--accent-color);
   text-decoration: none;
 }
 
@@ -406,7 +406,7 @@
 .bookmarks-section h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
 }
 
@@ -418,27 +418,27 @@
 
 .bookmark-item {
   padding: 16px;
-  border: 1px solid #2f3336;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  background-color: #202327;
+  background-color: var(--bg-secondary);
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .bookmark-item:hover {
-  background-color: #2f3336;
+  background-color: var(--bg-tertiary);
 }
 
 .bookmark-content h3 {
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 8px 0;
 }
 
 .bookmark-content p {
   font-size: 14px;
-  color: #71767b;
+  color: var(--text-muted);
   line-height: 1.4;
   margin: 0 0 12px 0;
 }
@@ -448,18 +448,18 @@
   align-items: center;
   gap: 16px;
   font-size: 12px;
-  color: #71767b;
+  color: var(--text-muted);
 }
 
 .bookmark-time {
   font-size: 12px;
-  color: #71767b;
+  color: var(--text-muted);
 }
 
 .history-section h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
 }
 
@@ -473,14 +473,14 @@
   display: flex;
   gap: 16px;
   padding: 16px;
-  border: 1px solid #2f3336;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  background-color: #202327;
+  background-color: var(--bg-secondary);
 }
 
 .history-date {
   font-size: 12px;
-  color: #71767b;
+  color: var(--text-muted);
   font-weight: 500;
   min-width: 80px;
   flex-shrink: 0;
@@ -493,13 +493,13 @@
 .history-content h3 {
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 4px 0;
 }
 
 .history-content p {
   font-size: 14px;
-  color: #71767b;
+  color: var(--text-muted);
   margin: 0 0 8px 0;
 }
 
@@ -508,7 +508,7 @@
   align-items: center;
   gap: 16px;
   font-size: 12px;
-  color: #71767b;
+  color: var(--text-muted);
 }
 
 .completion-time,
@@ -526,7 +526,7 @@
 .settings-section h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
 }
 
@@ -539,7 +539,7 @@
 .setting-group h3 {
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 12px 0;
 }
 
@@ -548,7 +548,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid #2f3336;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .setting-item:last-child {
@@ -557,19 +557,19 @@
 
 .setting-item span {
   font-size: 14px;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .setting-item input[type="checkbox"] {
   width: 20px;
   height: 20px;
-  accent-color: #1d9bf0;
+  accent-color: var(--accent-color);
 }
 
 .privacy-section h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
 }
 
@@ -582,17 +582,17 @@
 .privacy-item h3 {
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 8px 0;
 }
 
 .privacy-item select {
   padding: 8px 12px;
-  border: 1px solid #2f3336;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 14px;
-  color: #ffffff;
-  background-color: #202327;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
   cursor: pointer;
 }
 
@@ -601,7 +601,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #1d9bf0;
+  background-color: var(--accent-color);
   color: #ffffff;
   border: none;
   border-radius: 6px;
@@ -614,13 +614,13 @@
 
 .enable-2fa-btn:hover,
 .change-password-btn:hover {
-  background-color: #1a8cd8;
+  background-color: var(--accent-hover);
 }
 
 .help-section h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
 }
 
@@ -632,27 +632,27 @@
 
 .help-item {
   padding: 16px;
-  border: 1px solid #2f3336;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  background-color: #202327;
+  background-color: var(--bg-secondary);
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .help-item:hover {
-  background-color: #2f3336;
+  background-color: var(--bg-tertiary);
 }
 
 .help-item h3 {
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 8px 0;
 }
 
 .help-item p {
   font-size: 14px;
-  color: #71767b;
+  color: var(--text-muted);
   line-height: 1.4;
   margin: 0 0 12px 0;
 }
@@ -662,8 +662,8 @@
   align-items: center;
   gap: 6px;
   background-color: transparent;
-  color: #1d9bf0;
-  border: 1px solid #1d9bf0;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 13px;
@@ -683,7 +683,7 @@
   align-items: center;
   gap: 0;
   font-size: 1.1rem;
-  color: #e0e0e0;
+  color: var(--text-secondary);
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -740,4 +740,4 @@
   .help-options {
     gap: 8px;
   }
-} 
+}

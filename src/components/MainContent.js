@@ -882,11 +882,16 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   };
 
   const renderCourseDetail = () => {
+    // Ensure selectedCourse exists
+    if (!selectedCourse || !selectedCourse.id) return null;
+    
     // Get full course data from database
     const courseData = getCourseById(selectedCourse.id);
     if (!courseData) return null;
+    
     // Get instructor data for this course
     const instructorData = getInstructorById(courseData.instructorId);
+    if (!instructorData) return null;
     // Mock student-teacher stats
     const studentTeachers = 1200;
     const avgTaught = 5;
@@ -970,10 +975,10 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             </div>
             {/* Creator Profile Teaser */}
             <div style={{ margin: '18px 0', textAlign: 'center', background: bgSecondary, borderRadius: 10, padding: 16, border: isDarkMode ? `1px solid ${borderColor}` : 'none' }}>
-              <img src={instructorData.avatar} alt={instructorData.name} style={{ width: 48, height: 48, borderRadius: '50%', marginBottom: 4 }} />
-              <div style={{ fontWeight: 600, fontSize: 15, color: textPrimary }}>{instructorData.name}</div>
-              <div style={{ color: textMuted, fontSize: 13, marginBottom: 4 }}>{instructorData.title}</div>
-              <div style={{ color: textSecondary, fontSize: 13 }}>{instructorData.bio}</div>
+              <img src={instructorData?.avatar || ''} alt={instructorData?.name || 'Instructor'} style={{ width: 48, height: 48, borderRadius: '50%', marginBottom: 4 }} />
+              <div style={{ fontWeight: 600, fontSize: 15, color: textPrimary }}>{instructorData?.name || 'Unknown'}</div>
+              <div style={{ color: textMuted, fontSize: 13, marginBottom: 4 }}>{instructorData?.title || ''}</div>
+              <div style={{ color: textSecondary, fontSize: 13 }}>{instructorData?.bio || ''}</div>
             </div>
             {/* Student-Teacher Stats */}
             <div style={{ background: bgTertiary, border: '1px solid #1d9bf0', borderRadius: 8, padding: '12px 16px', marginBottom: 16, textAlign: 'center' }}>

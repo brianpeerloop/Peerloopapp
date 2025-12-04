@@ -1027,30 +1027,30 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
           </div>
         </div>
 
-        {/* ===== CTA - Minimalist Text Link ===== */}
+        {/* ===== CTA - Pill Button like Follow ===== */}
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
-          gap: 16,
+          gap: 12,
           marginBottom: 20
         }}>
           <span style={{ fontSize: 24, fontWeight: 700, color: textPrimary }}>
             {courseData.price}
           </span>
-          <span style={{ color: textMuted, fontSize: 14 }}>•</span>
-          <span 
+          <button 
             style={{ 
-              color: accentBlue, 
+              background: accentBlue,
+              color: '#fff',
               fontWeight: 600, 
-              fontSize: 15, 
+              fontSize: 14, 
               cursor: 'pointer',
-              transition: 'opacity 0.15s'
+              padding: '8px 16px',
+              borderRadius: 20,
+              border: 'none'
             }}
-            onMouseEnter={e => e.target.style.opacity = '0.7'}
-            onMouseLeave={e => e.target.style.opacity = '1'}
           >
             Enroll Now
-          </span>
+          </button>
           <span style={{ color: textMuted, fontSize: 13 }}>
             (includes 1-on-1 sessions)
           </span>

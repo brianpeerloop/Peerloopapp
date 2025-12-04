@@ -892,124 +892,399 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     // Get instructor data for this course
     const instructorData = getInstructorById(courseData.instructorId);
     if (!instructorData) return null;
-    // Mock student-teacher stats
-    const studentTeachers = 1200;
-    const avgTaught = 5;
-    // Mock top teacher badge
-    const topTeacherBadge = '🏅 Master Educator';
-    // Mock related courses
-    const relatedCourses = [
-      { id: 2, title: 'AI for Everyone' },
-      { id: 4, title: 'Machine Learning Basics' }
-    ];
 
     // Dark mode colors
     const bgPrimary = isDarkMode ? '#000' : '#fff';
-    const bgSecondary = isDarkMode ? '#16181c' : '#f7f9fa';
-    const bgTertiary = isDarkMode ? '#1e2428' : '#eff6ff';
-    const textPrimary = isDarkMode ? '#e7e9ea' : '#222';
-    const textSecondary = isDarkMode ? '#71767b' : '#444';
-    const textMuted = isDarkMode ? '#536471' : '#888';
-    const borderColor = isDarkMode ? '#2f3336' : '#e6e8ec';
+    const bgSecondary = isDarkMode ? '#16181c' : '#f8fafc';
+    const bgCard = isDarkMode ? '#16181c' : '#fff';
+    const textPrimary = isDarkMode ? '#e7e9ea' : '#0f172a';
+    const textSecondary = isDarkMode ? '#94a3b8' : '#64748b';
+    const textMuted = isDarkMode ? '#536471' : '#94a3b8';
+    const borderColor = isDarkMode ? '#2f3336' : '#e2e8f0';
+    const accentBlue = '#1d9bf0';
+    const accentGreen = isDarkMode ? '#00ba7c' : '#059669';
+
+    // Creator initials for avatar
+    const creatorInitials = instructorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '??';
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', padding: '0', marginTop: '0' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%', maxWidth: '100%', margin: '0', background: bgPrimary, borderRadius: 0, border: `1px solid ${borderColor}`, boxShadow: isDarkMode ? 'none' : '0 2px 8px rgba(0,0,0,0.04)', padding: 0, marginTop: '0' }}>
-          {/* Removed banner image so the title is at the very top */}
-          {/* Title & Creator */}
-          <div style={{ padding: '24px 32px 0 32px', textAlign: 'center', position: 'relative' }}>
-            {/* Follow button positioned top right */}
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        width: '100%', 
+        padding: '0 24px 24px 24px',
+        background: bgPrimary
+      }}>
+        
+        {/* ===== HERO SECTION ===== */}
+        <div style={{ marginBottom: 24 }}>
+          {/* Title Row with Following */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'flex-start', 
+            justifyContent: 'space-between',
+            marginBottom: 8
+          }}>
+            <h1 style={{ 
+              margin: 0, 
+              fontSize: 28, 
+              fontWeight: 700, 
+              color: textPrimary,
+              lineHeight: 1.2,
+              flex: 1,
+              paddingRight: 16
+            }}>
+              {courseData.title}
+            </h1>
             <button 
               onClick={() => handleFollowCourse(courseData.id)}
               disabled={isFollowingLoading}
               style={{ 
-                position: 'absolute',
-                top: 24,
-                right: 32,
-                background: isCourseFollowed(courseData.id) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : '#1d9bf0', 
-                color: isCourseFollowed(courseData.id) ? (isDarkMode ? '#71767b' : '#64748b') : '#fff', 
+                background: isCourseFollowed(courseData.id) ? (isDarkMode ? '#2f3336' : '#e2e8f0') : accentBlue, 
+                color: isCourseFollowed(courseData.id) ? textSecondary : '#fff', 
                 fontWeight: 600, 
                 fontSize: 14, 
                 cursor: 'pointer', 
-                padding: '10px 20px', 
-                borderRadius: 8, 
-                border: 'none', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 6 
+                padding: '8px 16px', 
+                borderRadius: 20, 
+                border: 'none',
+                flexShrink: 0
               }}
             >
               {isCourseFollowed(courseData.id) ? '✓ Following' : 'Follow'}
             </button>
-            <div className="main-course-title" style={{ fontWeight: 700, fontSize: 32, marginBottom: 8, color: textPrimary }}>
-              {courseData.title}
+          </div>
+
+          {/* Creator & Rating */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 8,
+            marginBottom: 12,
+            color: textSecondary,
+            fontSize: 15
+          }}>
+            <span>by <span style={{ color: accentBlue, fontWeight: 500 }}>{instructorData?.name}</span></span>
+            <span>•</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ color: '#f5b50a' }}>★</span> 
+              {courseData.rating} 
+              <span style={{ color: textMuted }}>({Math.floor(courseData.students * 0.15).toLocaleString()} reviews)</span>
+            </span>
+          </div>
+
+          {/* Stats Row */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 20,
+            fontSize: 14,
+            color: textSecondary,
+            marginBottom: 16
+          }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              👥 <strong style={{ color: textPrimary }}>{courseData.students.toLocaleString()}</strong> learners
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              📊 <strong style={{ color: textPrimary }}>{courseData.level}</strong>
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              ⏱️ <strong style={{ color: textPrimary }}>{courseData.duration}</strong>
+            </span>
+          </div>
+
+          {/* Description Box */}
+          <div style={{ 
+            background: bgSecondary, 
+            borderRadius: 12, 
+            padding: '16px 20px',
+            border: `1px solid ${borderColor}`,
+            marginBottom: 20
+          }}>
+            <p style={{ 
+              margin: 0, 
+              color: textPrimary, 
+              fontSize: 15, 
+              lineHeight: 1.6 
+            }}>
+              {courseData.description}
+            </p>
+          </div>
+        </div>
+
+        {/* ===== CTA CARDS ===== */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '1fr 1fr', 
+          gap: 16,
+          marginBottom: 24
+        }}>
+          {/* Enroll Card */}
+          <div style={{ 
+            background: bgCard, 
+            borderRadius: 12, 
+            padding: 20,
+            border: `1px solid ${borderColor}`,
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: 32, fontWeight: 700, color: textPrimary, marginBottom: 4 }}>
+              {courseData.price}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 8 }}>
-              <span style={{ fontSize: 16, color: textSecondary }}>Created by {instructorData && instructorData.name}</span>
+            <div style={{ color: textMuted, fontSize: 13, marginBottom: 16 }}>
+              Full course access
             </div>
-            {/* Stats Row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, fontSize: 15, marginBottom: 10, color: textPrimary }}>
-              <span title="Rating" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span style={{ color: '#f5b50a', fontSize: 16 }}>★</span> {courseData.rating}</span>
-              <span title="Active Learners" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span role="img" aria-label="users">👥</span> {courseData.students.toLocaleString()} Active Learners</span>
-              <span title="Level" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span role="img" aria-label="level">📊</span> {courseData.level}</span>
-              <span title="Price" style={{ display: 'flex', alignItems: 'center', gap: 2 }}><span role="img" aria-label="money">💰</span> {courseData.price}</span>
+            <button style={{ 
+              width: '100%',
+              background: accentBlue, 
+              color: '#fff', 
+              fontWeight: 600, 
+              fontSize: 15, 
+              cursor: 'pointer', 
+              padding: '12px 24px', 
+              borderRadius: 8, 
+              border: 'none'
+            }}>
+              Enroll Now
+            </button>
+          </div>
+
+          {/* 1-on-1 Session Card */}
+          <div style={{ 
+            background: bgCard, 
+            borderRadius: 12, 
+            padding: 20,
+            border: `2px solid ${accentBlue}`,
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: 20, marginBottom: 4 }}>📅</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: textPrimary, marginBottom: 4 }}>
+              1-on-1 Session
             </div>
-            {/* Description */}
-            <div style={{ color: textPrimary, fontSize: 15, marginBottom: 14, textAlign: 'center' }}>{courseData.description}</div>
-            {/* Flywheel Benefits */}
-            <ul style={{ color: textPrimary, fontSize: 15, margin: '18px 0 0 0', paddingLeft: 0, textAlign: 'left', fontWeight: 400, lineHeight: 1.5, listStylePosition: 'inside' }}>
-              <li style={{ marginBottom: 2 }}>Earn: 70% commission when you become a Student-Teacher (e.g., earn $350 per $500 course you teach)</li>
-              <li style={{ marginBottom: 2 }}>1-on-1 Sessions: Learn directly from the Creator or certified Student-Teachers via live video</li>
-              <li style={{ marginBottom: 2 }}>Certify: Get certified, then teach others and earn while sharing your knowledge</li>
-              <li style={{ marginBottom: 2 }}>Outcomes: Proven 2x better results through peer tutoring (Bloom's 2 Sigma)</li>
-            </ul>
-            {/* Curriculum Outline */}
-            <div style={{ margin: '32px 0 0 0', textAlign: 'left', width: '100%', paddingLeft: 0 }}>
-              <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 12, color: textPrimary }}>Curriculum Outline</div>
-              {courseData.curriculum.map((module, idx) => (
-                <div key={idx} style={{ marginBottom: 10 }}>
-                  <div style={{ fontWeight: 600, fontSize: 15, display: 'inline-block', color: textPrimary }}>{module.title} <span style={{ fontWeight: 400, fontSize: 15, color: textMuted }}>({module.duration})</span></div>
-                  <div style={{ fontSize: 15, color: textPrimary, marginLeft: 2 }}>{module.description}</div>
-                </div>
-              ))}
+            <div style={{ color: textMuted, fontSize: 13, marginBottom: 16 }}>
+              Learn with a Student-Teacher
             </div>
-            {/* Creator Profile Teaser */}
-            <div style={{ margin: '18px 0', textAlign: 'center', background: bgSecondary, borderRadius: 10, padding: 16, border: isDarkMode ? `1px solid ${borderColor}` : 'none' }}>
-              <img src={instructorData?.avatar || ''} alt={instructorData?.name || 'Instructor'} style={{ width: 48, height: 48, borderRadius: '50%', marginBottom: 4 }} />
-              <div style={{ fontWeight: 600, fontSize: 15, color: textPrimary }}>{instructorData?.name || 'Unknown'}</div>
-              <div style={{ color: textMuted, fontSize: 13, marginBottom: 4 }}>{instructorData?.title || ''}</div>
-              <div style={{ color: textSecondary, fontSize: 13 }}>{instructorData?.bio || ''}</div>
+            <button style={{ 
+              width: '100%',
+              background: 'transparent', 
+              color: accentBlue, 
+              fontWeight: 600, 
+              fontSize: 15, 
+              cursor: 'pointer', 
+              padding: '12px 24px', 
+              borderRadius: 8, 
+              border: `2px solid ${accentBlue}`
+            }}>
+              Book Session
+            </button>
+          </div>
+        </div>
+
+        {/* ===== LEARN & EARN SECTION ===== */}
+        <div style={{ 
+          background: isDarkMode ? '#0c1825' : '#eff6ff', 
+          borderRadius: 12, 
+          padding: 24,
+          marginBottom: 24,
+          border: `1px solid ${isDarkMode ? '#1e3a5f' : '#bfdbfe'}`
+        }}>
+          <div style={{ 
+            fontSize: 16, 
+            fontWeight: 700, 
+            color: textPrimary, 
+            marginBottom: 16,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8
+          }}>
+            🎓 Learn & Earn Path
+          </div>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr auto 1fr auto 1fr', 
+            alignItems: 'center',
+            gap: 12
+          }}>
+            {/* Step 1 */}
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                background: accentBlue, 
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 8px',
+                fontSize: 20
+              }}>📚</div>
+              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 14 }}>Complete</div>
+              <div style={{ color: textMuted, fontSize: 12 }}>Finish the course</div>
             </div>
-            {/* Student-Teacher Stats */}
-            <div style={{ background: bgTertiary, border: '1px solid #1d9bf0', borderRadius: 8, padding: '12px 16px', marginBottom: 16, textAlign: 'center' }}>
-              <div style={{ color: '#1d9bf0', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-                🎓 {studentTeachers} Student-Teachers available to help you learn
-              </div>
-              <div style={{ color: isDarkMode ? '#00ba7c' : '#047857', fontSize: 13 }}>
-                Book 1-on-1 sessions with the Creator or certified peers
-              </div>
+            {/* Arrow */}
+            <div style={{ color: textMuted, fontSize: 20 }}>→</div>
+            {/* Step 2 */}
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                background: accentGreen, 
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 8px',
+                fontSize: 20
+              }}>✓</div>
+              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 14 }}>Get Certified</div>
+              <div style={{ color: textMuted, fontSize: 12 }}>Pass assessment</div>
             </div>
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '16px 0 18px 0', flexWrap: 'wrap' }}>
-              <button style={{ background: '#1d9bf0', color: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: '10px 20px', borderRadius: 8, border: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-                📅 Schedule Session
-              </button>
-              <button style={{ background: '#1d9bf0', color: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: '10px 20px', borderRadius: 8, border: 'none' }}>
-                Enroll Now - {courseData.price}
-              </button>
-              <span style={{ color: '#1d9bf0', fontWeight: 500, fontSize: 14, cursor: 'pointer', textDecoration: 'none', padding: '10px 0', background: 'none', border: 'none', lineHeight: '20px' }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Learn about teaching</span>
-            </div>
-            {/* Footer: Related Courses, Share Links */}
-            <div style={{ color: textMuted, fontSize: 13, textAlign: 'center', marginBottom: 10 }}>
-              Related Courses: {relatedCourses.map(rc => rc.title).join(' | ')}
-            </div>
-            <div style={{ color: '#1d9bf0', fontSize: 13, textAlign: 'center', marginBottom: 18 }}>
-              
+            {/* Arrow */}
+            <div style={{ color: textMuted, fontSize: 20 }}>→</div>
+            {/* Step 3 */}
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                background: '#f59e0b', 
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 8px',
+                fontSize: 20
+              }}>💰</div>
+              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 14 }}>Earn 70%</div>
+              <div style={{ color: textMuted, fontSize: 12 }}>Teach & earn</div>
             </div>
           </div>
         </div>
-        {/* End of Card Padding */}
-        <div style={{ height: 40 }} />
+
+        {/* ===== CURRICULUM ===== */}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: 16
+          }}>
+            <div style={{ 
+              fontSize: 16, 
+              fontWeight: 700, 
+              color: textPrimary,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8
+            }}>
+              📚 Curriculum 
+              <span style={{ 
+                background: isDarkMode ? '#2f3336' : '#e2e8f0', 
+                padding: '2px 8px', 
+                borderRadius: 12,
+                fontSize: 13,
+                fontWeight: 500,
+                color: textSecondary
+              }}>
+                {courseData.curriculum?.length || 0} modules
+              </span>
+            </div>
+          </div>
+          <div style={{ 
+            background: bgCard, 
+            borderRadius: 12, 
+            border: `1px solid ${borderColor}`,
+            overflow: 'hidden'
+          }}>
+            {courseData.curriculum?.map((module, idx) => (
+              <div 
+                key={idx} 
+                style={{ 
+                  padding: '14px 20px',
+                  borderBottom: idx < courseData.curriculum.length - 1 ? `1px solid ${borderColor}` : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <div style={{ fontWeight: 600, color: textPrimary, fontSize: 14, marginBottom: 2 }}>
+                    {module.title}
+                  </div>
+                  <div style={{ color: textMuted, fontSize: 13 }}>
+                    {module.description}
+                  </div>
+                </div>
+                <div style={{ 
+                  color: textSecondary, 
+                  fontSize: 13,
+                  flexShrink: 0,
+                  marginLeft: 16
+                }}>
+                  {module.duration}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ===== ABOUT CREATOR ===== */}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ 
+            fontSize: 16, 
+            fontWeight: 700, 
+            color: textPrimary,
+            marginBottom: 16,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8
+          }}>
+            👤 About the Creator
+          </div>
+          <div style={{ 
+            background: bgCard, 
+            borderRadius: 12, 
+            padding: 20,
+            border: `1px solid ${borderColor}`,
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 16
+          }}>
+            <div style={{ 
+              width: 56, 
+              height: 56, 
+              borderRadius: '50%', 
+              background: isDarkMode ? '#2f3336' : '#e2e8f0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: textPrimary,
+              fontWeight: 700,
+              fontSize: 18,
+              flexShrink: 0
+            }}>
+              {creatorInitials}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, color: textPrimary, fontSize: 16, marginBottom: 2 }}>
+                {instructorData?.name}
+              </div>
+              <div style={{ color: accentBlue, fontSize: 14, marginBottom: 8 }}>
+                {instructorData?.title}
+              </div>
+              <div style={{ color: textSecondary, fontSize: 14, lineHeight: 1.5, marginBottom: 12 }}>
+                {instructorData?.bio}
+              </div>
+              <div style={{ display: 'flex', gap: 16, color: textMuted, fontSize: 13 }}>
+                <span>{instructorData?.stats?.coursesCreated || 5} courses</span>
+                <span>{(instructorData?.stats?.studentsTaught || 10000).toLocaleString()} students</span>
+                <span>⭐ {instructorData?.stats?.averageRating || 4.8} avg rating</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     );
   };

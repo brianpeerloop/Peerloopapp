@@ -964,7 +964,22 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             color: textSecondary,
             fontSize: 15
           }}>
-            <span>by <span style={{ color: accentBlue, fontWeight: 500 }}>{instructorData?.name}</span></span>
+            <span>by <span 
+              onClick={() => {
+                const fullCreatorData = getInstructorWithCourses(courseData.instructorId);
+                setSelectedInstructor(fullCreatorData || instructorData);
+                setSelectedCourse(null);
+                setActiveTopMenu('instructors');
+              }}
+              style={{ 
+                color: accentBlue, 
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'opacity 0.15s'
+              }}
+              onMouseEnter={e => e.target.style.opacity = '0.7'}
+              onMouseLeave={e => e.target.style.opacity = '1'}
+            >{instructorData?.name}</span></span>
             <span>•</span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <span style={{ color: '#f5b50a' }}>★</span> 
@@ -1457,12 +1472,29 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                 <div className="courses-section">
                   {selectedCourse ? (
                     <div className="course-detail-view">
-                      <button 
-                        className="back-btn"
-                        onClick={() => setSelectedCourse(null)}
-                      >
-                        ← Back to Courses
-                      </button>
+                      <div style={{
+                        position: 'sticky',
+                        top: 0,
+                        background: isDarkMode ? '#000' : '#fff',
+                        padding: '12px 0',
+                        zIndex: 10,
+                        borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0'
+                      }}>
+                        <span 
+                          onClick={() => setSelectedCourse(null)}
+                          style={{
+                            color: '#1d9bf0',
+                            fontWeight: 500,
+                            fontSize: 14,
+                            cursor: 'pointer',
+                            transition: 'opacity 0.15s'
+                          }}
+                          onMouseEnter={e => e.target.style.opacity = '0.7'}
+                          onMouseLeave={e => e.target.style.opacity = '1'}
+                        >
+                          ← Back to Courses
+                        </span>
+                      </div>
                       {renderCourseDetail()}
                     </div>
                   ) : (

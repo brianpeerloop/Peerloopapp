@@ -1,120 +1,70 @@
 import React, { useState } from 'react';
 import './Profile.css';
+import { 
+  FaUserEdit, 
+  FaBookmark, 
+  FaHistory, 
+  FaCog, 
+  FaShieldAlt, 
+  FaQuestionCircle, 
+  FaSignOutAlt,
+  FaCamera,
+  FaEdit,
+  FaSave,
+  FaTimes,
+  FaGraduationCap,
+  FaTrophy,
+  FaCalendar,
+  FaClock,
+  FaStar
+} from 'react-icons/fa';
 
 const Profile = ({ currentUser, onSwitchUser, onMenuChange }) => {
+  const [activeSection, setActiveSection] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
-  
-  // Get user initials for avatar
-  const getUserInitials = () => {
-    if (!currentUser?.name) return 'AS';
-    return currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-  };
-  
   const [profileData, setProfileData] = useState({
-    name: currentUser?.name || 'Alex Sanders',
-    handle: currentUser?.username || '@alexsanders',
-    email: `${(currentUser?.name || 'alex').toLowerCase().replace(/\s+/g, '.')}@peerloop.com`,
-    bio: currentUser?.bio || 'Lifelong learner passionate about education.',
-    location: currentUser?.location || 'San Francisco, CA',
-    website: currentUser?.website || 'https://peerloop.com'
+    name: 'Albert Einstein',
+    handle: '@alberteinstein',
+    email: 'albert.einstein@physics.edu',
+    bio: 'Theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. Nobel Prize laureate in Physics for his explanation of the photoelectric effect.',
+    location: 'Princeton, NJ',
+    website: 'https://einstein-archive.org',
+    avatar: 'https://via.placeholder.com/120x120/FFD700/000000?text=AE'
   });
 
-  // Render back button header
-  const renderHeader = () => (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '12px 16px',
-      borderBottom: '1px solid var(--border-color, #2f3336)',
-      position: 'sticky',
-      top: 0,
-      background: 'var(--bg-primary, #000)',
-      zIndex: 10
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+  const profileSections = [
+    { id: 'overview', label: 'Overview', icon: <FaUserEdit /> },
+    { id: 'bookmarks', label: 'Bookmarks', icon: <FaBookmark /> },
+    { id: 'history', label: 'History', icon: <FaHistory /> },
+    { id: 'settings', label: 'Settings', icon: <FaCog /> },
+    { id: 'privacy', label: 'Privacy & Security', icon: <FaShieldAlt /> },
+    { id: 'help', label: 'Help & Support', icon: <FaQuestionCircle /> }
+  ];
+
+  // Render horizontal tab bar with Edit Profile button
+  const renderTabBar = () => (
+    <div className="profile-tab-bar">
+      {profileSections.map(section => (
         <button
-          onClick={() => onMenuChange('My Community')}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-primary, #e7e9ea)',
-            fontSize: 20,
-            cursor: 'pointer',
-            padding: 8,
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'none'}
-          title="Go back"
+          key={section.id}
+          className={`profile-tab-item${activeSection === section.id ? ' active' : ''}`}
+          onClick={() => setActiveSection(section.id)}
         >
-          ←
+          <span className="tab-icon">{section.icon}</span>
+          <span>{section.label}</span>
         </button>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: 'var(--text-primary, #e7e9ea)' }}>
-            {profileData.name}
-          </h1>
-          <p style={{ margin: 0, fontSize: 13, color: 'var(--text-secondary, #71767b)' }}>
-            {currentUser?.stats?.coursesCompleted || 12} courses completed
-          </p>
-        </div>
-      </div>
-      
-      {/* Edit Profile Button */}
+      ))}
+      {/* Edit Profile button in tab bar */}
       {!isEditing ? (
-        <button
-          onClick={() => setIsEditing(true)}
-          style={{
-            background: 'transparent',
-            border: '1px solid var(--border-color, #536471)',
-            color: 'var(--text-primary, #e7e9ea)',
-            padding: '8px 16px',
-            borderRadius: 20,
-            fontWeight: 600,
-            fontSize: 14,
-            cursor: 'pointer'
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-        >
-          Edit profile
+        <button className="profile-tab-item edit-profile-tab-btn" onClick={() => setIsEditing(true)} title="Edit Profile">
+          <FaEdit style={{marginRight: 4}} />
+          <span className="hide-on-narrow">Edit</span>
         </button>
       ) : (
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button
-            onClick={handleSave}
-            style={{
-              background: '#1d9bf0',
-              border: 'none',
-              color: '#fff',
-              padding: '8px 16px',
-              borderRadius: 20,
-              fontWeight: 600,
-              fontSize: 14,
-              cursor: 'pointer'
-            }}
-          >
-            Save
-          </button>
-          <button
-            onClick={handleCancel}
-            style={{
-              background: 'transparent',
-              border: '1px solid var(--border-color, #536471)',
-              color: 'var(--text-primary, #e7e9ea)',
-              padding: '8px 16px',
-              borderRadius: 20,
-              fontWeight: 600,
-              fontSize: 14,
-              cursor: 'pointer'
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+        <span className="edit-actions-inline">
+          <button className="save-btn small" onClick={handleSave} title="Save"><FaSave /></button>
+          <button className="cancel-btn small" onClick={handleCancel} title="Cancel"><FaTimes /></button>
+        </span>
       )}
     </div>
   );
@@ -130,66 +80,38 @@ const Profile = ({ currentUser, onSwitchUser, onMenuChange }) => {
     // Reset to original data
   };
 
+  // Add a switch user button and creator profile link at the bottom
+  const renderSwitchUserButton = () => (
+    <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+      <button onClick={onSwitchUser} style={{ background: '#444', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.7rem 2rem', fontSize: '1.1rem', cursor: 'pointer', marginRight: '1rem' }}>
+        Switch User
+      </button>
+      {currentUser.roles.includes('creator') && (
+        <button 
+          onClick={() => onMenuChange('CreatorProfile')} 
+          style={{ 
+            background: '#4A90E2', 
+            color: '#fff', 
+            border: 'none', 
+            borderRadius: '4px', 
+            padding: '0.7rem 2rem', 
+            fontSize: '1.1rem', 
+            cursor: 'pointer',
+            fontWeight: '600'
+          }}
+        >
+          Creator Studio
+        </button>
+      )}
+      <div style={{ marginTop: '0.5rem', color: '#888', fontSize: '0.95rem' }}>
+        Current: <strong>{currentUser.name}</strong> ({currentUser.roles.join(', ')})
+      </div>
+    </div>
+  );
 
   const renderOverview = () => (
     <div className="profile-overview">
-      {/* Profile Header Banner - X.com Style */}
-      <div style={{
-        background: 'linear-gradient(135deg, #1d9bf0 0%, #0284c7 100%)',
-        height: 150,
-        borderRadius: '16px 16px 0 0',
-        marginBottom: -60,
-        position: 'relative'
-      }} />
-      
-      {/* Avatar and Basic Info */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20, padding: '0 24px', marginBottom: 20 }}>
-        {/* Large Avatar */}
-        <div style={{
-          width: 120,
-          height: 120,
-          borderRadius: '50%',
-          background: '#1d9bf0',
-          border: '4px solid var(--bg-primary, #fff)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#fff',
-          fontSize: 40,
-          fontWeight: 700,
-          flexShrink: 0,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-        }}>
-          {getUserInitials()}
-        </div>
-        
-        {/* Name and Handle */}
-        <div style={{ flex: 1, paddingBottom: 8 }}>
-          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: 'var(--text-primary, #0f172a)' }}>
-            {profileData.name}
-          </h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--text-secondary, #64748b)', fontSize: 15 }}>
-            {profileData.handle}
-          </p>
-          <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-            {currentUser?.roles?.map(role => (
-              <span key={role} style={{
-                background: role === 'teacher' ? '#10b981' : role === 'student' ? '#1d9bf0' : role === 'creator' ? '#8b5cf6' : '#f59e0b',
-                color: '#fff',
-                padding: '4px 12px',
-                borderRadius: 20,
-                fontSize: 12,
-                fontWeight: 600,
-                textTransform: 'capitalize'
-              }}>
-                {role}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="profile-details" style={{ padding: '0 24px' }}>
+      <div className="profile-details">
         {isEditing ? (
           <div className="edit-form">
             <div className="form-group">
@@ -206,6 +128,14 @@ const Profile = ({ currentUser, onSwitchUser, onMenuChange }) => {
                 type="text" 
                 value={profileData.handle}
                 onChange={(e) => setProfileData({...profileData, handle: e.target.value})}
+              />
+            </div>
+            <div className="form-group">
+              <label>Email</label>
+              <input 
+                type="email" 
+                value={profileData.email}
+                onChange={(e) => setProfileData({...profileData, email: e.target.value})}
               />
             </div>
             <div className="form-group">
@@ -235,137 +165,235 @@ const Profile = ({ currentUser, onSwitchUser, onMenuChange }) => {
           </div>
         ) : (
           <div className="profile-info-display">
-            <p className="profile-bio" style={{ fontSize: 15, lineHeight: 1.5, color: 'var(--text-primary, #334155)', marginBottom: 16 }}>
-              {profileData.bio}
-            </p>
-            
-            <div className="profile-meta" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 16, color: 'var(--text-secondary, #64748b)', fontSize: 14 }}>
-              <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                📍 {profileData.location}
+            <h2>{profileData.name}</h2>
+            <p className="profile-handle">{profileData.handle}</p>
+            <p className="profile-bio">{profileData.bio}</p>
+            <div className="profile-meta">
+              <div className="meta-item">
+                <FaCalendar />
+                <span>Joined January 2023</span>
               </div>
-              <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                🔗 <a href={profileData.website} target="_blank" rel="noopener noreferrer" style={{ color: '#1d9bf0' }}>{profileData.website}</a>
-              </div>
-              <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                📅 Joined {currentUser?.joinedDate || 'March 2024'}
+              <div className="meta-item">
+                <FaClock />
+                <span>Last active 2 hours ago</span>
               </div>
             </div>
-
-            {/* Stats Grid */}
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', 
-              gap: 16, 
-              marginBottom: 24,
-              padding: 16,
-              background: 'var(--bg-secondary, #f8fafc)',
-              borderRadius: 12
-            }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#1d9bf0' }}>{currentUser?.stats?.coursesCompleted || 12}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary, #64748b)' }}>Courses Done</div>
+            <div className="profile-links">
+              <div className="link-item">
+                <strong>Email:</strong> {profileData.email}
               </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#10b981' }}>{currentUser?.stats?.coursesTeaching || 3}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary, #64748b)' }}>Teaching</div>
+              <div className="link-item">
+                <strong>Location:</strong> {profileData.location}
               </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#f59e0b' }}>{currentUser?.stats?.studentsHelped || 47}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary, #64748b)' }}>Students Helped</div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#8b5cf6' }}>{currentUser?.stats?.hoursLearned || 156}h</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary, #64748b)' }}>Hours Learned</div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#ec4899' }}>⭐ {currentUser?.stats?.avgRating || 4.9}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary, #64748b)' }}>Avg Rating</div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 700, color: '#14b8a6' }}>${currentUser?.stats?.totalEarnings?.toLocaleString() || '2,340'}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary, #64748b)' }}>Earned</div>
+              <div className="link-item">
+                <strong>Website:</strong> <a href={profileData.website} target="_blank" rel="noopener noreferrer">{profileData.website}</a>
               </div>
             </div>
-
-            {/* Expertise Tags */}
-            {currentUser?.expertise && (
-              <div style={{ marginBottom: 24 }}>
-                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: 'var(--text-primary, #0f172a)' }}>Expertise</h3>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {currentUser.expertise.map(skill => (
-                    <span key={skill} style={{
-                      background: 'var(--bg-secondary, #e2e8f0)',
-                      color: 'var(--text-primary, #475569)',
-                      padding: '6px 14px',
-                      borderRadius: 20,
-                      fontSize: 13,
-                      fontWeight: 500
-                    }}>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Currently Learning */}
-            {currentUser?.currentlyLearning && (
-              <div style={{ marginBottom: 24 }}>
-                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: 'var(--text-primary, #0f172a)' }}>📚 Currently Learning</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {currentUser.currentlyLearning.map(course => (
-                    <div key={course} style={{
-                      background: 'var(--bg-secondary, #f0f9ff)',
-                      border: '1px solid #bae6fd',
-                      padding: '12px 16px',
-                      borderRadius: 8,
-                      fontSize: 14,
-                      color: '#0369a1'
-                    }}>
-                      {course}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Achievements */}
-            {currentUser?.achievements && (
-              <div style={{ marginBottom: 24 }}>
-                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: 'var(--text-primary, #0f172a)' }}>🏆 Achievements</h3>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-                  {currentUser.achievements.map(achievement => (
-                    <div key={achievement.id} style={{
-                      background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-                      border: '1px solid #fbbf24',
-                      padding: '12px 16px',
-                      borderRadius: 12,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      minWidth: 200
-                    }}>
-                      <span style={{ fontSize: 24 }}>{achievement.icon}</span>
-                      <div>
-                        <div style={{ fontWeight: 600, fontSize: 14, color: '#92400e' }}>{achievement.name}</div>
-                        <div style={{ fontSize: 12, color: '#a16207' }}>{achievement.description}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         )}
+      </div>
+      {/* Avatar at the bottom (temporarily removed for debugging) */}
+      {/* Stats row at the bottom */}
+      <div className="profile-stats-inline" style={{marginTop: 8}}>
+        <span><FaGraduationCap style={{marginRight: 4}}/> 12 Content Created</span>
+        <span style={{marginLeft: 18}}><FaTrophy style={{marginRight: 4}}/> 2,500 Students</span>
+        <span style={{marginLeft: 18}}><FaStar style={{marginRight: 4}}/> 4.9 Rating</span>
+      </div>
+      {renderSwitchUserButton()}
+    </div>
+  );
+
+  const renderBookmarks = () => (
+    <div className="bookmarks-section">
+      <h2>Bookmarked Content</h2>
+      <div className="bookmarks-grid">
+        <div className="bookmark-item">
+          <div className="bookmark-content">
+            <h3>Advanced React Patterns</h3>
+            <p>Bookmarked on March 15, 2024</p>
+            <div className="bookmark-meta">
+              <span className="course-type">Course</span>
+              <span className="bookmark-time">2 hours ago</span>
+            </div>
+          </div>
+        </div>
+        <div className="bookmark-item">
+          <div className="bookmark-content">
+            <h3>UI/UX Design Principles</h3>
+            <p>Bookmarked on March 10, 2024</p>
+            <div className="bookmark-meta">
+              <span className="course-type">Course</span>
+              <span className="bookmark-time">5 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div className="bookmark-item">
+          <div className="bookmark-content">
+            <h3>JavaScript Best Practices</h3>
+            <p>Bookmarked on March 5, 2024</p>
+            <div className="bookmark-meta">
+              <span className="course-type">Article</span>
+              <span className="bookmark-time">1 week ago</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 
+
+
+  const renderHistory = () => (
+    <div className="history-section">
+      <h2>Learning History</h2>
+      <div className="history-timeline">
+        <div className="history-item">
+          <div className="history-date">March 15, 2024</div>
+          <div className="history-content">
+            <h3>Completed: Advanced React Patterns</h3>
+            <p>Finished all modules and received certificate</p>
+            <div className="history-meta">
+              <span className="completion-time">15 hours</span>
+              <span className="grade">Grade: A+</span>
+            </div>
+          </div>
+        </div>
+        <div className="history-item">
+          <div className="history-date">March 10, 2024</div>
+          <div className="history-content">
+            <h3>Completed: UI/UX Design Masterclass</h3>
+            <p>Finished all modules and received certificate</p>
+            <div className="history-meta">
+              <span className="completion-time">12 hours</span>
+              <span className="grade">Grade: A</span>
+            </div>
+          </div>
+        </div>
+        <div className="history-item">
+          <div className="history-date">March 5, 2024</div>
+          <div className="history-content">
+            <h3>Started: JavaScript Deep Dive</h3>
+            <p>Progress: 60% complete</p>
+            <div className="history-meta">
+              <span className="completion-time">10.8 hours</span>
+              <span className="progress">Progress: 60%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSettings = () => (
+    <div className="settings-section">
+      <h2>Account Settings</h2>
+      <div className="settings-grid">
+        <div className="setting-group">
+          <h3>Notifications</h3>
+          <div className="setting-item">
+            <span>Email notifications</span>
+            <input type="checkbox" defaultChecked />
+          </div>
+          <div className="setting-item">
+            <span>Push notifications</span>
+            <input type="checkbox" defaultChecked />
+          </div>
+          <div className="setting-item">
+            <span>Course updates</span>
+            <input type="checkbox" />
+          </div>
+        </div>
+        
+        <div className="setting-group">
+          <h3>Display</h3>
+          <div className="setting-item">
+            <span>Dark mode</span>
+            <input type="checkbox" defaultChecked />
+          </div>
+          <div className="setting-item">
+            <span>Show progress bars</span>
+            <input type="checkbox" defaultChecked />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPrivacy = () => (
+    <div className="privacy-section">
+      <h2>Privacy & Security</h2>
+      <div className="privacy-options">
+        <div className="privacy-item">
+          <h3>Profile Visibility</h3>
+          <select defaultValue="public">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="friends">Friends Only</option>
+          </select>
+        </div>
+        
+        <div className="privacy-item">
+          <h3>Two-Factor Authentication</h3>
+          <button className="enable-2fa-btn">Enable 2FA</button>
+        </div>
+        
+        <div className="privacy-item">
+          <h3>Password</h3>
+          <button className="change-password-btn">Change Password</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderHelp = () => (
+    <div className="help-section">
+      <h2>Help & Support</h2>
+      <div className="help-options">
+        <div className="help-item">
+          <h3>FAQ</h3>
+          <p>Find answers to common questions</p>
+          <button className="help-btn">Browse FAQ</button>
+        </div>
+        
+        <div className="help-item">
+          <h3>Contact Support</h3>
+          <p>Get help from our support team</p>
+          <button className="help-btn">Contact Us</button>
+        </div>
+        
+        <div className="help-item">
+          <h3>Documentation</h3>
+          <p>Read our detailed documentation</p>
+          <button className="help-btn">View Docs</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'overview':
+        return renderOverview();
+      case 'bookmarks':
+        return renderBookmarks();
+      case 'history':
+        return renderHistory();
+      case 'settings':
+        return renderSettings();
+      case 'privacy':
+        return renderPrivacy();
+      case 'help':
+        return renderHelp();
+      default:
+        return renderOverview();
+    }
+  };
+
   return (
-    <div className="profile" style={{ background: 'var(--bg-primary, #000)', minHeight: '100vh' }}>
-      {renderHeader()}
-      <div className="profile-main" style={{ padding: 0 }}>
-        {renderOverview()}
+    <div className="profile">
+      {renderTabBar()}
+      <div className="profile-main">
+        {renderContent()}
       </div>
     </div>
   );

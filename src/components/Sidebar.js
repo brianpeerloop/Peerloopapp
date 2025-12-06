@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './Sidebar.css';
 import { 
@@ -36,19 +36,36 @@ import { UserPropType } from './PropTypes';
  * @param {string} activeMenu - The currently active menu item
  */
 const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDarkMode }) => {
-  // Track which tooltip is visible (by index) and a click counter to restart animation
-  const [tooltipState, setTooltipState] = useState({ index: null, clickId: 0 });
+  // Track which tooltip is visible (by index)
+  const [visibleTooltip, setVisibleTooltip] = useState(null);
+  const timerRef = useRef(null);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   /**
-   * Shows tooltip with CSS animation that auto-hides after 5 seconds
+   * Shows tooltip for 5 seconds then hides it
    * @param {number} index - The index of the menu item
    */
   const showTooltipTemporarily = (index) => {
-    // Increment clickId to force animation restart even if same item clicked
-    setTooltipState(prev => ({ 
-      index, 
-      clickId: prev.clickId + 1 
-    }));
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    
+    // Show the tooltip
+    setVisibleTooltip(index);
+    
+    // Hide after half a second
+    timerRef.current = setTimeout(() => {
+      setVisibleTooltip(null);
+    }, 500);
   };
 
   /**
@@ -154,15 +171,10 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDark
             <div className="nav-icon">{item.icon}</div>
             {/* Use displayLabel if available, otherwise use label */}
             <span className="nav-label">{item.displayLabel || item.label}</span>
-            {/* Tooltip for collapsed sidebar - shown on click for 5 seconds via CSS animation */}
-            {tooltipState.index === index && (
-              <span 
-                key={tooltipState.clickId} 
-                className="nav-tooltip tooltip-visible"
-              >
-                {item.displayLabel || item.label}
-              </span>
-            )}
+            {/* Tooltip for collapsed sidebar - shown on click for 5 seconds */}
+            <span className={`nav-tooltip ${visibleTooltip === index ? 'tooltip-visible' : ''}`}>
+              {item.displayLabel || item.label}
+            </span>
           </div>
         ))}
       </nav>

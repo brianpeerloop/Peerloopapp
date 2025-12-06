@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import './Dashboard.css';
 import { FaChevronLeft, FaChevronRight, FaVideo } from 'react-icons/fa';
 import { coursesDatabase, getInstructorById } from '../data/database';
+import ActivityFeed from './ActivityFeed';
 
-const Dashboard = ({ isDarkMode }) => {
+const Dashboard = ({ isDarkMode, currentUser }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const today = new Date();
 
@@ -255,7 +256,8 @@ const Dashboard = ({ isDarkMode }) => {
     <div className={`dashboard-container ${isDarkMode ? 'dark' : ''}`}>
       {/* Header */}
       <div className="dashboard-header">
-        <h1>Dashboard</h1>
+        <h1>Welcome back, {currentUser?.name?.split(' ')[0] || 'Learner'}! 👋</h1>
+        <p className="dashboard-subtitle">Here's what's happening in your learning journey</p>
       </div>
 
       {/* Minimalist Stats Bar */}
@@ -364,6 +366,15 @@ const Dashboard = ({ isDarkMode }) => {
         ))}
 
         <button className="show-more-btn">Show More Sessions...</button>
+      </div>
+
+      {/* Activity Feed */}
+      <div className="dashboard-activity-section">
+        <ActivityFeed 
+          currentUser={currentUser} 
+          feedType="following" 
+          title="Community Activity"
+        />
       </div>
     </div>
   );

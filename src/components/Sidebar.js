@@ -35,7 +35,7 @@ import { UserPropType } from './PropTypes';
  * @param {Function} onMenuChange - Callback function to handle menu item clicks
  * @param {string} activeMenu - The currently active menu item
  */
-const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDarkMode }) => {
+const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDarkMode, onLogout }) => {
   // Track which tooltip is visible (by index)
   const [visibleTooltip, setVisibleTooltip] = useState(null);
   const timerRef = useRef(null);
@@ -109,8 +109,16 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDark
    * @param {string} action - The action to perform
    */
   const handleProfileMenuAction = (action) => {
-    onMenuChange('Profile');
-    // Here you can add specific actions for each menu item
+    if (action === 'signout') {
+      // Handle logout/switch user
+      if (onLogout) {
+        onLogout();
+      }
+    } else if (action === 'settings') {
+      onMenuChange('Settings');
+    } else {
+      onMenuChange('Profile');
+    }
   };
 
   /**

@@ -6,6 +6,8 @@ import CreatorSidebar from './components/CreatorSidebar';
 import MainContent from './components/MainContent';
 import ErrorBoundary from './components/ErrorBoundary';
 import useDeviceDetect from './hooks/useDeviceDetect';
+import Login from './components/Login';
+import { supabase, getProfile } from './services/supabase';
 
 /**
  * Main Application Component
@@ -17,6 +19,88 @@ import useDeviceDetect from './hooks/useDeviceDetect';
 function App() {
   // Device detection hook
   const device = useDeviceDetect();
+
+  // Authentication state
+  const [session, setSession] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  // Check for existing session on mount
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user) {
+        loadUserProfile(session.user);
+      }
+      setAuthLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session);
+        if (session?.user) {
+          loadUserProfile(session.user);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Load user profile from database
+  const loadUserProfile = async (user) => {
+    const { data: profile } = await getProfile(user.id);
+    if (profile) {
+      setCurrentUser({
+        id: user.id,
+        name: profile.full_name || user.email,
+        username: '@' + (profile.username || user.email.split('@')[0]),
+        roles: profile.user_type === 'creator' ? ['creator', 'instructor'] : 
+               profile.user_type === 'student_teacher' ? ['student', 'teacher'] : 
+               ['student'],
+        avatar: profile.avatar_url,
+        bio: profile.bio || '',
+        userType: profile.user_type
+      });
+    }
+  };
+
+  // Handle successful login (real auth)
+  const handleLoginSuccess = (user) => {
+    loadUserProfile(user);
+  };
+
+  // Handle demo login (skip auth, use mock user)
+  const handleDemoLogin = (demoUser) => {
+    setCurrentUser({
+      id: demoUser.id,
+      name: demoUser.name,
+      username: demoUser.username,
+      roles: demoUser.roles,
+      avatar: demoUser.avatar,
+      bio: demoUser.bio,
+      userType: demoUser.userType,
+      location: demoUser.location,
+      stats: demoUser.stats,
+      isDemo: true // Flag to know this is a demo user
+    });
+    // Set a fake session to bypass login screen
+    setSession({ user: { id: demoUser.id, email: demoUser.email }, isDemo: true });
+  };
+
+  // Handle logout / switch user
+  const handleLogout = async () => {
+    if (session?.isDemo) {
+      // Demo mode - just clear session
+      setSession(null);
+      setCurrentUser(userA); // Reset to default
+    } else {
+      // Real auth - sign out from Supabase
+      await supabase.auth.signOut();
+      setSession(null);
+    }
+  };
 
   // Global state for tracking which menu item is currently active
   // This determines what content is displayed in the main area
@@ -161,6 +245,28 @@ function App() {
     setCurrentUser(currentUser.id === userA.id ? userB : userA);
   };
 
+  // Show loading spinner while checking auth
+  if (authLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        fontSize: '20px'
+      }}>
+        Loading...
+      </div>
+    );
+  }
+
+  // Show login if not authenticated
+  if (!session) {
+    return <Login onLoginSuccess={handleLoginSuccess} onDemoLogin={handleDemoLogin} />;
+  }
+
   return (
     <ErrorBoundary>
       <div className={`app ${isDarkMode ? 'dark-mode' : ''} ${device.deviceType}`}>
@@ -183,6 +289,7 @@ function App() {
             isDarkMode={isDarkMode}
             toggleDarkMode={toggleDarkMode}
             device={device}
+            onLogout={handleLogout}
           />
         )}
         

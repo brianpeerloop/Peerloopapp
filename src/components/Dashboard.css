@@ -30,6 +30,23 @@
   color: var(--text-primary, #0f1419);
 }
 
+.dashboard-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: var(--text-secondary, #536471);
+}
+
+/* Activity Section */
+.dashboard-activity-section {
+  padding: 20px;
+  border-top: 1px solid var(--border-color, #eff3f4);
+  margin-top: 20px;
+}
+
+.dark .dashboard-activity-section {
+  border-color: #2f3336;
+}
+
 /* Stats Bar - X.com style ultra minimalist inline text */
 .dashboard-container .stats-bar {
   display: flex;

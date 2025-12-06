@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Community.css';
 import { FaUsers, FaStar, FaClock, FaPlay, FaBook, FaGraduationCap, FaHome, FaChevronLeft, FaChevronRight, FaHeart, FaComment, FaRetweet, FaBookmark, FaShare, FaChevronDown, FaInfoCircle } from 'react-icons/fa';
 import { getAllCourses, getInstructorById, getCourseById } from '../data/database';
+import { createPost, getPosts, likePost } from '../services/posts';
+import { initGetStream } from '../services/getstream';
 
 const Community = ({ followedCommunities = [], setFollowedCommunities = null, isDarkMode = false, currentUser = null, onMenuChange = null, onViewUserProfile = null, onViewCourse = null }) => {
   const [selectedCommunity, setSelectedCommunity] = useState(null);
@@ -11,17 +13,76 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [openCreatorDropdown, setOpenCreatorDropdown] = useState(null); // Track which creator dropdown is open
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, useRight: false }); // Track dropdown position
   const [selectedCourseFilters, setSelectedCourseFilters] = useState([]); // Filter to specific courses within creator (multi-select)
   const [newPostText, setNewPostText] = useState(''); // Text for new post
   const [isComposerFocused, setIsComposerFocused] = useState(false); // Track if composer is focused
   const [postAudience, setPostAudience] = useState('everyone'); // 'everyone' or creator id
   const [showAudienceDropdown, setShowAudienceDropdown] = useState(false); // Track audience dropdown visibility
   const [showInfoTooltip, setShowInfoTooltip] = useState(null); // Track which info tooltip is visible
+  const [realPosts, setRealPosts] = useState([]); // Posts from Supabase
+  const [isPosting, setIsPosting] = useState(false); // Loading state for posting
+  const [postError, setPostError] = useState(null); // Error state for posting
+
+  // Initialize GetStream and load posts on mount
+  useEffect(() => {
+    const init = async () => {
+      // Initialize GetStream for current user
+      if (currentUser?.id) {
+        await initGetStream(currentUser.id);
+      }
+      // Load posts from Supabase
+      const result = await getPosts();
+      if (result.success) {
+        setRealPosts(result.posts);
+      }
+    };
+    init();
+  }, [currentUser?.id]);
+
+  // Handle posting a new message
+  const handleSubmitPost = async () => {
+    if (!newPostText.trim() || isPosting) return;
+    
+    setIsPosting(true);
+    setPostError(null);
+    
+    const result = await createPost(
+      currentUser?.id || 'anonymous',
+      currentUser?.name || 'Anonymous User',
+      newPostText.trim(),
+      postAudience
+    );
+    
+    if (result.success) {
+      // Add new post to the top of the list
+      setRealPosts(prev => [result.post, ...prev]);
+      setNewPostText('');
+      setIsComposerFocused(false);
+      console.log('✅ Post created successfully!');
+    } else {
+      setPostError(result.error || 'Failed to create post');
+      console.error('❌ Post failed:', result.error);
+    }
+    
+    setIsPosting(false);
+  };
   
   // Get user initials from currentUser name
   const getUserInitials = () => {
     if (!currentUser?.name) return 'AS';
     return currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  };
+
+  // Format timestamp for display
+  const formatTimeAgo = (timestamp) => {
+    if (!timestamp) return 'just now';
+    const seconds = Math.floor((new Date() - new Date(timestamp)) / 1000);
+    if (seconds < 60) return 'just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`;
+    return new Date(timestamp).toLocaleDateString();
   };
   
   // Handle clicking on user avatar to go to profile
@@ -616,34 +677,69 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
 
   // Filter posts based on active tab - memoized for performance
   const displayedPosts = React.useMemo(() => {
-    let filteredPosts;
+    // Convert real posts from Supabase to display format FIRST
+    const formattedRealPosts = realPosts.map(post => ({
+      id: `real-${post.id}`,
+      courseId: null,
+      author: post.user_name,
+      authorHandle: `@${post.user_name.toLowerCase().replace(/\s/g, '')}`,
+      content: post.content,
+      timestamp: formatTimeAgo(post.created_at),
+      likes: post.likes || 0,
+      replies: post.comments || 0,
+      retweets: post.shares || 0,
+      community: post.audience === 'everyone' ? 'Everyone' : post.audience,
+      isRealPost: true,
+      supabaseId: post.id
+    }));
+
+    let filteredFakePosts;
     
     // Get all followed course IDs from grouped creators
     const allFollowedCourseIds = groupedByCreator.flatMap(c => c.followedCourseIds);
     
     if (activeTab === 'Home') {
       // Home tab: Show all posts from followed courses
-      filteredPosts = fakePosts.filter(post => allFollowedCourseIds.includes(post.courseId));
+      filteredFakePosts = fakePosts.filter(post => allFollowedCourseIds.includes(post.courseId));
     } else {
       // Specific creator tab: Filter based on that creator's followed courses
       const activeCreator = groupedByCreator.find(c => c.id === activeTab);
       if (activeCreator) {
         if (selectedCourseFilters.length > 0) {
           // Filter to selected courses only
-          filteredPosts = fakePosts.filter(post => selectedCourseFilters.includes(post.courseId));
+          filteredFakePosts = fakePosts.filter(post => selectedCourseFilters.includes(post.courseId));
         } else {
           // No filter selected - show all posts from this creator's followed courses
-          filteredPosts = fakePosts.filter(post => 
+          filteredFakePosts = fakePosts.filter(post => 
             activeCreator.followedCourseIds.includes(post.courseId)
           );
         }
       } else {
-        filteredPosts = [];
+        filteredFakePosts = [];
       }
     }
     
-    // Sort by engagement (likes + replies) and recency for algorithmic feel
-    return filteredPosts.sort((a, b) => {
+    // ALWAYS show real posts first, then filtered fake posts
+    // Real posts appear regardless of followed communities
+    const combinedPosts = [...formattedRealPosts, ...filteredFakePosts];
+    
+    // If on Home tab and no communities followed, still show real posts
+    if (activeTab === 'Home' && combinedPosts.length === 0) {
+      return formattedRealPosts;
+    }
+    
+    // Sort: Real posts first (by time), then fake posts by engagement
+    return combinedPosts.sort((a, b) => {
+      // Real posts always come first
+      if (a.isRealPost && !b.isRealPost) return -1;
+      if (!a.isRealPost && b.isRealPost) return 1;
+      
+      // Among real posts, sort by most recent
+      if (a.isRealPost && b.isRealPost) {
+        return 0; // Keep original order (already sorted by created_at desc from Supabase)
+      }
+      
+      // Among fake posts, sort by engagement
       const engagementA = a.likes + (a.replies * 10);
       const engagementB = b.likes + (b.replies * 10);
       const timeA = a.timestamp.includes('hour') ? parseInt(a.timestamp) : 
@@ -655,7 +751,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
       // Combine engagement and recency (recent + high engagement first)
       return (engagementB / (timeB + 1)) - (engagementA / (timeA + 1));
     });
-  }, [activeTab, groupedByCreator, selectedCourseFilters]);
+  }, [activeTab, groupedByCreator, selectedCourseFilters, realPosts]);
 
   if (selectedCommunity) {
     // Get posts for this community
@@ -869,11 +965,41 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     >
                       <span>{creator.name.length > 15 ? creator.name.substring(0, 13) + '...' : creator.name}</span>
                       <span 
-                        style={{ fontSize: 10, marginLeft: 4, padding: '4px' }}
+                        style={{ fontSize: 10, marginLeft: 4, padding: '4px', cursor: 'pointer' }}
                         onClick={(e) => {
                           e.stopPropagation();
                           // Toggle dropdown only when clicking the arrow
-                          setOpenCreatorDropdown(openCreatorDropdown === creator.id ? null : creator.id);
+                          if (openCreatorDropdown === creator.id) {
+                            setOpenCreatorDropdown(null);
+                          } else {
+                            // Calculate position based on the button
+                            const button = e.target.closest('.community-tab-btn');
+                            if (button) {
+                              const rect = button.getBoundingClientRect();
+                              const dropdownWidth = 280; // Max dropdown width
+                              const viewportWidth = window.innerWidth;
+                              
+                              // Check if dropdown would overflow right edge
+                              const wouldOverflowRight = rect.right + 50 > viewportWidth || rect.left + dropdownWidth > viewportWidth - 20;
+                              
+                              if (wouldOverflowRight) {
+                                // Use right positioning - anchor to right edge of screen
+                                setDropdownPosition({
+                                  top: rect.bottom + 4,
+                                  left: 'auto',
+                                  useRight: true
+                                });
+                              } else {
+                                // Use left positioning - align to button
+                                setDropdownPosition({
+                                  top: rect.bottom + 4,
+                                  left: Math.max(10, rect.left),
+                                  useRight: false
+                                });
+                              }
+                            }
+                            setOpenCreatorDropdown(creator.id);
+                          }
                         }}
                       >▼</span>
                     </button>
@@ -882,9 +1008,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     {openCreatorDropdown === creator.id && (
                       <div style={{
                         position: 'fixed',
-                        top: '53px',
-                        left: 'auto',
-                        marginTop: 4,
+                        top: dropdownPosition.top,
+                        left: dropdownPosition.useRight ? 'auto' : dropdownPosition.left,
+                        right: dropdownPosition.useRight ? 10 : 'auto',
                         background: isDarkMode ? '#16181c' : '#fff',
                         border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
                         borderRadius: 8,
@@ -1346,33 +1472,31 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     
                     {/* Post Button */}
                     <button
-                      disabled={!newPostText.trim()}
-                      onClick={() => {
-                        // TODO: Handle post submission
-                        console.log('Posting:', newPostText);
-                        setNewPostText('');
-                        setIsComposerFocused(false);
-                      }}
+                      disabled={!newPostText.trim() || isPosting}
+                      onClick={handleSubmitPost}
                       style={{
-                        background: newPostText.trim() ? '#1d9bf0' : (isDarkMode ? '#0e4d78' : '#8ecdf8'),
-                        color: newPostText.trim() ? '#fff' : (isDarkMode ? '#808080' : '#fff'),
+                        background: (newPostText.trim() && !isPosting) ? '#1d9bf0' : (isDarkMode ? '#0e4d78' : '#8ecdf8'),
+                        color: (newPostText.trim() && !isPosting) ? '#fff' : (isDarkMode ? '#808080' : '#fff'),
                         border: 'none',
                         borderRadius: 20,
                         padding: '8px 16px',
                         fontWeight: 700,
                         fontSize: 15,
-                        cursor: newPostText.trim() ? 'pointer' : 'not-allowed',
-                        opacity: newPostText.trim() ? 1 : 0.5
+                        cursor: (newPostText.trim() && !isPosting) ? 'pointer' : 'not-allowed',
+                        opacity: (newPostText.trim() && !isPosting) ? 1 : 0.5
                       }}
                     >
-                      Post
+                      {isPosting ? 'Posting...' : 'Post'}
                     </button>
+                    {postError && (
+                      <span style={{ color: '#f44', fontSize: 12, marginLeft: 8 }}>{postError}</span>
+                    )}
                   </div>
                 )}
               </div>
             </div>
             
-            {groupedByCreator.length > 0 ? (
+            {(groupedByCreator.length > 0 || realPosts.length > 0) ? (
               <div className="posts-feed">
                 {displayedPosts.length > 0 ? (
                   displayedPosts.map(post => {

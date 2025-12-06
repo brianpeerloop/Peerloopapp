@@ -9,6 +9,7 @@ import { IoShareOutline } from 'react-icons/io5';
 import { MdChatBubbleOutline } from 'react-icons/md';
 import { BsBookmark } from 'react-icons/bs';
 import Dashboard from './Dashboard';
+import CreatorDashboard from './CreatorDashboard';
 import Community from './Community';
 import Profile from './Profile';
 import CreatorProfile from './CreatorProfile';
@@ -24,11 +25,57 @@ import { UserPropType } from './PropTypes';
 const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDarkMode }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const lastTopMenuRef = useRef('courses');
-  const [activeTopMenu, setActiveTopMenu] = useState('courses');
-  const [selectedInstructor, setSelectedInstructor] = useState(null);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [currentInstructorForCourse, setCurrentInstructorForCourse] = useState(null);
+  
+  // Persist Browse state in localStorage so it survives menu navigation
+  const [activeTopMenu, setActiveTopMenu] = useState(() => {
+    try {
+      return localStorage.getItem('browseActiveTopMenu') || 'courses';
+    } catch { return 'courses'; }
+  });
+  const [selectedInstructor, setSelectedInstructor] = useState(() => {
+    try {
+      const saved = localStorage.getItem('browseSelectedInstructor');
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  });
+  const [selectedCourse, setSelectedCourse] = useState(() => {
+    try {
+      const saved = localStorage.getItem('browseSelectedCourse');
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  });
+  const [currentInstructorForCourse, setCurrentInstructorForCourse] = useState(() => {
+    try {
+      const saved = localStorage.getItem('browseCurrentInstructorForCourse');
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  });
   const [isReturningFromCourse, setIsReturningFromCourse] = useState(false);
+  
+  // Save Browse state to localStorage when it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('browseActiveTopMenu', activeTopMenu);
+    } catch {}
+  }, [activeTopMenu]);
+  
+  useEffect(() => {
+    try {
+      localStorage.setItem('browseSelectedInstructor', JSON.stringify(selectedInstructor));
+    } catch {}
+  }, [selectedInstructor]);
+  
+  useEffect(() => {
+    try {
+      localStorage.setItem('browseSelectedCourse', JSON.stringify(selectedCourse));
+    } catch {}
+  }, [selectedCourse]);
+  
+  useEffect(() => {
+    try {
+      localStorage.setItem('browseCurrentInstructorForCourse', JSON.stringify(currentInstructorForCourse));
+    } catch {}
+  }, [currentInstructorForCourse]);
   
   // User profile viewing state
   const [viewingUserProfile, setViewingUserProfile] = useState(null); // username of user being viewed
@@ -118,24 +165,32 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   const [selectedCourseForListing, setSelectedCourseForListing] = useState(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); // Track course description expansion
 
-    // Reset to top level when Browse menu is clicked
+    // Only reset Browse state when explicitly requested (double-click Browse or Browse_Reset)
+    // This preserves state when navigating away and back
     React.useEffect(() => {
-      if (activeMenu === 'Browse' || activeMenu === 'Browse_Reset') {
+      if (activeMenu === 'Browse_Reset') {
         setSelectedInstructor(null);
         setSelectedCourse(null);
         setCurrentInstructorForCourse(null);
-        setActiveTopMenu(lastTopMenuRef.current || 'courses');
+        setActiveTopMenu('courses');
         setSearchQuery('');
+        // Also clear localStorage
+        try {
+          localStorage.removeItem('browseSelectedInstructor');
+          localStorage.removeItem('browseSelectedCourse');
+          localStorage.removeItem('browseCurrentInstructorForCourse');
+          localStorage.setItem('browseActiveTopMenu', 'courses');
+        } catch {}
       }
     }, [activeMenu]);
 
-    // Reset when Browse is clicked again while already on Browse page
+    // Reset when Browse is clicked again while already on Browse page (double-click)
     React.useEffect(() => {
       if (activeMenu === 'Browse' && lastBrowseClick > 0) {
         setSelectedInstructor(null);
         setSelectedCourse(null);
         setCurrentInstructorForCourse(null);
-        setActiveTopMenu('instructors');
+        setActiveTopMenu('courses');
         setSearchQuery('');
       }
     }, [lastBrowseClick]);
@@ -144,17 +199,6 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     useEffect(() => {
       lastTopMenuRef.current = activeTopMenu;
     }, [activeTopMenu]);
-
-    // Restore last selected top menu when Browse is activated
-    useEffect(() => {
-      if (activeMenu === 'Browse' || activeMenu === 'Browse_Reset') {
-        setSelectedInstructor(null);
-        setSelectedCourse(null);
-        setCurrentInstructorForCourse(null);
-        setActiveTopMenu(lastTopMenuRef.current || 'courses');
-        setSearchQuery('');
-      }
-    }, [activeMenu]);
 
     // Close creator follow dropdown when clicking outside
     useEffect(() => {
@@ -1735,18 +1779,21 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     );
   }
 
-  // Show Dashboard when Dashboard is active
+  // Show appropriate Dashboard based on user type
   if (activeMenu === 'Dashboard') {
+    // Creators and Admins see Creator Dashboard
+    if (currentUser?.userType === 'creator' || currentUser?.userType === 'admin' || 
+        currentUser?.roles?.includes('creator') || currentUser?.roles?.includes('instructor')) {
+      return (
+        <div className="main-content">
+          <CreatorDashboard isDarkMode={isDarkMode} currentUser={currentUser} />
+        </div>
+      );
+    }
+    // Students see Learning Dashboard
     return (
       <div className="main-content">
-        <div className="three-column-layout">
-          <div className="center-column">
-            <Dashboard isDarkMode={isDarkMode} />
-          </div>
-          <div className="right-pane">
-            {/* Right pane placeholder for Dashboard */}
-          </div>
-        </div>
+        <Dashboard isDarkMode={isDarkMode} currentUser={currentUser} />
       </div>
     );
   }

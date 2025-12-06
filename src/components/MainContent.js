@@ -15,6 +15,9 @@ import CreatorProfile from './CreatorProfile';
 import CreatorMode from './CreatorMode';
 import CourseListing from './CourseListing';
 import JobExchange from './JobExchange';
+import Settings from './Settings';
+import UserProfile from './UserProfile';
+import CourseDetailView from './CourseDetailView';
 import { getAllInstructors, getInstructorWithCourses, getCourseById, getAllCourses, getInstructorById, getIndexedCourses, getIndexedInstructors } from '../data/database';
 import { UserPropType } from './PropTypes';
 
@@ -26,6 +29,46 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [currentInstructorForCourse, setCurrentInstructorForCourse] = useState(null);
   const [isReturningFromCourse, setIsReturningFromCourse] = useState(false);
+  
+  // User profile viewing state
+  const [viewingUserProfile, setViewingUserProfile] = useState(null); // username of user being viewed
+  const [navigationHistory, setNavigationHistory] = useState([]); // track where user came from
+  const [viewingCourseFromCommunity, setViewingCourseFromCommunity] = useState(null); // course being viewed from community
+  
+  // Function to view a user's profile
+  const handleViewUserProfile = (username) => {
+    // Save current location to history
+    setNavigationHistory(prev => [...prev, activeMenu]);
+    setViewingUserProfile(username);
+  };
+  
+  // Function to go back from user profile
+  const handleBackFromUserProfile = () => {
+    const history = [...navigationHistory];
+    const previousPage = history.pop() || 'My Community';
+    setNavigationHistory(history);
+    setViewingUserProfile(null);
+    onMenuChange(previousPage);
+  };
+  
+  // Function to view a course from community
+  const handleViewCourseFromCommunity = (courseId) => {
+    const course = getCourseById(courseId);
+    if (course) {
+      // Save current location to history
+      setNavigationHistory(prev => [...prev, activeMenu]);
+      setViewingCourseFromCommunity(course);
+    }
+  };
+  
+  // Function to go back from course view
+  const handleBackFromCourse = () => {
+    const history = [...navigationHistory];
+    const previousPage = history.pop() || 'My Community';
+    setNavigationHistory(history);
+    setViewingCourseFromCommunity(null);
+    onMenuChange(previousPage);
+  };
   const [followedCommunities, setFollowedCommunities] = useState(() => {
     // Load existing follow states from localStorage
     try {
@@ -293,10 +336,16 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                 style={{ 
                   width: 100, 
                   height: 100, 
+                  minWidth: 100,
+                  minHeight: 100,
+                  maxWidth: 100,
+                  maxHeight: 100,
                   borderRadius: '50%', 
                   border: isDarkMode ? '4px solid #000' : '4px solid #fff',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                  objectFit: 'cover'
+                  objectFit: 'cover',
+                  flexShrink: 0,
+                  aspectRatio: '1 / 1'
                 }}
               />
               <div style={{ flex: 1, paddingBottom: 8 }}>
@@ -1541,6 +1590,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                             <div key={course.id} className="course-post" onClick={() => setSelectedCourse(course)} style={{ background: isDarkMode ? '#000' : '#fff', boxShadow: 'none', padding: '12px 18px', fontFamily: 'system-ui, sans-serif', fontSize: 15, lineHeight: '20px', width: '100%', marginLeft: 0, marginRight: 0, cursor: 'pointer', color: isDarkMode ? '#e7e9ea' : '#222', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                               {/* Creator Avatar */}
                               <div 
+                                className="course-creator-avatar"
                                 onClick={e => { 
                                   e.stopPropagation(); 
                                   const fullCreatorData = getInstructorWithCourses(course.instructorId);
@@ -1701,6 +1751,34 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     );
   }
 
+  // Show UserProfile when viewing another user's profile
+  if (viewingUserProfile) {
+    return (
+      <div className="main-content">
+        <UserProfile
+          username={viewingUserProfile}
+          onBack={handleBackFromUserProfile}
+          isDarkMode={isDarkMode}
+        />
+      </div>
+    );
+  }
+
+  // Show Course when viewing a course from community
+  if (viewingCourseFromCommunity) {
+    return (
+      <div className="main-content">
+        <CourseDetailView
+          course={viewingCourseFromCommunity}
+          onBack={handleBackFromCourse}
+          isDarkMode={isDarkMode}
+          followedCommunities={followedCommunities}
+          setFollowedCommunities={setFollowedCommunities}
+        />
+      </div>
+    );
+  }
+
   // Show Community when My Community is active
   if (activeMenu === 'My Community') {
     return (
@@ -1709,6 +1787,10 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
           followedCommunities={followedCommunities}
           setFollowedCommunities={setFollowedCommunities}
           isDarkMode={isDarkMode}
+          currentUser={currentUser}
+          onMenuChange={onMenuChange}
+          onViewUserProfile={handleViewUserProfile}
+          onViewCourse={handleViewCourseFromCommunity}
         />
       </div>
     );
@@ -2105,6 +2187,23 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
     return (
       <div className="main-content">
         <JobExchange />
+      </div>
+    );
+  }
+
+  // Show Settings when Settings is active
+  if (activeMenu === 'Settings') {
+    return (
+      <div className="main-content">
+        <Settings 
+          currentUser={currentUser}
+          onMenuChange={onMenuChange}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => {
+            // Toggle dark mode via document class
+            document.documentElement.classList.toggle('dark-mode');
+          }}
+        />
       </div>
     );
   }

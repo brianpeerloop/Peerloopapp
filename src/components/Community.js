@@ -3,7 +3,7 @@ import './Community.css';
 import { FaUsers, FaStar, FaClock, FaPlay, FaBook, FaGraduationCap, FaHome, FaChevronLeft, FaChevronRight, FaHeart, FaComment, FaRetweet, FaBookmark, FaShare, FaChevronDown, FaInfoCircle } from 'react-icons/fa';
 import { getAllCourses, getInstructorById, getCourseById } from '../data/database';
 
-const Community = ({ followedCommunities = [], setFollowedCommunities = null, isDarkMode = false }) => {
+const Community = ({ followedCommunities = [], setFollowedCommunities = null, isDarkMode = false, currentUser = null, onMenuChange = null, onViewUserProfile = null, onViewCourse = null }) => {
   const [selectedCommunity, setSelectedCommunity] = useState(null);
   const [activeTab, setActiveTab] = useState('Home'); // 'Home' or community id
   const [isFollowingLoading, setIsFollowingLoading] = useState(false);
@@ -17,6 +17,19 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
   const [postAudience, setPostAudience] = useState('everyone'); // 'everyone' or creator id
   const [showAudienceDropdown, setShowAudienceDropdown] = useState(false); // Track audience dropdown visibility
   const [showInfoTooltip, setShowInfoTooltip] = useState(null); // Track which info tooltip is visible
+  
+  // Get user initials from currentUser name
+  const getUserInitials = () => {
+    if (!currentUser?.name) return 'AS';
+    return currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  };
+  
+  // Handle clicking on user avatar to go to profile
+  const handleAvatarClick = () => {
+    if (onMenuChange) {
+      onMenuChange('Profile');
+    }
+  };
   
   // Use props directly - the parent (MainContent) manages the state and localStorage
   // This ensures consistency between Browse follows and Community display
@@ -1038,23 +1051,34 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                 background: isDarkMode ? '#000' : '#fff'
               }}
             >
-              {/* User Avatar */}
+              {/* User Avatar - Clickable to go to Profile */}
               <div 
+                className="post-card-avatar"
+                onClick={handleAvatarClick}
                 style={{
                   width: 40,
                   height: 40,
                   borderRadius: '50%',
-                  background: '#2f3336',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  background: '#1d9bf0',
                   color: '#fff',
                   fontWeight: 700,
                   fontSize: 14,
-                  flexShrink: 0
+                  lineHeight: '40px',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  transition: 'transform 0.15s, box-shadow 0.15s'
                 }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(29, 155, 240, 0.4)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                title={`View ${currentUser?.name || 'your'} profile`}
               >
-                AS
+                {getUserInitials()}
               </div>
               
               {/* Composer Input Area */}
@@ -1244,14 +1268,15 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     border: 'none',
                     outline: 'none',
                     resize: 'none',
-                    fontSize: 15,
+                    fontSize: 20,
                     fontWeight: 400,
-                    lineHeight: 1.2,
+                    lineHeight: 1.3,
                     background: 'transparent',
                     color: isDarkMode ? '#e7e9ea' : '#0f1419',
-                    padding: '2px 0',
-                    minHeight: '18px',
-                    fontFamily: 'inherit'
+                    padding: '8px 0',
+                    minHeight: isComposerFocused ? '80px' : '24px',
+                    fontFamily: 'inherit',
+                    transition: 'min-height 0.2s ease'
                   }}
                 />
                 
@@ -1357,36 +1382,83 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     const colorIndex = post.author.charCodeAt(0) % avatarColors.length;
                     const avatarColor = avatarColors[colorIndex];
                     const initials = post.author.replace(/[^A-Z0-9]/gi, '').substring(0, 2).toUpperCase();
+                    
+                    // Handle clicking on post author to view their profile
+                    const handlePostAuthorClick = () => {
+                      if (onViewUserProfile) {
+                        onViewUserProfile(post.author);
+                      }
+                    };
+                    
                     return (
                       <div key={post.id} className="post-card">
                         <div className="post-card-header">
                           <div 
                             className="post-card-avatar"
+                            onClick={handlePostAuthorClick}
                             style={{
                               width: 40,
                               height: 40,
                               borderRadius: '50%',
                               background: avatarColor,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
                               color: '#fff',
                               fontWeight: 700,
                               fontSize: 14,
-                              flexShrink: 0
+                              lineHeight: '40px',
+                              textAlign: 'center',
+                              cursor: 'pointer',
+                              transition: 'transform 0.15s, box-shadow 0.15s'
                             }}
+                            onMouseEnter={e => {
+                              e.currentTarget.style.transform = 'scale(1.05)';
+                              e.currentTarget.style.boxShadow = '0 2px 8px rgba(255,255,255,0.2)';
+                            }}
+                            onMouseLeave={e => {
+                              e.currentTarget.style.transform = 'scale(1)';
+                              e.currentTarget.style.boxShadow = 'none';
+                            }}
+                            title={`View ${post.author}'s profile`}
                           >
                             {initials}
                           </div>
                           <div className="post-card-header-info">
                             <div className="post-card-name-row">
-                              <span className="post-card-author">{post.author}</span>
-                              <span className="post-card-handle">{post.authorHandle}</span>
+                              <span 
+                                className="post-card-author"
+                                onClick={handlePostAuthorClick}
+                                style={{ cursor: 'pointer' }}
+                                onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+                                onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+                              >
+                                {post.author}
+                              </span>
+                              <span 
+                                className="post-card-handle"
+                                onClick={handlePostAuthorClick}
+                                style={{ cursor: 'pointer' }}
+                                onMouseEnter={e => e.currentTarget.style.color = '#1d9bf0'}
+                                onMouseLeave={e => e.currentTarget.style.color = ''}
+                              >
+                                {post.authorHandle}
+                              </span>
                               <span className="post-card-dot">·</span>
                               <span className="post-card-timestamp">{post.timestamp}</span>
                             </div>
                             {post.community && (
-                              <span className="post-card-community">in {post.community}</span>
+                              <span 
+                                className="post-card-community"
+                                onClick={() => {
+                                  if (onViewCourse && post.courseId) {
+                                    onViewCourse(post.courseId);
+                                  }
+                                }}
+                                style={{ cursor: 'pointer' }}
+                                onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+                                onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+                                title={`View ${post.community} course`}
+                              >
+                                in {post.community}
+                              </span>
                             )}
                           </div>
                         </div>

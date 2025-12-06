@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import CreatorSidebar from './components/CreatorSidebar';
 import MainContent from './components/MainContent';
 import ErrorBoundary from './components/ErrorBoundary';
+import useDeviceDetect from './hooks/useDeviceDetect';
 
 /**
  * Main Application Component
@@ -14,6 +15,9 @@ import ErrorBoundary from './components/ErrorBoundary';
  * consisting of a sidebar and main content area.
  */
 function App() {
+  // Device detection hook
+  const device = useDeviceDetect();
+
   // Global state for tracking which menu item is currently active
   // This determines what content is displayed in the main area
   const [activeMenu, setActiveMenu] = useState('My Community');
@@ -33,6 +37,35 @@ function App() {
     localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
   }, [isDarkMode]);
 
+  // Debug mode - set to true to show device info overlay
+  const [showDeviceDebug, setShowDeviceDebug] = useState(false);
+
+  // Apply device classes to body for CSS targeting
+  useEffect(() => {
+    const body = document.body;
+    
+    // Clear previous device classes
+    body.classList.remove('is-mobile', 'is-tablet', 'is-desktop', 'is-touch', 
+      'is-ios', 'is-android', 'is-safari', 'is-chrome', 'is-standalone',
+      'is-portrait', 'is-landscape');
+    
+    // Add current device classes
+    if (device.isMobile) body.classList.add('is-mobile');
+    if (device.isTablet) body.classList.add('is-tablet');
+    if (device.isDesktop) body.classList.add('is-desktop');
+    if (device.isTouchDevice) body.classList.add('is-touch');
+    if (device.isIOS) body.classList.add('is-ios');
+    if (device.isAndroid) body.classList.add('is-android');
+    if (device.isSafari) body.classList.add('is-safari');
+    if (device.isChrome) body.classList.add('is-chrome');
+    if (device.isStandalone) body.classList.add('is-standalone');
+    if (device.isPortrait) body.classList.add('is-portrait');
+    if (device.isLandscape) body.classList.add('is-landscape');
+
+    // Log device info for debugging
+    console.log('📱 Device detected:', device.deviceType, device.os, device.browser, device.screenWidth + 'x' + device.screenHeight);
+  }, [device]);
+
   // Toggle dark mode
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);
 
@@ -40,13 +73,55 @@ function App() {
   // Each user has different roles and permissions
   const userA = {
     id: 1,
-    name: 'Alex Student/Teacher',
+    name: 'Alex Sanders',
+    username: '@alexsanders',
     roles: ['student', 'teacher'], // Alex can both learn and teach
+    avatar: null, // Will use initials AS
+    bio: 'Lifelong learner passionate about AI and machine learning. Currently studying Deep Learning and teaching Python basics to beginners. Love helping others on their learning journey!',
+    location: 'San Francisco, CA',
+    website: 'https://alexsanders.dev',
+    joinedDate: 'March 2024',
+    stats: {
+      coursesCompleted: 12,
+      coursesTeaching: 3,
+      studentsHelped: 47,
+      hoursLearned: 156,
+      avgRating: 4.9,
+      totalEarnings: 2340
+    },
+    expertise: ['Python', 'Machine Learning', 'Data Analysis', 'AI Fundamentals'],
+    currentlyLearning: ['Deep Learning Fundamentals', 'Natural Language Processing'],
+    achievements: [
+      { id: 1, name: 'Quick Learner', description: 'Completed 10 courses', icon: '🎓' },
+      { id: 2, name: 'Helpful Teacher', description: 'Helped 25+ students', icon: '🌟' },
+      { id: 3, name: 'Rising Star', description: 'Top rated student-teacher', icon: '⭐' }
+    ]
   };
   const userB = {
     id: 2,
-    name: 'Jamie Creator/Instructor/Student/Teacher',
+    name: 'Jamie Chen',
+    username: '@jamiechen',
     roles: ['creator', 'instructor', 'student', 'teacher'], // Jamie has all roles
+    avatar: null,
+    bio: 'Full-stack developer and course creator with 10+ years of experience. Passionate about making tech education accessible to everyone.',
+    location: 'New York, NY',
+    website: 'https://jamiechen.io',
+    joinedDate: 'January 2024',
+    stats: {
+      coursesCompleted: 28,
+      coursesTeaching: 8,
+      studentsHelped: 234,
+      hoursLearned: 412,
+      avgRating: 4.95,
+      totalEarnings: 12500
+    },
+    expertise: ['React', 'Node.js', 'TypeScript', 'System Design', 'AWS'],
+    currentlyLearning: ['AI for Robotics', 'Medical AI'],
+    achievements: [
+      { id: 1, name: 'Course Creator', description: 'Published 5+ courses', icon: '📚' },
+      { id: 2, name: 'Master Teacher', description: 'Helped 200+ students', icon: '🏆' },
+      { id: 3, name: 'Top Earner', description: 'Earned $10,000+', icon: '💰' }
+    ]
   };
 
   // State for tracking which user is currently active
@@ -88,7 +163,7 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
+      <div className={`app ${isDarkMode ? 'dark-mode' : ''} ${device.deviceType}`}>
         {/* Left Sidebar - Navigation and user profile */}
         {isCreatorMode ? (
           <CreatorSidebar 
@@ -98,6 +173,7 @@ function App() {
             onBackToMain={handleBackToMain}
             isDarkMode={isDarkMode}
             toggleDarkMode={toggleDarkMode}
+            device={device}
           />
         ) : (
           <Sidebar 
@@ -106,6 +182,7 @@ function App() {
             currentUser={currentUser}
             isDarkMode={isDarkMode}
             toggleDarkMode={toggleDarkMode}
+            device={device}
           />
         )}
         
@@ -116,7 +193,44 @@ function App() {
           onSwitchUser={toggleUser}
           onMenuChange={handleMenuChange}
           isDarkMode={isDarkMode}
+          device={device}
         />
+
+        {/* Device Debug Overlay - Click the badge to expand */}
+        <div 
+          className="device-debug-badge"
+          onClick={() => setShowDeviceDebug(!showDeviceDebug)}
+          style={{
+            position: 'fixed',
+            bottom: '10px',
+            right: '10px',
+            background: device.isIOS ? '#007AFF' : device.isAndroid ? '#3DDC84' : '#6B7280',
+            color: 'white',
+            padding: showDeviceDebug ? '12px' : '6px 10px',
+            borderRadius: '8px',
+            fontSize: '11px',
+            fontFamily: 'monospace',
+            zIndex: 9999,
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+            maxWidth: showDeviceDebug ? '200px' : 'auto',
+          }}
+        >
+          {showDeviceDebug ? (
+            <div>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>📱 Device Info</div>
+              <div>Type: {device.deviceType}</div>
+              <div>OS: {device.os}</div>
+              <div>Browser: {device.browser}</div>
+              <div>Screen: {device.screenWidth}×{device.screenHeight}</div>
+              <div>Touch: {device.isTouchDevice ? 'Yes' : 'No'}</div>
+              <div>PWA: {device.isStandalone ? 'Yes' : 'No'}</div>
+              <div style={{ marginTop: '8px', opacity: 0.7 }}>Tap to close</div>
+            </div>
+          ) : (
+            <span>📱 {device.deviceType}</span>
+          )}
+        </div>
       </div>
     </ErrorBoundary>
   );

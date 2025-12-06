@@ -143,6 +143,20 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDark
         ))}
       </nav>
 
+      {/* Settings Button */}
+      <div className="settings-btn-container">
+        <button 
+          className={`settings-btn ${activeMenu === 'Settings' ? 'active' : ''}`}
+          onClick={() => onMenuChange('Settings')}
+          title="Settings"
+        >
+          <div className="settings-icon">
+            <FaCog />
+          </div>
+          <span className="settings-label">Settings</span>
+        </button>
+      </div>
+
       {/* Dark Mode Toggle */}
       <div className="dark-mode-toggle-container">
         <button 

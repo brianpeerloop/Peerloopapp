@@ -73,13 +73,55 @@ function App() {
   // Each user has different roles and permissions
   const userA = {
     id: 1,
-    name: 'Alex Student/Teacher',
+    name: 'Alex Sanders',
+    username: '@alexsanders',
     roles: ['student', 'teacher'], // Alex can both learn and teach
+    avatar: null, // Will use initials AS
+    bio: 'Lifelong learner passionate about AI and machine learning. Currently studying Deep Learning and teaching Python basics to beginners. Love helping others on their learning journey!',
+    location: 'San Francisco, CA',
+    website: 'https://alexsanders.dev',
+    joinedDate: 'March 2024',
+    stats: {
+      coursesCompleted: 12,
+      coursesTeaching: 3,
+      studentsHelped: 47,
+      hoursLearned: 156,
+      avgRating: 4.9,
+      totalEarnings: 2340
+    },
+    expertise: ['Python', 'Machine Learning', 'Data Analysis', 'AI Fundamentals'],
+    currentlyLearning: ['Deep Learning Fundamentals', 'Natural Language Processing'],
+    achievements: [
+      { id: 1, name: 'Quick Learner', description: 'Completed 10 courses', icon: '🎓' },
+      { id: 2, name: 'Helpful Teacher', description: 'Helped 25+ students', icon: '🌟' },
+      { id: 3, name: 'Rising Star', description: 'Top rated student-teacher', icon: '⭐' }
+    ]
   };
   const userB = {
     id: 2,
-    name: 'Jamie Creator/Instructor/Student/Teacher',
+    name: 'Jamie Chen',
+    username: '@jamiechen',
     roles: ['creator', 'instructor', 'student', 'teacher'], // Jamie has all roles
+    avatar: null,
+    bio: 'Full-stack developer and course creator with 10+ years of experience. Passionate about making tech education accessible to everyone.',
+    location: 'New York, NY',
+    website: 'https://jamiechen.io',
+    joinedDate: 'January 2024',
+    stats: {
+      coursesCompleted: 28,
+      coursesTeaching: 8,
+      studentsHelped: 234,
+      hoursLearned: 412,
+      avgRating: 4.95,
+      totalEarnings: 12500
+    },
+    expertise: ['React', 'Node.js', 'TypeScript', 'System Design', 'AWS'],
+    currentlyLearning: ['AI for Robotics', 'Medical AI'],
+    achievements: [
+      { id: 1, name: 'Course Creator', description: 'Published 5+ courses', icon: '📚' },
+      { id: 2, name: 'Master Teacher', description: 'Helped 200+ students', icon: '🏆' },
+      { id: 3, name: 'Top Earner', description: 'Earned $10,000+', icon: '💰' }
+    ]
   };
 
   // State for tracking which user is currently active

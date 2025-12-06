@@ -109,3 +109,16 @@ function getDeviceInfo() {
 }
 
 export default useDeviceDetect;
+
+
+
+
+
+
+
+
+
+
+
+
+

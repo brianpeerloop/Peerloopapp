@@ -1057,11 +1057,22 @@
 }
 
 .post-card-avatar {
-  width: 40px;
-  height: 40px;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  flex-grow: 0;
+  align-self: flex-start;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  line-height: 40px;
+  text-align: center;
+  overflow: hidden;
 }
 
 .post-card-header-info {

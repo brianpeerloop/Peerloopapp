@@ -1,0 +1,19 @@
+/* Settings Component Styles */
+.settings-container {
+  background: var(--bg-primary, #000);
+  min-height: 100vh;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .settings-sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-color, #2f3336);
+  }
+  
+  .settings-layout {
+    flex-direction: column !important;
+  }
+}
+

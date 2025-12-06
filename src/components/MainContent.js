@@ -32,31 +32,44 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   
   // User profile viewing state
   const [viewingUserProfile, setViewingUserProfile] = useState(null); // username of user being viewed
-  const [navigationHistory, setNavigationHistory] = useState([]); // track where user came from
+  const [navigationHistory, setNavigationHistory] = useState([]); // track where user came from (includes tab state)
   const [viewingCourseFromCommunity, setViewingCourseFromCommunity] = useState(null); // course being viewed from community
+  const [communityTabToRestore, setCommunityTabToRestore] = useState(null); // tab to restore after back navigation
+  const [currentCommunityTab, setCurrentCommunityTab] = useState('Home'); // track current community tab
   
   // Function to view a user's profile
-  const handleViewUserProfile = (username) => {
-    // Save current location to history
-    setNavigationHistory(prev => [...prev, activeMenu]);
+  const handleViewUserProfile = (username, communityTab = null) => {
+    // Save current location to history with community tab state
+    setNavigationHistory(prev => [...prev, { 
+      menu: activeMenu, 
+      communityTab: communityTab || currentCommunityTab 
+    }]);
     setViewingUserProfile(username);
   };
   
   // Function to go back from user profile
   const handleBackFromUserProfile = () => {
     const history = [...navigationHistory];
-    const previousPage = history.pop() || 'My Community';
+    const previousState = history.pop() || { menu: 'My Community', communityTab: 'Home' };
     setNavigationHistory(history);
     setViewingUserProfile(null);
-    onMenuChange(previousPage);
+    
+    // Restore community tab if going back to Community
+    if (previousState.menu === 'My Community' && previousState.communityTab) {
+      setCommunityTabToRestore(previousState.communityTab);
+    }
+    onMenuChange(previousState.menu || 'My Community');
   };
   
   // Function to view a course from community
-  const handleViewCourseFromCommunity = (courseId) => {
+  const handleViewCourseFromCommunity = (courseId, communityTab = null) => {
     const course = getCourseById(courseId);
     if (course) {
-      // Save current location to history
-      setNavigationHistory(prev => [...prev, activeMenu]);
+      // Save current location to history with community tab state
+      setNavigationHistory(prev => [...prev, { 
+        menu: activeMenu, 
+        communityTab: communityTab || currentCommunityTab 
+      }]);
       setViewingCourseFromCommunity(course);
     }
   };
@@ -64,10 +77,15 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   // Function to go back from course view
   const handleBackFromCourse = () => {
     const history = [...navigationHistory];
-    const previousPage = history.pop() || 'My Community';
+    const previousState = history.pop() || { menu: 'My Community', communityTab: 'Home' };
     setNavigationHistory(history);
     setViewingCourseFromCommunity(null);
-    onMenuChange(previousPage);
+    
+    // Restore community tab if going back to Community
+    if (previousState.menu === 'My Community' && previousState.communityTab) {
+      setCommunityTabToRestore(previousState.communityTab);
+    }
+    onMenuChange(previousState.menu || 'My Community');
   };
   const [followedCommunities, setFollowedCommunities] = useState(() => {
     // Load existing follow states from localStorage
@@ -1789,8 +1807,13 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
           isDarkMode={isDarkMode}
           currentUser={currentUser}
           onMenuChange={onMenuChange}
-          onViewUserProfile={handleViewUserProfile}
-          onViewCourse={handleViewCourseFromCommunity}
+          onViewUserProfile={(username, tab) => handleViewUserProfile(username, tab)}
+          onViewCourse={(courseId, tab) => handleViewCourseFromCommunity(courseId, tab)}
+          initialTab={communityTabToRestore}
+          onTabChange={(tab) => {
+            setCurrentCommunityTab(tab);
+            setCommunityTabToRestore(null); // Clear after using
+          }}
         />
       </div>
     );

@@ -3,9 +3,23 @@ import './Community.css';
 import { FaUsers, FaStar, FaClock, FaPlay, FaBook, FaGraduationCap, FaHome, FaChevronLeft, FaChevronRight, FaHeart, FaComment, FaRetweet, FaBookmark, FaShare, FaChevronDown, FaInfoCircle } from 'react-icons/fa';
 import { getAllCourses, getInstructorById, getCourseById } from '../data/database';
 
-const Community = ({ followedCommunities = [], setFollowedCommunities = null, isDarkMode = false, currentUser = null, onMenuChange = null, onViewUserProfile = null, onViewCourse = null }) => {
+const Community = ({ followedCommunities = [], setFollowedCommunities = null, isDarkMode = false, currentUser = null, onMenuChange = null, onViewUserProfile = null, onViewCourse = null, initialTab = null, onTabChange = null }) => {
   const [selectedCommunity, setSelectedCommunity] = useState(null);
-  const [activeTab, setActiveTab] = useState('Home'); // 'Home' or community id
+  const [activeTab, setActiveTab] = useState(initialTab || 'Home'); // 'Home' or community id
+  
+  // Handle initialTab restoration from navigation
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
+  
+  // Notify parent of tab changes
+  useEffect(() => {
+    if (onTabChange) {
+      onTabChange(activeTab);
+    }
+  }, [activeTab, onTabChange]);
   const [isFollowingLoading, setIsFollowingLoading] = useState(false);
   const tabsContainerRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -1386,7 +1400,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     // Handle clicking on post author to view their profile
                     const handlePostAuthorClick = () => {
                       if (onViewUserProfile) {
-                        onViewUserProfile(post.author);
+                        onViewUserProfile(post.author, activeTab);
                       }
                     };
                     
@@ -1449,7 +1463,7 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                 className="post-card-community"
                                 onClick={() => {
                                   if (onViewCourse && post.courseId) {
-                                    onViewCourse(post.courseId);
+                                    onViewCourse(post.courseId, activeTab);
                                   }
                                 }}
                                 style={{ cursor: 'pointer' }}

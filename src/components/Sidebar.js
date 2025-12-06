@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Sidebar.css';
 import { 
@@ -36,6 +36,20 @@ import { UserPropType } from './PropTypes';
  * @param {string} activeMenu - The currently active menu item
  */
 const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDarkMode }) => {
+  // Track which tooltip is visible (by index) and a click counter to restart animation
+  const [tooltipState, setTooltipState] = useState({ index: null, clickId: 0 });
+
+  /**
+   * Shows tooltip with CSS animation that auto-hides after 5 seconds
+   * @param {number} index - The index of the menu item
+   */
+  const showTooltipTemporarily = (index) => {
+    // Increment clickId to force animation restart even if same item clicked
+    setTooltipState(prev => ({ 
+      index, 
+      clickId: prev.clickId + 1 
+    }));
+  };
 
   /**
    * Main navigation menu items
@@ -132,30 +146,26 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDark
           <div 
             key={index} 
             className={`nav-item ${activeMenu === item.label ? 'active' : ''}`}
-            onClick={() => handleMenuClick(item.label)}
+            onClick={() => {
+              showTooltipTemporarily(index);
+              handleMenuClick(item.label);
+            }}
           >
             <div className="nav-icon">{item.icon}</div>
             {/* Use displayLabel if available, otherwise use label */}
             <span className="nav-label">{item.displayLabel || item.label}</span>
-            {/* Tooltip for collapsed sidebar */}
-            <span className="nav-tooltip">{item.displayLabel || item.label}</span>
+            {/* Tooltip for collapsed sidebar - shown on click for 5 seconds via CSS animation */}
+            {tooltipState.index === index && (
+              <span 
+                key={tooltipState.clickId} 
+                className="nav-tooltip tooltip-visible"
+              >
+                {item.displayLabel || item.label}
+              </span>
+            )}
           </div>
         ))}
       </nav>
-
-      {/* Settings Button */}
-      <div className="settings-btn-container">
-        <button 
-          className={`settings-btn ${activeMenu === 'Settings' ? 'active' : ''}`}
-          onClick={() => onMenuChange('Settings')}
-          title="Settings"
-        >
-          <div className="settings-icon">
-            <FaCog />
-          </div>
-          <span className="settings-label">Settings</span>
-        </button>
-      </div>
 
       {/* Dark Mode Toggle */}
       <div className="dark-mode-toggle-container">

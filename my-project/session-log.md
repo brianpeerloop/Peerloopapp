@@ -81,29 +81,31 @@
 ---
 
 ### Session 3
-**Date:** December 4, 2025
-**Duration:** ~30 min
-**Phase:** Building & Polish
+**Date:** December 6, 2025
+**Duration:** ~2 hours
+**Phase:** Building & Bug Fixes
 
 **What we did:**
-- **Community Creator Dropdown Improvements:**
-  - Added "Follow All" option (blue) to follow all courses from a creator
-  - Added "Unfollow All" option (red) to unfollow all courses from a creator
-  - Fixed individual course follow/unfollow - clicking a course now toggles its follow state
-  - Followed courses show blue checkmark ✓
-  - Unfollowed courses can be clicked to follow
+- Implemented 0.5-second auto-hide tooltip for sidebar icons on mobile
+- Reduced "Post here" textarea size for cleaner UI
+- Made all right panes consistent width at 315px (10% reduction)
+- **Major fix:** Recovered lost user profiles from git history
+  - Restored src/data/users.js (28 community user profiles)
+  - Restored UserProfile.js, CourseDetailView.js, Settings.js/css
+  - Restored clickable usernames and course links in Community
+- Deployed all fixes to GitHub Pages
 
-- **Browse Section Follow Dropdown Fix:**
-  - Changed logic so "Unfollow All" shows when ANY course is followed (not just when entire creator is followed)
-  - Consistent behavior between Browse > Creators and Instructor Profile dropdowns
+**Decisions made:**
+- 0.5 second tooltip duration (tested 5s, 2s, 1s first)
+- 315px right pane width for more content space
+- Full file restore from git commit f89811f rather than manual merge
 
-**Technical changes:**
-- `Community.js`: Added Follow All/Unfollow All, fixed individual course click handlers
-- `MainContent.js`: Changed `isInstructorFollowed()` to `hasAnyCreatorCourseFollowed()` for dropdown logic
+**Technical notes:**
+- Used `git checkout f89811f -- [files]` to restore deleted files
+- Files were accidentally removed in commits after Dec 5
+- Windows PowerShell shell output issues worked around by reading terminal files
 
-**Deployments:** 4 deployments to GitHub Pages
-
-**Next session:** Continue feature development
+**Next session:** Test all user profile links, verify Settings page works
 
 
 ---

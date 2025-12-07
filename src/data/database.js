@@ -234,6 +234,35 @@ export const instructorsDatabase = [
       totalReviews: 600
     },
     courses: [14] // Course IDs that this instructor teaches
+  },
+  {
+    id: 8,
+    name: "Guy Rymberg",
+    title: "AI Prompting Specialist & Business AI Expert",
+    avatar: "https://via.placeholder.com/120x120/1d9bf0/ffffff?text=GR",
+    bio: "AI teaching specialist with 15 years experience in AI and machine learning. Expert in helping professionals leverage AI prompting for competitive advantage. Has taught over 500 students the art of prompt engineering and AI communication. Passionate about the PeerLoop model of Learn → Teach → Earn.",
+    qualifications: [
+      { id: 1, sentence: "Ph.D. in Computer Science from MIT (2012)" },
+      { id: 2, sentence: "Former AI Lead at Google for 6 years" },
+      { id: 3, sentence: "Published Author: 'AI Prompting for Business' (2023)" },
+      { id: 4, sentence: "Keynote Speaker at AI Summit, TechCrunch Disrupt" }
+    ],
+    website: "https://guyrymberg.ai",
+    expertise: [
+      "AI Prompt Engineering",
+      "Large Language Models",
+      "Business AI Strategy",
+      "AI Communication",
+      "Prompt Library Design",
+      "AI-Powered Workflows"
+    ],
+    stats: {
+      studentsTaught: 527,
+      coursesCreated: 1,
+      averageRating: 4.9,
+      totalReviews: 127
+    },
+    courses: [15] // AI Prompting Mastery
   }
 ];
 
@@ -745,6 +774,84 @@ export const coursesDatabase = [
       { title: "Python for AI", duration: "1h", description: "Python basics for AI coding." },
       { title: "ML Project 1", duration: "2h 30min", description: "Hands-on machine learning project." },
       { title: "ML Project 2", duration: "2h 30min", description: "Advanced AI coding project." }
+    ]
+  },
+  {
+    id: 15,
+    title: "AI Prompting Mastery",
+    description: "Learn to write effective AI prompts for business use. Master the art of communicating with AI to boost your productivity. This comprehensive course teaches you the fundamentals and advanced techniques of prompt engineering.",
+    duration: "4-6 weeks",
+    level: "Intermediate",
+    rating: 4.9,
+    students: 127,
+    price: "$450",
+    thumbnail: "https://via.placeholder.com/300x200/1d9bf0/ffffff?text=AI+Prompting",
+    instructorId: 8, // Links to Guy Rymberg
+    category: "AI & Prompt Engineering",
+    tags: ["AI Prompting", "Prompt Engineering", "ChatGPT", "LLM", "Business AI", "Productivity"],
+    peerloopFeatures: {
+      oneOnOneTeaching: true,
+      certifiedTeachers: true,
+      earnWhileTeaching: true,
+      teacherCommission: "70%"
+    },
+    learningObjectives: [
+      "Fundamentals of prompt engineering",
+      "Advanced techniques for business applications",
+      "Building your own prompt library",
+      "Iteration and refinement strategies",
+      "Context and constraint design",
+      "Real-world AI use cases"
+    ],
+    curriculum: [
+      { 
+        title: "Module 1: Foundations", 
+        duration: "Week 1", 
+        description: "What is AI prompting, your first prompts, and the prompt framework guide.",
+        videos: 2,
+        readings: 1
+      },
+      { 
+        title: "Module 2: Intermediate Techniques", 
+        duration: "Week 2", 
+        description: "Context and constraints, iteration strategies, and 50 prompt templates.",
+        videos: 2,
+        readings: 1
+      },
+      { 
+        title: "Module 3: Advanced Applications", 
+        duration: "Week 3", 
+        description: "Business use cases, building AI workflows, and automation patterns.",
+        videos: 2,
+        readings: 1
+      },
+      { 
+        title: "Module 4: Specialization", 
+        duration: "Week 4", 
+        description: "Industry-specific prompting, custom GPT creation, and prompt library design.",
+        videos: 2,
+        readings: 1
+      },
+      { 
+        title: "Module 5: Certification Prep", 
+        duration: "Week 5-6", 
+        description: "Final assessment, portfolio review, and becoming a certified Student-Teacher.",
+        videos: 1,
+        assessment: true
+      }
+    ],
+    studentTeachers: [
+      { name: "Marcus Chen", studentsTaught: 12, certifiedDate: "December 2024" },
+      { name: "Jessica Torres", studentsTaught: 8, certifiedDate: "November 2024" },
+      { name: "Alex Rivera", studentsTaught: 5, certifiedDate: "January 2025" }
+    ],
+    includes: [
+      "Full course access",
+      "1-on-1 peer teaching sessions",
+      "Certificate on completion",
+      "Lifetime access to materials",
+      "Access to prompt library templates",
+      "Discord community access"
     ]
   }
 ];

@@ -761,6 +761,102 @@ export const communityUsers = {
       { id: 1, name: 'Bootcamp Graduate', description: 'All projects done', icon: '🎓' },
       { id: 2, name: 'Rapid Growth', description: 'Teacher in 8 weeks', icon: '📈' }
     ]
+  },
+
+  // Creator: Guy Rymberg - AI Prompting Mastery
+  'GuyRymberg': {
+    id: 'GuyRymberg',
+    name: 'Guy Rymberg',
+    username: '@GuyRymberg',
+    roles: ['creator'],
+    avatar: null,
+    avatarColor: '#1d9bf0',
+    bio: 'AI teaching specialist with 15 years experience. Created the AI Prompting Mastery course. Passionate about the PeerLoop model - Learn, Teach, Earn. Former AI Lead at Google, published author of "AI Prompting for Business".',
+    location: 'San Francisco, CA',
+    website: 'https://guyrymberg.ai',
+    joinedDate: 'October 2024',
+    stats: {
+      coursesCompleted: 0,
+      coursesTeaching: 0,
+      coursesCreated: 1,
+      studentsEnrolled: 127,
+      studentTeachers: 3,
+      totalRevenue: 57150,
+      creatorEarnings: 8573, // 15% of $57,150
+      hoursLearned: 0,
+      avgRating: 4.9,
+      totalEarnings: 8573
+    },
+    expertise: ['AI Prompt Engineering', 'Large Language Models', 'Business AI Strategy', 'AI Communication', 'Prompt Library Design'],
+    currentlyLearning: [],
+    achievements: [
+      { id: 1, name: 'Course Creator', description: 'Published first course', icon: '📚' },
+      { id: 2, name: 'Student-Teacher Builder', description: '3 certified S-Ts', icon: '👨‍🏫' },
+      { id: 3, name: 'Top Rated Creator', description: '4.9 average rating', icon: '⭐' },
+      { id: 4, name: 'Century Club', description: '100+ students enrolled', icon: '💯' }
+    ],
+    createdCourses: [15], // AI Prompting Mastery
+    studentTeachers: [
+      { name: 'Marcus Chen', studentsTaught: 12 },
+      { name: 'Jessica Torres', studentsTaught: 8 },
+      { name: 'Alex Rivera', studentsTaught: 5 }
+    ]
+  },
+
+  // Student-Teachers for AI Prompting Mastery course
+  'MarcusChen_ST': {
+    id: 'MarcusChen_ST',
+    name: 'Marcus Chen',
+    username: '@MarcusChen_ST',
+    roles: ['student', 'teacher'],
+    avatar: null,
+    avatarColor: '#1d9bf0',
+    bio: 'Certified Student-Teacher for AI Prompting Mastery. Former marketing manager who discovered the power of AI prompts. Now helping others master prompt engineering while earning 70% commission!',
+    location: 'Seattle, WA',
+    website: null,
+    joinedDate: 'November 2024',
+    stats: {
+      coursesCompleted: 1,
+      coursesTeaching: 1,
+      studentsHelped: 12,
+      hoursLearned: 45,
+      avgRating: 4.88,
+      totalEarnings: 3780 // 12 students × $450 × 70%
+    },
+    expertise: ['AI Prompting', 'Business Applications', 'ChatGPT', 'Prompt Templates'],
+    currentlyLearning: ['Advanced LLM Techniques'],
+    achievements: [
+      { id: 1, name: 'Certified Teacher', description: 'AI Prompting Mastery', icon: '🎓' },
+      { id: 2, name: 'Dozen Club', description: '12 students taught', icon: '🔥' }
+    ],
+    certifiedCourses: [15]
+  },
+
+  'JessicaTorres_ST': {
+    id: 'JessicaTorres_ST',
+    name: 'Jessica Torres',
+    username: '@JessicaTorres_ST',
+    roles: ['student', 'teacher'],
+    avatar: null,
+    avatarColor: '#1d9bf0',
+    bio: 'Student-Teacher for AI Prompting Mastery. Product manager by day, AI prompt teacher by passion. Love helping others unlock the power of effective AI communication.',
+    location: 'Austin, TX',
+    website: null,
+    joinedDate: 'December 2024',
+    stats: {
+      coursesCompleted: 1,
+      coursesTeaching: 1,
+      studentsHelped: 8,
+      hoursLearned: 38,
+      avgRating: 4.91,
+      totalEarnings: 2520 // 8 students × $450 × 70%
+    },
+    expertise: ['AI Prompting', 'Product Management', 'Business Strategy'],
+    currentlyLearning: ['Advanced Prompt Engineering'],
+    achievements: [
+      { id: 1, name: 'Certified Teacher', description: 'AI Prompting Mastery', icon: '🎓' }
+    ],
+    certifiedCourses: [15]
   }
 };
 

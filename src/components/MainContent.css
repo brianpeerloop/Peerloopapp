@@ -24,9 +24,9 @@
 }
 
 .center-column {
-  flex: 0 1 600px;
+  flex: 0 1 760px;
   min-width: 0;
-  max-width: 600px;
+  max-width: 760px;
   border-right: 1px solid var(--border-color, #e2e8f0);
   border-left: 1px solid var(--border-color, #e2e8f0);
   overflow-y: auto;
@@ -34,9 +34,10 @@
 }
 
 .right-pane {
-  flex: 0 0 315px;
-  width: 315px;
-  padding: 16px;
+  flex: 1 0 160px;
+  min-width: 160px;
+  max-width: 250px;
+  padding: 12px;
   background: var(--bg-secondary, #f8fafc);
   overflow-y: auto;
   height: 100vh;
@@ -49,17 +50,17 @@
 .right-pane-section {
   background: var(--card-bg, #fff);
   border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: 10px;
+  margin-bottom: 12px;
   border: 1px solid var(--border-color, #e2e8f0);
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .right-pane-section h3 {
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-primary, #1e293b);
-  margin: 0 0 16px 0;
+  margin: 0 0 10px 0;
 }
 
 /* Trending Items */
@@ -151,8 +152,8 @@
   }
   
   .right-pane {
-    width: 250px;
-    flex: 0 0 250px;
+    width: 140px;
+    flex: 0 0 140px;
   }
 }
 

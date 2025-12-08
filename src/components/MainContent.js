@@ -52,6 +52,10 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
   });
   const [isReturningFromCourse, setIsReturningFromCourse] = useState(false);
   
+  // Track where user came from when viewing an instructor (for proper back navigation)
+  const [previousBrowseContext, setPreviousBrowseContext] = useState(null);
+  // { type: 'course', course: courseObj } or { type: 'courseList' } or { type: 'creatorList' }
+  
   // Save Browse state to localStorage when it changes
   useEffect(() => {
     try {
@@ -347,7 +351,23 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
       <div style={{ background: isDarkMode ? '#000' : '#f8fafc', minHeight: '100vh', padding: '0' }}>
         {/* Back Button */}
         <button 
-          onClick={() => setSelectedInstructor(null)}
+          onClick={() => {
+            // Check if we came from a course view
+            if (previousBrowseContext?.type === 'course' && previousBrowseContext.course) {
+              setSelectedInstructor(null);
+              setSelectedCourse(previousBrowseContext.course);
+              setActiveTopMenu('courses');
+              setPreviousBrowseContext(null);
+            } else if (previousBrowseContext?.type === 'courseList') {
+              setSelectedInstructor(null);
+              setActiveTopMenu('courses');
+              setPreviousBrowseContext(null);
+            } else {
+              // Default: go back to creators list
+              setSelectedInstructor(null);
+              setPreviousBrowseContext(null);
+            }
+          }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -362,7 +382,7 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             color: isDarkMode ? '#e7e9ea' : '#64748b'
           }}
         >
-          ← Back to Creators
+          ← {previousBrowseContext?.type === 'course' ? 'Back to Course' : previousBrowseContext?.type === 'courseList' ? 'Back to Courses' : 'Back to Creators'}
         </button>
 
         {/* Creator Profile Card */}
@@ -1061,6 +1081,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
             <span>by <span 
               onClick={() => {
                 const fullCreatorData = getInstructorWithCourses(courseData.instructorId);
+                // Save current context before navigating to creator
+                setPreviousBrowseContext({ type: 'course', course: courseData });
                 setSelectedInstructor(fullCreatorData || instructorData);
                 setSelectedCourse(null);
                 setActiveTopMenu('instructors');
@@ -1329,6 +1351,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
               <div 
                 onClick={() => {
                   const fullCreatorData = getInstructorWithCourses(courseData.instructorId);
+                  // Save current context before navigating to creator
+                  setPreviousBrowseContext({ type: 'course', course: courseData });
                   setSelectedInstructor(fullCreatorData || instructorData);
                   setSelectedCourse(null);
                   setActiveTopMenu('instructors');
@@ -1380,6 +1404,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
           return (
           <div key={creator.id} className="creator-card" onClick={() => {
             const fullCreatorData = getInstructorWithCourses(creator.id);
+            // Clear previous context since we're coming from creators list
+            setPreviousBrowseContext({ type: 'creatorList' });
             setSelectedInstructor(fullCreatorData || creator);
           }} style={{
             background: isDarkMode ? '#000' : '#fff',
@@ -1638,6 +1664,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                 onClick={e => { 
                                   e.stopPropagation(); 
                                   const fullCreatorData = getInstructorWithCourses(course.instructorId);
+                                  // Save current context before navigating to creator
+                                  setPreviousBrowseContext({ type: 'courseList' });
                                   setSelectedInstructor(fullCreatorData || instructorData);
                                   setActiveTopMenu('instructors');
                                 }}
@@ -1690,6 +1718,8 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
                                     onClick={e => { 
                                       e.stopPropagation(); 
                                       const fullCreatorData = getInstructorWithCourses(course.instructorId);
+                                      // Save current context before navigating to creator
+                                      setPreviousBrowseContext({ type: 'courseList' });
                                       setSelectedInstructor(fullCreatorData || instructorData);
                                       setActiveTopMenu('instructors');
                                     }}

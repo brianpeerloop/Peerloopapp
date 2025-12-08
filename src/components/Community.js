@@ -152,7 +152,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (openCreatorDropdown && !event.target.closest('.community-tab-wrapper')) {
+      if (openCreatorDropdown && 
+          !event.target.closest('.community-tab-wrapper') && 
+          !event.target.closest('.community-tab-dropdown')) {
         setOpenCreatorDropdown(null);
       }
     };
@@ -1006,20 +1008,22 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                     
                     {/* Minimalist dropdown - same style as Browse Creators */}
                     {openCreatorDropdown === creator.id && (
-                      <div style={{
-                        position: 'fixed',
-                        top: dropdownPosition.top,
-                        left: dropdownPosition.useRight ? 'auto' : dropdownPosition.left,
-                        right: dropdownPosition.useRight ? 10 : 'auto',
-                        background: isDarkMode ? '#16181c' : '#fff',
-                        border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
-                        borderRadius: 8,
-                        boxShadow: isDarkMode ? '0 2px 12px rgba(0,0,0,0.4)' : '0 2px 12px rgba(0,0,0,0.1)',
-                        zIndex: 99999,
-                        minWidth: 200,
-                        maxWidth: 280,
-                        padding: '4px 0'
-                      }}>
+                      <div 
+                        className="community-tab-dropdown"
+                        style={{
+                          position: 'fixed',
+                          top: dropdownPosition.top,
+                          left: dropdownPosition.useRight ? 'auto' : dropdownPosition.left,
+                          right: dropdownPosition.useRight ? 10 : 'auto',
+                          background: isDarkMode ? '#16181c' : '#fff',
+                          border: isDarkMode ? '1px solid #2f3336' : '1px solid #e2e8f0',
+                          borderRadius: 8,
+                          boxShadow: isDarkMode ? '0 2px 12px rgba(0,0,0,0.4)' : '0 2px 12px rgba(0,0,0,0.1)',
+                          zIndex: 99999,
+                          minWidth: 200,
+                          maxWidth: 280,
+                          padding: '4px 0'
+                        }}>
                         {/* Follow All option */}
                         <div 
                           style={{ 
@@ -1029,7 +1033,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                             color: '#1d9bf0',
                             fontWeight: 500
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
                             // Follow all courses from this creator
                             const allCourseIds = (creator.allCourses || []).map(c => c.id);
                             allCourseIds.forEach(courseId => {
@@ -1069,7 +1075,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                             fontWeight: 500,
                             borderBottom: isDarkMode ? '1px solid #2f3336' : '1px solid #f1f5f9'
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
                             // Remove all courses from this creator from followedCommunities
                             actualSetFollowedCommunities(prev => 
                               prev.filter(c => {
@@ -1108,7 +1116,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                               }}
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
                                 // Toggle follow/unfollow for this course
                                 const courseCommunityId = `course-${course.id}`;
                                 if (isFollowed) {
@@ -1130,6 +1140,8 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                                     return [...prev, courseCommunity];
                                   });
                                 }
+                                // Close the dropdown after selecting a course
+                                setOpenCreatorDropdown(null);
                               }}
                               onMouseEnter={(e) => e.currentTarget.style.background = isDarkMode ? '#2f3336' : '#f8fafc'}
                               onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
@@ -1256,6 +1268,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                         onClick={() => {
                           setPostAudience('everyone');
                           setShowAudienceDropdown(false);
+                          // Also switch the active tab to Home to show all posts
+                          setActiveTab('Home');
+                          setSelectedCourseFilters([]);
                         }}
                         style={{
                           padding: '12px 16px',
@@ -1284,6 +1299,9 @@ const Community = ({ followedCommunities = [], setFollowedCommunities = null, is
                           onClick={() => {
                             setPostAudience(creator.id);
                             setShowAudienceDropdown(false);
+                            // Also switch the active tab to show this creator's feed
+                            setActiveTab(creator.id);
+                            setSelectedCourseFilters([]);
                           }}
                           style={{
                             padding: '12px 16px',

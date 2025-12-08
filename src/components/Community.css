@@ -52,9 +52,9 @@
 }
 
 .community-center-column {
-  flex: 0 1 600px;
+  flex: 0 1 760px;
   min-width: 0;
-  max-width: 600px;
+  max-width: 760px;
   border-right: 1px solid var(--border-color);
   border-left: 1px solid var(--border-color);
   overflow-y: auto;
@@ -62,9 +62,10 @@
 }
 
 .community-right-pane {
-  flex: 0 0 315px;
-  width: 315px;
-  padding: 16px;
+  flex: 1 0 160px;
+  min-width: 160px;
+  max-width: 250px;
+  padding: 12px;
   background: var(--bg-secondary);
   overflow-y: auto;
   height: 100vh;
@@ -76,25 +77,25 @@
 .community-right-section {
   background: var(--bg-primary);
   border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: 10px;
+  margin-bottom: 12px;
   border: 1px solid var(--border-color);
 }
 
 .community-right-section h3 {
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 16px 0;
+  margin: 0 0 10px 0;
 }
 
 .community-mini-card {
   display: flex;
   flex-direction: column;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 6px;
   background: var(--bg-secondary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   cursor: pointer;
   transition: all 0.2s;
   border: 2px solid transparent;
@@ -112,15 +113,15 @@
 .mini-card-name {
   font-weight: 600;
   color: var(--text-primary);
-  font-size: 14px;
-  margin-bottom: 4px;
+  font-size: 11px;
+  margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .mini-card-members {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--text-secondary);
 }
 
@@ -135,11 +136,11 @@
   display: inline-block;
   background: var(--bg-secondary);
   color: var(--text-primary);
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
   font-weight: 500;
-  margin: 4px 4px 4px 0;
+  margin: 2px 2px 2px 0;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -149,9 +150,9 @@
 }
 
 .tip-text {
-  font-size: 14px;
+  font-size: 11px;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.4;
   margin: 0;
 }
 
@@ -164,8 +165,8 @@
 /* Responsive */
 @media (max-width: 1400px) {
   .community-right-pane {
-    width: 250px;
-    flex: 0 0 250px;
+    width: 140px;
+    flex: 0 0 140px;
   }
 }
 

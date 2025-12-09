@@ -21,7 +21,8 @@ import {
   FaMoon,
   FaSun,
   FaTachometerAlt,
-  FaUsers
+  FaUsers,
+  FaChalkboardTeacher
 } from 'react-icons/fa';
 import { UserPropType } from './PropTypes';
 
@@ -77,6 +78,7 @@ const Sidebar = ({ onMenuChange, activeMenu, currentUser, isDarkMode, toggleDark
     { icon: <FaHome />, label: 'Browse', displayLabel: 'Browse' }, // Browse courses and instructors
     { icon: <FaBell />, label: 'Notifications', displayLabel: 'Notifications' }, // Notification center
     { icon: <FaTachometerAlt />, label: 'Dashboard', displayLabel: 'Dashboard' }, // User's learning dashboard
+    { icon: <FaChalkboardTeacher />, label: 'Teaching', displayLabel: 'Teaching' }, // Student-Teacher dashboard
     { icon: <FaEnvelope />, label: 'Messages', displayLabel: 'Messages' }, // Messaging system
     { icon: <FaBriefcase />, label: 'Job Exchange', displayLabel: 'Job Exchange' }, // Job exchange system
     { icon: <FaUser />, label: 'Profile', displayLabel: 'Profile' }, // User profile

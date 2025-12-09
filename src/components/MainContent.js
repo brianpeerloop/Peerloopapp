@@ -19,6 +19,7 @@ import JobExchange from './JobExchange';
 import Settings from './Settings';
 import UserProfile from './UserProfile';
 import CourseDetailView from './CourseDetailView';
+import StudentTeacherDashboard from './StudentTeacherDashboard';
 import { getAllInstructors, getInstructorWithCourses, getCourseById, getAllCourses, getInstructorById, getIndexedCourses, getIndexedInstructors } from '../data/database';
 import { UserPropType } from './PropTypes';
 
@@ -2294,6 +2295,15 @@ const MainContent = ({ activeMenu, currentUser, onSwitchUser, onMenuChange, isDa
           onBackToMain={() => onMenuChange('Profile')}
           onSwitchToCreatorMode={() => onMenuChange('CreatorMode')}
         />
+      </div>
+    );
+  }
+
+  // Show Student-Teacher Dashboard when Teaching is active
+  if (activeMenu === 'Teaching') {
+    return (
+      <div className="main-content" style={{ padding: 0 }}>
+        <StudentTeacherDashboard isDarkMode={isDarkMode} />
       </div>
     );
   }

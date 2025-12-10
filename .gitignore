@@ -14,16 +14,11 @@ Desktop.ini
 *.swp
 *.swo
 
-# Q-System session files (keep local by default)
-.q-system/session-notes/
-.q-system/transcripts/
-.q-system/checkpoints/
-!.q-system/session-notes/.gitkeep
-!.q-system/transcripts/.gitkeep
-!.q-system/checkpoints/.gitkeep
-
 # Backup files
 *.bak
 *.backup
 *~
 node_modules/
+
+# Claude Code local settings
+.claude/

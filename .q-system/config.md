@@ -1,6 +1,7 @@
 # Q-System Configuration
 
-Edit this file to customize Q-System behavior for your project.
+**Created:** 2025-12-10T14:25:00Z
+**Setup mode:** Completed (partial install fixed)
 
 ---
 
@@ -9,7 +10,18 @@ Edit this file to customize Q-System behavior for your project.
 Used for session file naming: `YYYY-MM-DD-HHmm-[name].md`
 
 ```
-user_name: YourName
+user_name: Brian
+```
+
+---
+
+## Project Profile
+
+```
+project_type: Software/Code
+collaboration: Solo
+experience_level: Intermediate
+project_name: Peer Loop - Education Marketplace
 ```
 
 ---
@@ -22,7 +34,7 @@ Control whether session files are tracked in git.
 - `no` - Keep session files local only (default, recommended for most projects)
 
 ```
-track_in_git: no
+track_in_git: yes
 ```
 
 If you set this to `yes`, also remove `.q-system/` from your `.gitignore`.
